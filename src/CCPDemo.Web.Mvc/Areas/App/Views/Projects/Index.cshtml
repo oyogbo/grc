@@ -1,0 +1,149 @@
+﻿@using CCPDemo.Authorization
+@using CCPDemo.Web.Areas.App.Models.Projects
+@using CCPDemo.Web.Areas.App.Startup
+@model ProjectsViewModel
+@{
+ViewBag.CurrentPageName = AppPageNames.Common.Projects;
+}
+@section Scripts
+{
+<script abp-src="/view-resources/Areas/App/Views/Projects/Index.js" asp-append-version="true"></script>
+}
+
+<div class="content d-flex flex-column flex-column-fluid">
+
+    <abp-page-subheader title='@L("Projects")' description='@L("ProjectsHeaderInfo")'>
+        <button id="ExportToExcelButton" class="btn btn-outline btn-outline-success btn-active-light-success me-1"><i class="fa fa-file-excel"></i> @L("ExportToExcel")</button>
+
+        @if (IsGranted(AppPermissions.Pages_Administration_Projects_Create))
+        {
+        <button id="CreateNewProjectButton" class="btn btn-primary blue"><i class="fa fa-plus"></i> @L("CreateNewProject")</button>
+        }
+    </abp-page-subheader>
+
+    <div class="@(await GetContainerClass())">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <div class="form">
+                    <div class="row align-items-center mb-4">
+                        <div class="col-xl-12">
+
+                            <div class="my-3">
+                                <div class="input-group">
+                                    <input type="text" id="ProjectsTableFilter" class="form-control reload-on-change" placeholder='@L("SearchWithThreeDot")' value="@Model.FilterText">
+                                    <button id="GetProjectsButton" class="btn btn-primary" type="submit"><i class="flaticon-search-1"></i></button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div id="AdvacedAuditFiltersArea" style="display: none" class="row mb-4">
+                    <div class="col-md-12">
+
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="MinValueFilterId">@L("MinMax") @L("Value")</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control m-input reload-on-keyup" placeholder="@L(" MinValue")" name="minValueFilter" id="MinValueFilterId" />
+                                <input type="number" class="form-control m-input reload-on-keyup" placeholder="@L(" MaxValue")" name="maxValueFilter" id="MaxValueFilterId" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="NameFilterId">@L("Name")</label>
+                            <input type="text" class="form-control reload-on-keyup" name="nameFilter" id="NameFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="MinDueDateFilterId">@L("DueDateRange")</label>
+                            <div class="input-group">
+                                <input class="form-control m-input date-picker startDate" type="text" placeholder="@L(" MinValue")" id="MinDueDateFilterId">
+                                <span style="line-height: 40px;padding: 0 15px 0 15px;"> &mdash; </span>
+                                <input class="form-control m-input date-picker endDate" type="text" placeholder="@L(" MaxValue")" id="MaxDueDateFilterId">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="MinConsultantIdFilterId">@L("MinMax") @L("ConsultantId")</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control m-input reload-on-keyup" placeholder="@L(" MinValue")" name="minConsultantIdFilter" id="MinConsultantIdFilterId" />
+                                <input type="number" class="form-control m-input reload-on-keyup" placeholder="@L(" MaxValue")" name="maxConsultantIdFilter" id="MaxConsultantIdFilterId" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="MinBusinessOwnerIdFilterId">@L("MinMax") @L("BusinessOwnerId")</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control m-input reload-on-keyup" placeholder="@L(" MinValue")" name="minBusinessOwnerIdFilter" id="MinBusinessOwnerIdFilterId" />
+                                <input type="number" class="form-control m-input reload-on-keyup" placeholder="@L(" MaxValue")" name="maxBusinessOwnerIdFilter" id="MaxBusinessOwnerIdFilterId" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="MinDataClassificationIdFilterId">@L("MinMax") @L("DataClassificationId")</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control m-input reload-on-keyup" placeholder="@L(" MinValue")" name="minDataClassificationIdFilter" id="MinDataClassificationIdFilterId" />
+                                <input type="number" class="form-control m-input reload-on-keyup" placeholder="@L(" MaxValue")" name="maxDataClassificationIdFilter" id="MaxDataClassificationIdFilterId" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="MinOrderFilterId">@L("MinMax") @L("Order")</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control m-input reload-on-keyup" placeholder="@L(" MinValue")" name="minOrderFilter" id="MinOrderFilterId" />
+                                <input type="number" class="form-control m-input reload-on-keyup" placeholder="@L(" MaxValue")" name="maxOrderFilter" id="MaxOrderFilterId" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="MinstatusFilterId">@L("MinMax") @L("status")</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control m-input reload-on-keyup" placeholder="@L(" MinValue")" name="minstatusFilter" id="MinstatusFilterId" />
+                                <input type="number" class="form-control m-input reload-on-keyup" placeholder="@L(" MaxValue")" name="maxstatusFilter" id="MaxstatusFilterId" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mt-5">
+                        <button class="btn btn-secondary btn-sm" id="btn-reset-filters">Reset</button>
+                    </div>
+                </div>
+                <div class="row my-4">
+                    <div class="col-xl-12">
+                        <span id="ShowAdvancedFiltersSpan" class="text-muted clickable-item"><i class="fa fa-angle-down"></i> @L("ShowAdvancedFilters")</span>
+                        <span id="HideAdvancedFiltersSpan" class="text-muted clickable-item" style="display: none"><i class="fa fa-angle-up"></i> @L("HideAdvancedFilters")</span>
+                    </div>
+                </div>
+                <div class="row align-items-center">
+                    <table id="ProjectsTable" class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer">
+                        <thead>
+                            <tr>
+                                <th></th>
+
+                                <th>@L("Actions")</th>
+                                <th>@L("Value")</th>
+                                <th>@L("Name")</th>
+                                <th>@L("DueDate")</th>
+                                <th>@L("ConsultantId")</th>
+                                <th>@L("BusinessOwnerId")</th>
+                                <th>@L("DataClassificationId")</th>
+                                <th>@L("Order")</th>
+                                <th>@L("status")</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

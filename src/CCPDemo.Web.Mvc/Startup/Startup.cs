@@ -54,6 +54,9 @@ using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using CCPDemo.Web.Extensions;
 using SecurityStampValidatorCallback = CCPDemo.Identity.SecurityStampValidatorCallback;
+using CCPDemo.KeyRiskIndicators;
+using AutoMapper;
+
 
 namespace CCPDemo.Web.Startup
 {
@@ -70,6 +73,7 @@ namespace CCPDemo.Web.Startup
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+
             // MVC
             services.AddControllersWithViews(options =>
                 {
@@ -134,6 +138,14 @@ namespace CCPDemo.Web.Startup
             services.AddScoped<IWebResourceManager, WebResourceManager>();
 
             services.AddSignalR();
+            //services.AddScoped<ISerialiserService, SerialiserService>();
+            //services.AddScoped<IKeyRiskIndicatorsAppService, IKeyRiskIndicatorsAppService>();
+            //var config = new MapperConfiguration(cfg =>
+
+             //cfg.CreateMap<RCSAModel, CreateOrEditKeyRiskIndicatorDto>().ReverseMap()
+
+             //   );
+
 
             if (WebConsts.GraphQL.Enabled)
             {
@@ -144,6 +156,8 @@ namespace CCPDemo.Web.Startup
             {
                 options.ValidationInterval = TimeSpan.Zero;
             });
+
+
 
             if (bool.Parse(_appConfiguration["HealthChecks:HealthChecksEnabled"]))
             {

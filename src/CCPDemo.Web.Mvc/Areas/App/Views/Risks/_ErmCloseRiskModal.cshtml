@@ -1,0 +1,70 @@
+﻿
+@using System.Globalization
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.Risks
+@model CreateOrEditRiskModalViewModel
+@using Abp.Extensions
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel("Close Risk"))
+
+@{
+   
+}
+
+<div class="modal-body">
+    <div id="RiskInformationsTab">
+        <form name="RiskInformationsForm" role="form" novalidate class="form-validation">
+
+            <input type="hidden" id="riskId" name="id" value="@Model.Risk.Id" />
+            <input type="hidden" id="currentOwner" name="id" value="@Model.Risk.RiskOwner" />
+            <input type="hidden" id="loggedInUserId" name="loggedInUserId" value="@AbpSession.UserId" />
+
+            <div class="my-3">
+                <label class="form-label" for="Risk_RiskType">Risk Type</label>
+                <textarea id="Risk_RiskType" rows="5" name="riskType" class="form-control form-control-solid" maxlength="256" readonly>@Model.Risk.RiskType</textarea>
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Risk_RiskSummary">Risk Summary</label>
+                @*<input class="form-control" id="VRisk_Description" value="@Model.VRisk.Description" type="text" name="description" />*@
+                <textarea id="Risk_RiskSummary" rows="5" name="riskSummary" class="form-control form-control-solid" maxlength="256" readonly>@Model.Risk.RiskSummary</textarea>
+            </div>
+
+
+
+            <div class="my-3">
+                <label class="form-label" for="Risk_Status">@L("Status")</label>
+                <input class="form-control form-control-solid" id="Risk_Status" value="@Model.Risk.Status" type="text" name="status" readonly/>
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Risk_Rating">@L("Rating")</label>
+                <input class="form-control form-control-solid" id="Risk_Rating" value="@Model.Risk.Rating" type="text" name="rating" readonly/>
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="VRisk_ActualClosureDate">Actual Closure Date</label>
+                <input class="form-control form-control-solid" id="VRisk_ActualClosureDate" value="@Model.Risk.ActualClosureDate" type="text" name="actualClosureDate" />
+            </div>
+
+
+        </form>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-light-primary font-weight-bold close-button" data-bs-dismiss="modal">@L("Cancel")</button>
+    <button type="button" class="btn btn-primary save-button" id="CloseRiskBtnSave"><i class="fa fa-save"></i> <span>@L("Save")</span></button>
+</div>
+
+
+@section Scripts
+{
+    <script>
+        $.noConflict;
+        var $ = jQuery;
+
+        $(function () {
+
+        });
+    </script>
+}

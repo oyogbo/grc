@@ -1,0 +1,119 @@
+﻿@using CCPDemo.Authorization
+@using CCPDemo.Web.Areas.App.Models.Closures
+@using CCPDemo.Web.Areas.App.Startup
+@model ClosuresViewModel
+@{
+ViewBag.CurrentPageName = AppPageNames.Common.Closures;
+}
+@section Scripts
+{
+<script abp-src="/view-resources/Areas/App/Views/Closures/Index.js" asp-append-version="true"></script>
+}
+
+<div class="content d-flex flex-column flex-column-fluid">
+
+    <abp-page-subheader title='@L("Closures")' description='@L("ClosuresHeaderInfo")'>
+        <button id="ExportToExcelButton" class="btn btn-outline btn-outline-success btn-active-light-success me-1"><i class="fa fa-file-excel"></i> @L("ExportToExcel")</button>
+
+        @if (IsGranted(AppPermissions.Pages_Administration_Closures_Create))
+        {
+        <button id="CreateNewClosureButton" class="btn btn-primary blue"><i class="fa fa-plus"></i> @L("CreateNewClosure")</button>
+        }
+    </abp-page-subheader>
+
+    <div class="@(await GetContainerClass())">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <div class="form">
+                    <div class="row align-items-center mb-4">
+                        <div class="col-xl-12">
+
+                            <div class="my-3">
+                                <div class="input-group">
+                                    <input type="text" id="ClosuresTableFilter" class="form-control reload-on-change" placeholder='@L("SearchWithThreeDot")' value="@Model.FilterText">
+                                    <button id="GetClosuresButton" class="btn btn-primary" type="submit"><i class="flaticon-search-1"></i></button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div id="AdvacedAuditFiltersArea" style="display: none" class="row mb-4">
+                    <div class="col-md-12">
+
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="MinRiskIdFilterId">@L("MinMax") @L("RiskId")</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control m-input reload-on-keyup" placeholder="@L(" MinValue")" name="minRiskIdFilter" id="MinRiskIdFilterId" />
+                                <input type="number" class="form-control m-input reload-on-keyup" placeholder="@L(" MaxValue")" name="maxRiskIdFilter" id="MaxRiskIdFilterId" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="MinUserIdFilterId">@L("MinMax") @L("UserId")</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control m-input reload-on-keyup" placeholder="@L(" MinValue")" name="minUserIdFilter" id="MinUserIdFilterId" />
+                                <input type="number" class="form-control m-input reload-on-keyup" placeholder="@L(" MaxValue")" name="maxUserIdFilter" id="MaxUserIdFilterId" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="MinClosureDateFilterId">@L("ClosureDateRange")</label>
+                            <div class="input-group">
+                                <input class="form-control m-input date-picker startDate" type="text" placeholder="@L(" MinValue")" id="MinClosureDateFilterId">
+                                <span style="line-height: 40px;padding: 0 15px 0 15px;"> &mdash; </span>
+                                <input class="form-control m-input date-picker endDate" type="text" placeholder="@L(" MaxValue")" id="MaxClosureDateFilterId">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="MinCloseReasonIdFilterId">@L("MinMax") @L("CloseReasonId")</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control m-input reload-on-keyup" placeholder="@L(" MinValue")" name="minCloseReasonIdFilter" id="MinCloseReasonIdFilterId" />
+                                <input type="number" class="form-control m-input reload-on-keyup" placeholder="@L(" MaxValue")" name="maxCloseReasonIdFilter" id="MaxCloseReasonIdFilterId" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="NoteFilterId">@L("Note")</label>
+                            <input type="text" class="form-control reload-on-keyup" name="noteFilter" id="NoteFilterId">
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mt-5">
+                        <button class="btn btn-secondary btn-sm" id="btn-reset-filters">Reset</button>
+                    </div>
+                </div>
+                <div class="row my-4">
+                    <div class="col-xl-12">
+                        <span id="ShowAdvancedFiltersSpan" class="text-muted clickable-item"><i class="fa fa-angle-down"></i> @L("ShowAdvancedFilters")</span>
+                        <span id="HideAdvancedFiltersSpan" class="text-muted clickable-item" style="display: none"><i class="fa fa-angle-up"></i> @L("HideAdvancedFilters")</span>
+                    </div>
+                </div>
+                <div class="row align-items-center">
+                    <table id="ClosuresTable" class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer">
+                        <thead>
+                            <tr>
+                                <th></th>
+
+                                <th>@L("Actions")</th>
+                                <th>@L("RiskId")</th>
+                                <th>@L("UserId")</th>
+                                <th>@L("ClosureDate")</th>
+                                <th>@L("CloseReasonId")</th>
+                                <th>@L("Note")</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

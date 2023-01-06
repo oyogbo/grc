@@ -1,0 +1,27 @@
+﻿
+@using System.Globalization
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.Departments
+@model CreateOrEditDepartmentModalViewModel
+@using Abp.Extensions
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("EditDepartment")) : L("CreateNewDepartment")))
+
+<div class="modal-body">
+    <div id="DepartmentInformationsTab">
+        <form name="DepartmentInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+            <input type="hidden" name="id" value="@Model.Department.Id" />
+            }
+
+            <div class="my-3">
+                <label class="form-label" for="Department_Name">@L("Name")</label>
+                <input class="form-control" id="Department_Name" value="@Model.Department.Name" type="text" name="name" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

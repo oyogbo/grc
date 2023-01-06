@@ -1,0 +1,32 @@
+﻿
+@using System.Globalization
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.ReviewLevels
+@model CreateOrEditReviewLevelModalViewModel
+@using Abp.Extensions
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("EditReviewLevel")) : L("CreateNewReviewLevel")))
+
+<div class="modal-body">
+    <div id="ReviewLevelInformationsTab">
+        <form name="ReviewLevelInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+            <input type="hidden" name="id" value="@Model.ReviewLevel.Id" />
+            }
+
+            <div class="my-3">
+                <label class="form-label" for="ReviewLevel_Value">@L("Value")</label>
+                <input class="form-control m-input" id="ReviewLevel_Value" value="@Model.ReviewLevel.Value.ToString(CultureInfo.InvariantCulture)" type="number" name="value" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="ReviewLevel_Name">@L("Name")</label>
+                <input class="form-control" id="ReviewLevel_Name" value="@Model.ReviewLevel.Name" type="text" name="name" required maxlength="@CCPDemo.ReviewLevels.ReviewLevelConsts.MaxNameLength" minlength="@CCPDemo.ReviewLevels.ReviewLevelConsts.MinNameLength" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

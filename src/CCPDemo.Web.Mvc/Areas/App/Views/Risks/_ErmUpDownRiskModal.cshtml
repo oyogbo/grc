@@ -1,0 +1,64 @@
+﻿
+@using System.Globalization
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.Risks
+@model CreateOrEditRiskModalViewModel
+@using Abp.Extensions
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel("Downgrade Risk"))
+
+@{
+    
+}
+
+<div class="modal-body">
+    <div id="RiskInformationsTab">
+        <form name="RiskInformationsForm" role="form" novalidate class="form-validation">
+
+            <input type="hidden" id="riskId" name="id" value="@Model.Risk.Id" />
+            <input type="hidden" id="currentOwner" name="id" value="@Model.Risk.RiskOwner" />
+            <input type="hidden" id="loggedInUserId" name="loggedInUserId" value="@AbpSession.UserId" />
+
+            <div class="my-3">
+                <label class="form-label" for="Risk_Name">Risk Type</label>
+                <textarea id="Risk_RiskType" rows="5" name="riskType" class="form-control form-control-solid" maxlength="256" readonly>@Model.Risk.RiskType</textarea>
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Risk_RiskSummary">Risk Summary</label>
+                <textarea id="Risk_RiskSummary" rows="5" name="riskSummary" class="form-control form-control-solid" maxlength="256" readonly>@Model.Risk.RiskSummary</textarea>
+            </div>
+
+
+
+            <div class="my-3">
+                <label class="form-label" for="Risk_Status">@L("Status")</label>
+                <input class="form-control form-control-solid" id="Risk_Status" value="@Model.Risk.Status" type="text" name="status" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Risk_Rating">@L("Rating")</label>
+                <select id="Risk_Rating" name="rating" class="form-control">
+
+                    @{
+                        var selectRating = Model.Risk.Rating ?? "Select Rating";
+
+                    }
+                    <option value="0">
+                        @selectRating
+                    </option>
+                    <option value="Critical">Critical</option>
+                    <option value="Very Highn">Very High</option>
+                    <option value="Highn">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                </select>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-light-primary font-weight-bold close-button" data-bs-dismiss="modal">@L("Cancel")</button>
+    <button type="button" class="btn btn-primary save-button" id="UpgradeDowngradeBtnSave"><i class="fa fa-save"></i> <span>@L("Save")</span></button>
+</div>

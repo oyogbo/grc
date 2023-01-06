@@ -1,19 +1,282 @@
-﻿<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-    <abp-page-subheader>
-    </abp-page-subheader>
-    <div class="@(await GetContainerClass())">
-        <div class="card">
-            <div class="card-body">
-                <div class="alert alert-custom alert-primary fade show" role="alert">
-                    <div class="alert-icon">
-                        <i class="flaticon-information" aria-label="@L("Welcome")"></i>
-                    </div>
-                    <div class="alert-text">
-                        <h4 class="alert-heading">@L("WelcomePage_Title")</h4>
-                        <p>@L("WelcomePage_Info")</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+﻿@using CCPDemo.Authorization
+@using CCPDemo.Web.Areas.App.Models.VRisks
+@using CCPDemo.Web.Areas.App.Startup
+@model VRisksViewModel
+
+@section Scripts {
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+	<script>
+		var xValues = ["Critical", "High", "Medium", "Low"];
+		var yValues = [@Model.Critical, @Model.High, @Model.Medium, @Model.Low];
+		var barColors = [
+			"#b91d47",
+			"#00aba9",
+			"#2b5797",
+			"#e8c3b9",
+		];
+
+		new Chart("riskProfile", {
+			type: "pie",
+			data: {
+				labels: xValues,
+				datasets: [{
+					backgroundColor: barColors,
+					data: yValues
+				}]
+			},
+			options: {
+				title: {
+					display: true,
+					text: "CATEGORIZATION OF RISK"
+				}
+			}
+		});
+	</script>
+}
+
+<div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+<!--begin::Content wrapper-->
+				<div class="d-flex flex-column flex-column-fluid">
+							
+					<div id="kt_app_content" class="app-content flex-column-fluid">
+						<!--begin::Content container-->
+						<div id="kt_app_content_container" class="app-container container-xxl">
+							<div class="row gx-5 gx-xl-10">
+
+
+								<div class="col-xl-6 mb-5 mb-xl-10">
+									<!--begin::Table widget 10-->
+									<div class="card card-flush h-xl-100">
+										<!--begin::Header-->
+										<div class="card-header pt-5">
+											<!--begin::Title-->
+											<h3 class="card-title align-items-start flex-column">
+							<span class="card-label fw-bold text-gray-800">RISK PROFILE</span>
+
+											</h3>
+										</div>
+
+										<div class="card-body py-3">
+													
+
+						<canvas id="riskProfile" style="width:100%;max-width:600px"></canvas>
+
+
+										</div>
+										<!--end::Body-->
+									</div>
+									<!--end::Table Widget 10-->
+								</div>
+
+								<!--begin::Col-->
+								<div class="col-xl-6 mb-5 mb-xl-10">
+									<!--begin::Table widget 9-->
+									<div class="card card-flush h-xl-100">
+										<!--begin::Header-->
+										<div class="card-header pt-5">
+											<!--begin::Title-->
+											<h3 class="card-title align-items-start flex-column">
+											<span class="card-label fw-bold text-gray-800">UPCOMING RESOLUTION</span>
+													
+											</h3>
+													
+										</div>
+										<!--end::Header-->
+										<!--begin::Body-->
+										<div class="card-body py-3">
+											<!--begin::Table container-->
+											<div class="table-responsive">
+												<!--begin::Table-->
+												<table class="table table-row-dashed align-middle gs-0 gy-4">
+													<!--begin::Table head-->
+													<thead>
+														<tr class="fs-7 fw-bold border-0 text-gray-400">
+															<th class="min-w-150px" colspan="2">S/N</th>
+															<th class="min-w-150px text-center pe-0" colspan="2">DEPT</th>
+															<th class="text-center min-w-150px" colspan="2">RISK</th>
+															<th class="text-center min-w-150px" colspan="2">DUE DATE</th>
+														</tr>
+													</thead>
+													<!--end::Table head-->
+													<!--begin::Table body-->
+													<tbody>
+													@{
+														var count = 0;
+													}
+													@foreach (var risk in Model.Risks)
+													{
+															count++;
+															<tr>
+															<td class="" colspan="2">
+																@count
+															</td>
+															<td class="pe-0" colspan="2">
+																@risk.Department
+															</td>
+															<td class="" colspan="2">
+																@risk.Name
+															</td>
+															<td class="" colspan="2">
+																@risk.ResolutionTimeLine
+															</td>
+														</tr>
+									}
+
+																															
+													</tbody>
+													<!--end::Table body-->
+												</table>
+												<!--end::Table-->
+											</div>
+											<!--end::Table container-->
+										</div>
+										<!--end::Body-->
+									</div>
+									<!--end::Table Widget 9-->
+								</div>
+										
+							</div>
+
+
+		<div class="row gx-5 gx-xl-10">
+
+
+			<div class="col-xl-6 mb-5 mb-xl-10">
+				<!--begin::Table widget 10-->
+				<div class="card card-flush h-xl-100">
+					<!--begin::Header-->
+					<div class="card-header pt-5">
+						<!--begin::Title-->
+						<h3 class="card-title align-items-start flex-column">
+							<span class="card-label fw-bold text-gray-800">RISK BY DEPARTMENT</span>
+
+						</h3>
+					</div>
+
+					<div class="card-body py-3">
+						<h3 class="card-title align-items-start flex-column">
+							<span class="card-label fw-bold text-gray-800">Categorization of Risk</span>
+						</h3>
+
+						<h3>Bar Chart</h3>
+
+
+					</div>
+					<!--end::Body-->
+				</div>
+				<!--end::Table Widget 10-->
+			</div>
+
+			<!--begin::Col-->
+			<div class="col-xl-6 mb-5 mb-xl-10">
+				<!--begin::Table widget 9-->
+				<div class="card card-flush h-xl-100">
+					<!--begin::Header-->
+					<div class="card-header pt-5">
+						<!--begin::Title-->
+						<h3 class="card-title align-items-start flex-column">
+							<span class="card-label fw-bold text-gray-800">OVERDUE RESOLUTION</span>
+
+						</h3>
+
+					</div>
+					<!--end::Header-->
+					<!--begin::Body-->
+					<div class="card-body py-3">
+						<!--begin::Table container-->
+						<div class="table-responsive">
+							<!--begin::Table-->
+							<table class="table table-row-dashed align-middle gs-0 gy-4">
+								<!--begin::Table head-->
+								<thead>
+									<tr class="fs-7 fw-bold border-0 text-gray-400">
+										<th class="min-w-150px" colspan="2">S/N</th>
+										<th class="min-w-150px text-end pe-0" colspan="2">DEPT</th>
+										<th class="text-end min-w-150px" colspan="2">RISK</th>
+										<th class="text-end min-w-150px" colspan="2">DUE DATE</th>
+									</tr>
+								</thead>
+								<!--end::Table head-->
+								<!--begin::Table body-->
+								<tbody>
+									<tr>
+										<td class="" colspan="2">
+											1
+										</td>
+										<td class="pe-0" colspan="2">
+											Data & Digital Services
+										</td>
+										<td class="" colspan="2">
+											Data Loss
+										</td>
+										<td class="" colspan="2">
+											09/11/2022
+										</td>
+									</tr>
+									<tr>
+										<td class="" colspan="2">
+											2
+										</td>
+										<td class="pe-0" colspan="2">
+											Application Support
+										</td>
+										<td class="" colspan="2">
+											Application Time-out
+										</td>
+										<td class="" colspan="2">
+											10/11/2022
+										</td>
+									</tr>
+									<tr>
+										<td class="" colspan="2">
+											3
+										</td>
+										<td class="pe-0" colspan="2">
+											Sales
+										</td>
+										<td class="" colspan="2">
+											Marketing Metrics Unreachable
+										</td>
+										<td class="" colspan="2">
+											10/11/2022
+										</td>
+									</tr>
+									<tr>
+										<td class="" colspan="2">
+											4
+										</td>
+										<td class="pe-0" colspan="2">
+											Operations
+										</td>
+										<td class="" colspan="2">
+											Account Creation Metric Unavailable
+										</td>
+										<td class="" colspan="2">
+											11/11/2022
+										</td>
+									</tr>
+
+
+								</tbody>
+								<!--end::Table body-->
+							</table>
+							<!--end::Table-->
+						</div>
+						<!--end::Table container-->
+					</div>
+					<!--end::Body-->
+				</div>
+				<!--end::Table Widget 9-->
+			</div>
+
+
+
+
+		</div>
+						<!--end::Content container-->
+					</div>
+					<!--end::Content-->
+				</div>
+				<!--end::Content wrapper-->
+				</div>
+				</div>

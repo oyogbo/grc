@@ -188,7 +188,7 @@
 					"content" : "
 							<div class=\"col-md-3\">
 								<div class=\"my-3\">
-									<label for=\"{{NP_Foreign_Entity_Name_Here}}{{NP_Display_Property_Name_Here}}{{NP_Duplication_Number_Here}}FilterId\">(@L(\"{{NP_Foreign_Entity_Name_Here}}\")) @L(\"{{NP_Display_Property_Name_Here}}\")</label>
+									<label class=\"form-label\" for=\"{{NP_Foreign_Entity_Name_Here}}{{NP_Display_Property_Name_Here}}{{NP_Duplication_Number_Here}}FilterId\">(@L(\"{{NP_Foreign_Entity_Name_Here}}\")) @L(\"{{NP_Display_Property_Name_Here}}\")</label>
 									<input type=\"text\" class=\"form-control\" name=\"{{nP_Foreign_Entity_Name_Here}}{{NP_Display_Property_Name_Here}}{{NP_Duplication_Number_Here}}Filter\" id=\"{{NP_Foreign_Entity_Name_Here}}{{NP_Display_Property_Name_Here}}{{NP_Duplication_Number_Here}}FilterId\">
 								</div>
                             </div>"
@@ -207,7 +207,7 @@
 		{
 			"placeholder": "{{Get_Excel_Button_Here}}",
 			"condition": "{{Create_Excel_Export_Here}} == true",
-			"content": "<button id=\"ExportToExcelButton\" class=\"btn btn-outline-success\"><i class=\"fa fa-file-excel\"></i> @L(\"ExportToExcel\")</button>
+			"content": "<button id=\"ExportToExcelButton\" class=\"btn btn-outline btn-outline-success btn-active-light-success me-1\"><i class=\"fa fa-file-excel\"></i> @L(\"ExportToExcel\")</button>
             "
 		},
 		{
@@ -332,18 +332,18 @@
         },
         {
             "placeholder": "{{Seperator_Div_Here}}",
-            "condition": "{{Project_Version_Here}} >= 090000",
+            "condition": "{{Project_Version_Here}} >= 090000 && {{Project_Version_Here}} < 110000",
             "content": "<div class=\"separator separator-dashed\"></div>"
         },
         {
             "placeholder": "{{Filter_Form_Group_Before_V110000_Here}}",
             "condition": "{{Project_Version_Here}} < 110000",
             "content": "
-                <div class="form-group align-items-center">
-                    <div class="input-group">
-                        <input type="text" id="{{Entity_Name_Plural_Here}}TableFilter" class="form-control m-input" placeholder='@L("SearchWithThreeDot")' value="@Model.FilterText">
-                        <span class="input-group-btn">
-                            <button id="Get{{Entity_Name_Plural_Here}}Button" class="btn btn-primary" type="submit"><i class="flaticon-search-1"></i></button>
+                <div class=\"form-group align-items-center\">
+                    <div class=\"input-group\">
+                        <input type=\"text\" id=\"{{Entity_Name_Plural_Here}}TableFilter\" class=\"form-control m-input\" placeholder='@L(\"SearchWithThreeDot\")' value=\"@Model.FilterText\">
+                        <span class=\"input-group-btn\">
+                            <button id=\"Get{{Entity_Name_Plural_Here}}Button\" class=\"btn btn-primary\" type=\"submit\"><i class=\"flaticon-search-1\"></i></button>
                         </span>
                     </div>
                 </div>
@@ -353,13 +353,23 @@
             "placeholder": "{{Filter_Form_Group_After_V110000_Here}}",
             "condition": "{{Project_Version_Here}} >= 110000",
             "content": "
-                <div class="my-3">
-                    <div class="input-group">
-                        <input type="text" id="{{Entity_Name_Plural_Here}}TableFilter" class="form-control" placeholder='@L("SearchWithThreeDot")' value="@Model.FilterText">
-                        <button id="Get{{Entity_Name_Plural_Here}}Button" class="btn btn-primary" type="submit"><i class="flaticon-search-1"></i></button>                        
+                <div class=\"my-3\">
+                    <div class=\"input-group\">
+                        <input type=\"text\" id=\"{{Entity_Name_Plural_Here}}TableFilter\" class=\"form-control\" placeholder='@L(\"SearchWithThreeDot\")' value=\"@Model.FilterText\">
+                        <button id=\"Get{{Entity_Name_Plural_Here}}Button\" class=\"btn btn-primary\" type=\"submit\"><i class=\"flaticon-search-1\"></i></button>                        
                     </div>
                 </div>
             "
+        },
+        {
+            "placeholder": "{{Table_Class_Here}}",
+            "condition": "{{Project_Version_Here}} < 110000",
+            "content": "display table table-striped table-bordered table-hover dt-responsive nowrap"
+        },
+        {
+            "placeholder": "{{Table_Class_Here}}",
+            "condition": "{{Project_Version_Here}} >= 110000",
+            "content": "table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer"
         }
 	],
 "navigationPropertyOneToManyTableTemplates": [

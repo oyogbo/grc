@@ -1,0 +1,90 @@
+﻿
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.Employees
+@model EmployeesViewModel
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("Details")))
+
+<div class="modal-body">
+    <div id="EmployeesInformationsTab">
+
+        <div class="row">
+            <div class="col-6 mb-3">
+                <h6>@L("EmployeeID") :</h6>
+                @Model.Employees.EmployeeID
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("LastName") :</h6>
+                @Model.Employees.LastName
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("FirstName") :</h6>
+                @Model.Employees.FirstName
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("Title") :</h6>
+                @Model.Employees.Title
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("TitleOfCourtesy") :</h6>
+                @Model.Employees.TitleOfCourtesy
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("BirthDate") :</h6>
+                @Model.Employees.BirthDate
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("HireDate") :</h6>
+                @Model.Employees.HireDate
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("Address") :</h6>
+                @Model.Employees.Address
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("City") :</h6>
+                @Model.Employees.City
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("Region") :</h6>
+                @Model.Employees.Region
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("PostalCode") :</h6>
+                @Model.Employees.PostalCode
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("Country") :</h6>
+                @Model.Employees.Country
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("HomePhone") :</h6>
+                @Model.Employees.HomePhone
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("Extension") :</h6>
+                @Model.Employees.Extension
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("Photo") :</h6>
+                @Model.Employees.Photo
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("Notes") :</h6>
+                @Model.Employees.Notes
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("ReportsTo") :</h6>
+                @Model.Employees.ReportsTo
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("PhotoPath") :</h6>
+                @Model.Employees.PhotoPath
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithClose.cshtml")

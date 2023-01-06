@@ -1,0 +1,70 @@
+﻿
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.Risks
+@model RiskViewModel
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("Details")))
+
+<div class="modal-body">
+    <div id="RiskInformationsTab">
+
+        <div class="row">
+            <div class="col-6 mb-3">
+                <h6>@L("RiskType") :</h6>
+                @Model.Risk.RiskType
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("RiskSummary") :</h6>
+                @Model.Risk.RiskSummary
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("Department") :</h6>
+                @Model.Risk.Department
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("RiskOwner") :</h6>
+                @Model.Risk.RiskOwner
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("ExistingControl") :</h6>
+                @Model.Risk.ExistingControl
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("ERMComment") :</h6>
+                @Model.Risk.ERMComment
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("ActionPlan") :</h6>
+                @Model.Risk.ActionPlan
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("RiskOwnerComment") :</h6>
+                @Model.Risk.RiskOwnerComment
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("Status") :</h6>
+                @Model.Risk.Status
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("Rating") :</h6>
+                @Model.Risk.Rating
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("TargetDate") :</h6>
+                @Model.Risk.TargetDate
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("ActualClosureDate") :</h6>
+                @Model.Risk.ActualClosureDate
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("RiskAccepted") :</h6>
+                @Model.Risk.RiskAccepted
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithClose.cshtml")

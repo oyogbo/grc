@@ -1,0 +1,42 @@
+﻿
+@using System.Globalization
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.RiskLevels
+@model CreateOrEditRiskLevelModalViewModel
+@using Abp.Extensions
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("EditRiskLevel")) : L("CreateNewRiskLevel")))
+
+<div class="modal-body">
+    <div id="RiskLevelInformationsTab">
+        <form name="RiskLevelInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+            <input type="hidden" name="id" value="@Model.RiskLevel.Id" />
+            }
+
+            <div class="my-3">
+                <label class="form-label" for="RiskLevel_Value">@L("Value")</label>
+                <input class="form-control m-input" id="RiskLevel_Value" value="@Model.RiskLevel.Value.ToString(CultureInfo.InvariantCulture)" type="number" name="value" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="RiskLevel_Name">@L("Name")</label>
+                <input class="form-control" id="RiskLevel_Name" value="@Model.RiskLevel.Name" type="text" name="name" required maxlength="@CCPDemo.RiskLevels.RiskLevelConsts.MaxNameLength" minlength="@CCPDemo.RiskLevels.RiskLevelConsts.MinNameLength" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="RiskLevel_Color">@L("Color")</label>
+                <input class="form-control" id="RiskLevel_Color" value="@Model.RiskLevel.Color" type="text" name="color" required maxlength="@CCPDemo.RiskLevels.RiskLevelConsts.MaxColorLength" minlength="@CCPDemo.RiskLevels.RiskLevelConsts.MinColorLength" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="RiskLevel_DisplayName">@L("DisplayName")</label>
+                <input class="form-control" id="RiskLevel_DisplayName" value="@Model.RiskLevel.DisplayName" type="text" name="displayName" required maxlength="@CCPDemo.RiskLevels.RiskLevelConsts.MaxDisplayNameLength" minlength="@CCPDemo.RiskLevels.RiskLevelConsts.MinDisplayNameLength" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

@@ -93,7 +93,7 @@
                     "type" : "file",
                     "content" : "
                     [AbpAuthorize(AppPermissions.{{Permission_Name_Here}}_Edit)]
-                    public async Task Remove{{Property_Name_Here}}File(EntityDto input)
+                    public async Task Remove{{Property_Name_Here}}File(EntityDto{{Primary_Key_Inside_Tag_Here}} input)
                     {
                         var {{entity_Name_Here}} = await _{{entity_Name_Here}}Repository.FirstOrDefaultAsync(input.Id);
                         if ({{entity_Name_Here}} == null)
@@ -115,6 +115,7 @@
         },
 		{
 			"placeholder" : "{{File_Prop_Get_File_Name_Here}}",
+			"condition" : "{{Project_Version_Here}} >= 100100 && {{Property_Listed_Here}} == true",
 			"templates" : [
 					{
 					"type" : "file",
@@ -125,6 +126,7 @@
 		},
 		{
 			"placeholder" : "{{File_Prop_Get_File_Name_For_Edit_Here}}",
+			"condition" : "{{Project_Version_Here}} >= 100100 && {{Property_Listed_Here}} == true",
 			"templates" : [
 					{
 					"type" : "file",
@@ -136,6 +138,7 @@
 		},
 		{
 			"placeholder" : "{{File_Prop_Get_File_Name_For_View_Here}}",
+			"condition" : "{{Project_Version_Here}} >= 100100 && {{Property_Listed_Here}} == true",
 			"templates" : [
 					{
 					"type" : "file",
@@ -519,5 +522,10 @@ using {{Namespace_Here}}.{{Namespace_Relative_Full_Here}}.Exporting;"
                     _binaryObjectManager = binaryObjectManager;
 			"
 		},
+        {
+            "placeholder": "{{Primary_Key_Inside_Tag_Here}}",
+            "condition": "{{Primary_Key_Here}} != 'int'",
+            "content": "<{{Primary_Key_Here}}>"
+        }
 	],
 }

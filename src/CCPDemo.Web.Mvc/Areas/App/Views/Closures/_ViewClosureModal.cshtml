@@ -1,0 +1,38 @@
+﻿
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.Closures
+@model ClosureViewModel
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("Details")))
+
+<div class="modal-body">
+    <div id="ClosureInformationsTab">
+
+        <div class="row">
+            <div class="col-6 mb-3">
+                <h6>@L("RiskId") :</h6>
+                @Model.Closure.RiskId
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("UserId") :</h6>
+                @Model.Closure.UserId
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("ClosureDate") :</h6>
+                @Model.Closure.ClosureDate
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("CloseReasonId") :</h6>
+                @Model.Closure.CloseReasonId
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("Note") :</h6>
+                @Model.Closure.Note
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithClose.cshtml")

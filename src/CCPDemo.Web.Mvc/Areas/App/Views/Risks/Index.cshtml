@@ -1,0 +1,170 @@
+﻿@using CCPDemo.Authorization
+@using CCPDemo.Web.Areas.App.Models.Risks
+@using CCPDemo.Web.Areas.App.Startup
+@model RisksViewModel
+@{
+ViewBag.CurrentPageName = AppPageNames.Common.Risks;
+}
+@section Scripts
+{
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
+    <script src="/view-resources/Areas/App/Views/Risks/Index.js" asp-append-version="true"></script>
+}
+
+@section Styles {
+    
+     <link href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.dataTables.min.css" rel="stylesheet" />
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+}
+
+<div class="content d-flex flex-column flex-column-fluid">
+
+    <abp-page-subheader title='@L("Risks")' description='@L("RisksHeaderInfo")'>
+        <button id="ExportToExcelButton" class="btn btn-outline btn-outline-success btn-active-light-success me-1"><i class="fa fa-file-excel"></i> @L("ExportToExcel")</button>
+
+        @if (IsGranted(AppPermissions.Pages_Risks_Create))
+        {
+        <button id="CreateNewRiskButton" class="btn btn-primary blue"><i class="fa fa-plus"></i> Raise New Risk</button>
+        }
+    </abp-page-subheader>
+
+    <div class="@(await GetContainerClass())">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <div class="form">
+                    <div class="row align-items-center mb-4">
+                        <div class="col-xl-12">
+
+                            <div class="my-3">
+                                <div class="input-group">
+                                    <input type="text" id="RisksTableFilter" class="form-control" placeholder='@L("SearchWithThreeDot")' value="@Model.FilterText">
+                                    <button id="GetRisksButton" class="btn btn-primary" type="submit"><i class="flaticon-search-1"></i></button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div id="AdvacedAuditFiltersArea" style="display: none" class="row mb-4">
+                    <div class="col-md-12">
+
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="RiskTypeFilterId">@L("RiskType")</label>
+                            <input type="text" class="form-control" name="riskTypeFilter" id="RiskTypeFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="RiskSummaryFilterId">@L("RiskSummary")</label>
+                            <input type="text" class="form-control" name="riskSummaryFilter" id="RiskSummaryFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="DepartmentFilterId">@L("Department")</label>
+                            <input type="text" class="form-control" name="departmentFilter" id="DepartmentFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="RiskOwnerFilterId">@L("RiskOwner")</label>
+                            <input type="text" class="form-control" name="riskOwnerFilter" id="RiskOwnerFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="ExistingControlFilterId">@L("ExistingControl")</label>
+                            <input type="text" class="form-control" name="existingControlFilter" id="ExistingControlFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="ERMCommentFilterId">@L("ERMComment")</label>
+                            <input type="text" class="form-control" name="ermCommentFilter" id="ERMCommentFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="ActionPlanFilterId">@L("ActionPlan")</label>
+                            <input type="text" class="form-control" name="actionPlanFilter" id="ActionPlanFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="RiskOwnerCommentFilterId">@L("RiskOwnerComment")</label>
+                            <input type="text" class="form-control" name="riskOwnerCommentFilter" id="RiskOwnerCommentFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="StatusFilterId">@L("Status")</label>
+                            <input type="text" class="form-control" name="statusFilter" id="StatusFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="RatingFilterId">@L("Rating")</label>
+                            <input type="text" class="form-control" name="ratingFilter" id="RatingFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="TargetDateFilterId">@L("TargetDate")</label>
+                            <input type="text" class="form-control" name="targetDateFilter" id="TargetDateFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="ActualClosureDateFilterId">@L("ActualClosureDate")</label>
+                            <input type="text" class="form-control" name="actualClosureDateFilter" id="ActualClosureDateFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label" for="RiskAcceptedFilterId">@L("RiskAccepted")</label>
+                        <select class="form-control" name="RiskAcceptedFilter" id="RiskAcceptedFilterId">
+                            <option value="-1">@L("All")</option>
+                            <option value="0">@L("False")</option>
+                            <option value="1">@L("True")</option>
+                        </select>
+                    </div>
+
+                </div>
+                <div class="row my-4">
+                    <div class="col-xl-12">
+                        <span id="ShowAdvancedFiltersSpan" class="text-muted clickable-item"><i class="fa fa-angle-down"></i> @L("ShowAdvancedFilters")</span>
+                        <span id="HideAdvancedFiltersSpan" class="text-muted clickable-item" style="display: none"><i class="fa fa-angle-up"></i> @L("HideAdvancedFilters")</span>
+                    </div>
+                </div>
+                <div class="row align-items-center">
+                    <table id="RisksTable" class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer">
+                        <thead>
+                            <tr>
+                                <th></th>
+
+                                <th>@L("Actions")</th>
+                                <th>Risk TYpe</th>
+                                <th>Risk Summary</th>
+                                <th>@L("Department")</th>
+                                <th>Risk Owner</th>
+                                <th>Existing Control</th>
+                                <th>Recommendation/ERM Comment</th>
+                                <th>Action Plan</th>
+                                <th>Risk Owner's Comment</th>
+                                <th>@L("Status")</th>
+                                <th>@L("Rating")</th>
+                                <th>Target Date</th>
+                                <th>Actual Closure Date</th>
+                                <th>Risk Accepted?</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

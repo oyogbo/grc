@@ -1,0 +1,32 @@
+﻿
+@using System.Globalization
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.Category
+@model CreateOrEditCategoryModalViewModel
+@using Abp.Extensions
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("EditCategory")) : L("CreateNewCategory")))
+
+<div class="modal-body">
+    <div id="CategoryInformationsTab">
+        <form name="CategoryInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+            <input type="hidden" name="id" value="@Model.Category.Id" />
+            }
+
+            <div class="my-3">
+                <label class="form-label" for="Category_Value">@L("Value")</label>
+                <input class="form-control m-input" id="Category_Value" value="@Model.Category.Value.ToString(CultureInfo.InvariantCulture)" type="number" name="value" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Category_Name">@L("Name")</label>
+                <input class="form-control" id="Category_Name" value="@Model.Category.Name" type="text" name="name" required maxlength="@CCPDemo.RiskCategory.CategoryConsts.MaxNameLength" minlength="@CCPDemo.RiskCategory.CategoryConsts.MinNameLength" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

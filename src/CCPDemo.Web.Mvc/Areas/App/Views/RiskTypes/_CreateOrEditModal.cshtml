@@ -1,0 +1,27 @@
+﻿
+@using System.Globalization
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.RiskTypes
+@model CreateOrEditRiskTypeModalViewModel
+@using Abp.Extensions
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("EditRiskType")) : L("CreateNewRiskType")))
+
+<div class="modal-body">
+    <div id="RiskTypeInformationsTab">
+        <form name="RiskTypeInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+            <input type="hidden" name="id" value="@Model.RiskType.Id" />
+            }
+
+            <div class="my-3">
+                <label class="form-label" for="RiskType_Name">@L("Name")</label>
+                <input class="form-control" id="RiskType_Name" value="@Model.RiskType.Name" type="text" name="name" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

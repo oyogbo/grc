@@ -1,0 +1,42 @@
+﻿
+@using System.Globalization
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.RiskGroupings
+@model CreateOrEditRiskGroupingModalViewModel
+@using Abp.Extensions
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("EditRiskGrouping")) : L("CreateNewRiskGrouping")))
+
+<div class="modal-body">
+    <div id="RiskGroupingInformationsTab">
+        <form name="RiskGroupingInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+            <input type="hidden" name="id" value="@Model.RiskGrouping.Id" />
+            }
+
+            <div class="my-3">
+                <label class="form-label" for="RiskGrouping_Value">@L("Value")</label>
+                <input class="form-control m-input" id="RiskGrouping_Value" value="@Model.RiskGrouping.Value.ToString(CultureInfo.InvariantCulture)" type="number" name="value" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="RiskGrouping_Name">@L("Name")</label>
+                <input class="form-control" id="RiskGrouping_Name" value="@Model.RiskGrouping.Name" type="text" name="name" required maxlength="@CCPDemo.RiskGroupings.RiskGroupingConsts.MaxNameLength" minlength="@CCPDemo.RiskGroupings.RiskGroupingConsts.MinNameLength" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="RiskGrouping_Default">@L("Default")</label>
+                <input class="form-control m-input" id="RiskGrouping_Default" value="@Model.RiskGrouping.Default.ToString(CultureInfo.InvariantCulture)" type="number" name="default" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="RiskGrouping_Order">@L("Order")</label>
+                <input class="form-control m-input" id="RiskGrouping_Order" value="@Model.RiskGrouping.Order.ToString(CultureInfo.InvariantCulture)" type="number" name="order" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

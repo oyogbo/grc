@@ -1,0 +1,47 @@
+﻿
+@using System.Globalization
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.ThreatCatalog
+@model CreateOrEditThreatCatalogModalViewModel
+@using Abp.Extensions
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("EditThreatCatalog")) : L("CreateNewThreatCatalog")))
+
+<div class="modal-body">
+    <div id="ThreatCatalogInformationsTab">
+        <form name="ThreatCatalogInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+            <input type="hidden" name="id" value="@Model.ThreatCatalog.Id" />
+            }
+
+            <div class="my-3">
+                <label class="form-label" for="ThreatCatalog_Number">@L("Number")</label>
+                <input class="form-control" id="ThreatCatalog_Number" value="@Model.ThreatCatalog.Number" type="text" name="number" required maxlength="@CCPDemo.ThreatCatalogs.ThreatCatalogConsts.MaxNumberLength" minlength="@CCPDemo.ThreatCatalogs.ThreatCatalogConsts.MinNumberLength" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="ThreatCatalog_Grouping">@L("Grouping")</label>
+                <input class="form-control m-input" id="ThreatCatalog_Grouping" value="@Model.ThreatCatalog.Grouping.ToString(CultureInfo.InvariantCulture)" type="number" name="grouping" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="ThreatCatalog_Name">@L("Name")</label>
+                <input class="form-control" id="ThreatCatalog_Name" value="@Model.ThreatCatalog.Name" type="text" name="name" required maxlength="@CCPDemo.ThreatCatalogs.ThreatCatalogConsts.MaxNameLength" minlength="@CCPDemo.ThreatCatalogs.ThreatCatalogConsts.MinNameLength" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="ThreatCatalog_Description">@L("Description")</label>
+                <input class="form-control" id="ThreatCatalog_Description" value="@Model.ThreatCatalog.Description" type="text" name="description" required />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="ThreatCatalog_Order">@L("Order")</label>
+                <input class="form-control m-input" id="ThreatCatalog_Order" value="@Model.ThreatCatalog.Order.ToString(CultureInfo.InvariantCulture)" type="number" name="order" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

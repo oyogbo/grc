@@ -1,0 +1,52 @@
+﻿
+@using System.Globalization
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.RiskCatalogs
+@model CreateOrEditRiskCatalogModalViewModel
+@using Abp.Extensions
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("EditRiskCatalog")) : L("CreateNewRiskCatalog")))
+
+<div class="modal-body">
+    <div id="RiskCatalogInformationsTab">
+        <form name="RiskCatalogInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+            <input type="hidden" name="id" value="@Model.RiskCatalog.Id" />
+            }
+
+            <div class="my-3">
+                <label class="form-label" for="RiskCatalog_Number">@L("Number")</label>
+                <input class="form-control" id="RiskCatalog_Number" value="@Model.RiskCatalog.Number" type="text" name="number" required maxlength="@CCPDemo.RiskCatalogs.RiskCatalogConsts.MaxNumberLength" minlength="@CCPDemo.RiskCatalogs.RiskCatalogConsts.MinNumberLength" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="RiskCatalog_Grouping">@L("Grouping")</label>
+                <input class="form-control m-input" id="RiskCatalog_Grouping" value="@Model.RiskCatalog.Grouping.ToString(CultureInfo.InvariantCulture)" type="number" name="grouping" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="RiskCatalog_Name">@L("Name")</label>
+                <input class="form-control" id="RiskCatalog_Name" value="@Model.RiskCatalog.Name" type="text" name="name" required maxlength="@CCPDemo.RiskCatalogs.RiskCatalogConsts.MaxNameLength" minlength="@CCPDemo.RiskCatalogs.RiskCatalogConsts.MinNameLength" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="RiskCatalog_Description">@L("Description")</label>
+                <input class="form-control" id="RiskCatalog_Description" value="@Model.RiskCatalog.Description" type="text" name="description" required />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="RiskCatalog_Function">@L("Function")</label>
+                <input class="form-control m-input" id="RiskCatalog_Function" value="@Model.RiskCatalog.Function.ToString(CultureInfo.InvariantCulture)" type="number" name="function" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="RiskCatalog_Order">@L("Order")</label>
+                <input class="form-control m-input" id="RiskCatalog_Order" value="@Model.RiskCatalog.Order.ToString(CultureInfo.InvariantCulture)" type="number" name="order" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

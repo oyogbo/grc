@@ -21,7 +21,9 @@ namespace CCPDemo.Web.Areas.App.Startup
                         icon: "flaticon-line-graph",
                         permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Administration_Host_Dashboard)
                     )
-                ).AddItem(new MenuItemDefinition(
+                )
+                
+                .AddItem(new MenuItemDefinition(
                     AppPageNames.Host.Tenants,
                     L("Tenants"),
                     url: "App/Tenants",
@@ -42,7 +44,23 @@ namespace CCPDemo.Web.Areas.App.Startup
                         icon: "flaticon-line-graph",
                         permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Tenant_Dashboard)
                     )
-                ).AddItem(new MenuItemDefinition(
+                )
+                .AddItem(new MenuItemDefinition(
+                        AppPageNames.Common.RiskManagement,
+                        L("RiskManagement"),
+                        icon: "flaticon-interface-8"
+                    )
+                .AddItem(new MenuItemDefinition(
+                        AppPageNames.Common.Risks,
+                        L("Risks"),
+                        url: "App/Risks",
+                        icon: "flaticon-file-2",
+                        permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Risks)
+                    )
+                )
+
+                 )
+                .AddItem(new MenuItemDefinition(
                         AppPageNames.Common.Administration,
                         L("Administration"),
                         icon: "flaticon-interface-8"
@@ -67,7 +85,15 @@ namespace CCPDemo.Web.Areas.App.Startup
                             icon: "flaticon-users",
                             permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Administration_Users)
                         )
-                    ).AddItem(new MenuItemDefinition(
+                    )
+                .AddItem(new MenuItemDefinition(
+                        AppPageNames.Common.RiskTypes,
+                        L("RiskTypes"),
+                        url: "App/RiskTypes",
+                        icon: "flaticon-more",
+                        permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Administration_RiskTypes)
+                    )
+                ).AddItem(new MenuItemDefinition(
                             AppPageNames.Common.Languages,
                             L("Languages"),
                             url: "App/Languages",
@@ -89,13 +115,6 @@ namespace CCPDemo.Web.Areas.App.Startup
                             permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Administration_Host_Maintenance)
                         )
                     ).AddItem(new MenuItemDefinition(
-                            AppPageNames.Tenant.SubscriptionManagement,
-                            L("Subscription"),
-                            url: "App/SubscriptionManagement",
-                            icon: "flaticon-refresh",
-                            permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Administration_Tenant_SubscriptionManagement)
-                        )
-                    ).AddItem(new MenuItemDefinition(
                             AppPageNames.Common.UiCustomization,
                             L("VisualSettings"),
                             url: "App/UiCustomization",
@@ -103,19 +122,11 @@ namespace CCPDemo.Web.Areas.App.Startup
                             permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Administration_UiCustomization)
                         )
                     ).AddItem(new MenuItemDefinition(
-                            AppPageNames.Common.WebhookSubscriptions,
-                            L("WebhookSubscriptions"),
-                            url: "App/WebhookSubscription",
-                            icon: "flaticon2-world",
-                            permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Administration_WebhookSubscription)
-                        )
-                    )
-                    .AddItem(new MenuItemDefinition(
-                            AppPageNames.Common.DynamicProperties,
-                            L("DynamicProperties"),
-                            url: "App/DynamicProperty",
-                            icon: "flaticon-interface-8",
-                            permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Administration_DynamicProperties)
+                            AppPageNames.Common.Status,
+                             L("Status"),
+                            url: "App/Status",
+                            icon: "flaticon-medical",
+                            permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Administration_Status)
                         )
                     )
                     .AddItem(new MenuItemDefinition(
@@ -134,38 +145,6 @@ namespace CCPDemo.Web.Areas.App.Startup
                             permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Administration_Tenant_Settings)
                         )
                     )
-                ).AddItem(new MenuItemDefinition(
-                        AppPageNames.Common.DemoUiComponents,
-                        L("DemoUiComponents"),
-                        url: "App/DemoUiComponents",
-                        icon: "flaticon-shapes",
-                        permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_DemoUiComponents)
-                    )
-                )
-                .AddItem(new MenuItemDefinition(
-                        AppPageNames.Tenant.PhoneBook,
-                        L("PhoneBookApp"),
-                        url: "App/PhoneBookApp",
-                        icon: "flaticon-app",
-                        permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Tenant_PhoneBook)
-                    )
-                .AddItem(new MenuItemDefinition(
-                        AppPageNames.Tenant.PhoneBook,
-                        L("PhoneBook"),
-                        url: "App/PhoneBook",
-                        icon: "flaticon-user",
-                        permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Tenant_PhoneBook)
-                    )
-                
-                )
-                .AddItem(new MenuItemDefinition(
-                        AppPageNames.Tenant.PhoneBook,
-                        L("PhoneType"),
-                        url: "App/PhoneType",
-                        icon: "flaticon-list-1",
-                        permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Tenant_PhoneBook)
-                    )
-                )
                 );
         }
 

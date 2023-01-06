@@ -1,3 +1,45 @@
+﻿using CCPDemo.Risks.Dtos;
+using CCPDemo.Risks;
+using CCPDemo.RiskTypes.Dtos;
+using CCPDemo.RiskTypes;
+using CCPDemo.RiskTransactions.Dtos;
+using CCPDemo.RiskTransactions;
+using CCPDemo.Departments.Dtos;
+using CCPDemo.Departments;
+using CCPDemo.VRisks.Dtos;
+using CCPDemo.VRisks;
+using CCPDemo.Regulations.Dtos;
+using CCPDemo.Regulations;
+using CCPDemo.ManagementReviews.Dtos;
+using CCPDemo.ManagementReviews;
+using CCPDemo.Projects.Dtos;
+using CCPDemo.Projects;
+using CCPDemo.Assessments.Dtos;
+using CCPDemo.Assessments;
+using CCPDemo.ThreatGroupings.Dtos;
+using CCPDemo.ThreatGroupings;
+using CCPDemo.ThreatCatalogs.Dtos;
+using CCPDemo.ThreatCatalogs;
+using CCPDemo.Closures.Dtos;
+using CCPDemo.Closures;
+using CCPDemo.RiskCloseReason.Dtos;
+using CCPDemo.RiskCloseReason;
+using CCPDemo.RiskCategory.Dtos;
+using CCPDemo.RiskCategory;
+using CCPDemo.RiskModels.Dtos;
+using CCPDemo.RiskModels;
+using CCPDemo.ReviewLevels.Dtos;
+using CCPDemo.ReviewLevels;
+using CCPDemo.RiskLevels.Dtos;
+using CCPDemo.RiskLevels;
+using CCPDemo.RiskGroupings.Dtos;
+using CCPDemo.RiskGroupings;
+using CCPDemo.RiskFunctions.Dtos;
+using CCPDemo.RiskFunctions;
+using CCPDemo.RiskCatalogs.Dtos;
+using CCPDemo.RiskCatalogs;
+using CCPDemo.Employee.Dtos;
+using CCPDemo.Employee;
 using Abp.Application.Editions;
 using Abp.Application.Features;
 using Abp.Auditing;
@@ -52,6 +94,48 @@ namespace CCPDemo
     {
         public static void CreateMappings(IMapperConfigurationExpression configuration)
         {
+            configuration.CreateMap<CreateOrEditRiskDto, Risk>().ReverseMap();
+            configuration.CreateMap<RiskDto, Risk>().ReverseMap();
+            configuration.CreateMap<CreateOrEditRiskTypeDto, RiskType>().ReverseMap();
+            configuration.CreateMap<RiskTypeDto, RiskType>().ReverseMap();
+            configuration.CreateMap<CreateOrEditRiskTransactionDto, RiskTransaction>().ReverseMap();
+            configuration.CreateMap<RiskTransactionDto, RiskTransaction>().ReverseMap();
+            configuration.CreateMap<CreateOrEditDepartmentDto, Department>().ReverseMap();
+            configuration.CreateMap<DepartmentDto, Department>().ReverseMap();
+            configuration.CreateMap<CreateOrEditVRiskDto, VRisk>().ReverseMap();
+            configuration.CreateMap<VRiskDto, VRisk>().ReverseMap();
+            configuration.CreateMap<CreateOrEditRegulationDto, Regulation>().ReverseMap();
+            configuration.CreateMap<RegulationDto, Regulation>().ReverseMap();
+            configuration.CreateMap<CreateOrEditManagementReviewDto, ManagementReview>().ReverseMap();
+            configuration.CreateMap<ManagementReviewDto, ManagementReview>().ReverseMap();
+            configuration.CreateMap<CreateOrEditProjectDto, Project>().ReverseMap();
+            configuration.CreateMap<ProjectDto, Project>().ReverseMap();
+            configuration.CreateMap<CreateOrEditAssessmentDto, Assessment>().ReverseMap();
+            configuration.CreateMap<AssessmentDto, Assessment>().ReverseMap();
+            configuration.CreateMap<CreateOrEditThreatGroupingDto, ThreatGrouping>().ReverseMap();
+            configuration.CreateMap<ThreatGroupingDto, ThreatGrouping>().ReverseMap();
+            configuration.CreateMap<CreateOrEditThreatCatalogDto, ThreatCatalog>().ReverseMap();
+            configuration.CreateMap<ThreatCatalogDto, ThreatCatalog>().ReverseMap();
+            configuration.CreateMap<CreateOrEditClosureDto, Closure>().ReverseMap();
+            configuration.CreateMap<ClosureDto, Closure>().ReverseMap();
+            configuration.CreateMap<CreateOrEditCloseReasonDto, CloseReason>().ReverseMap();
+            configuration.CreateMap<CloseReasonDto, CloseReason>().ReverseMap();
+            configuration.CreateMap<CreateOrEditCategoryDto, Category>().ReverseMap();
+            configuration.CreateMap<CategoryDto, Category>().ReverseMap();
+            configuration.CreateMap<CreateOrEditRiskModelDto, RiskModel>().ReverseMap();
+            configuration.CreateMap<RiskModelDto, RiskModel>().ReverseMap();
+            configuration.CreateMap<CreateOrEditReviewLevelDto, ReviewLevel>().ReverseMap();
+            configuration.CreateMap<ReviewLevelDto, ReviewLevel>().ReverseMap();
+            configuration.CreateMap<CreateOrEditRiskLevelDto, RiskLevel>().ReverseMap();
+            configuration.CreateMap<RiskLevelDto, RiskLevel>().ReverseMap();
+            configuration.CreateMap<CreateOrEditRiskGroupingDto, RiskGrouping>().ReverseMap();
+            configuration.CreateMap<RiskGroupingDto, RiskGrouping>().ReverseMap();
+            configuration.CreateMap<CreateOrEditRiskFunctionDto, RiskFunction>().ReverseMap();
+            configuration.CreateMap<RiskFunctionDto, RiskFunction>().ReverseMap();
+            configuration.CreateMap<CreateOrEditRiskCatalogDto, RiskCatalog>().ReverseMap();
+            configuration.CreateMap<RiskCatalogDto, RiskCatalog>().ReverseMap();
+            configuration.CreateMap<CreateOrEditEmployeesDto, Employees>().ReverseMap();
+            configuration.CreateMap<EmployeesDto, Employees>().ReverseMap();
             //Inputs
             configuration.CreateMap<PhoneType, PhoneTypeListDto>();
             configuration.CreateMap<Person, GetPersonForEditOutput>();
@@ -86,8 +170,6 @@ namespace CCPDemo
             configuration.CreateMap<Role, RoleListDto>();
             configuration.CreateMap<UserRole, UserListRoleDto>();
 
-            
-
             //Edition
             configuration.CreateMap<EditionEditDto, SubscribableEdition>().ReverseMap();
             configuration.CreateMap<EditionCreateDto, SubscribableEdition>();
@@ -100,7 +182,6 @@ namespace CCPDemo
             configuration.CreateMap<Edition, EditionEditDto>();
             configuration.CreateMap<Edition, SubscribableEdition>();
             configuration.CreateMap<Edition, EditionSelectDto>();
-
 
             //Payment
             configuration.CreateMap<SubscriptionPaymentDto, SubscriptionPayment>().ReverseMap();
@@ -169,7 +250,7 @@ namespace CCPDemo
             configuration.CreateMap<DynamicEntityPropertyDto, DynamicEntityProperty>();
 
             configuration.CreateMap<DynamicEntityPropertyValue, DynamicEntityPropertyValueDto>().ReverseMap();
-            
+
             //User Delegations
             configuration.CreateMap<CreateUserDelegationDto, UserDelegation>();
 

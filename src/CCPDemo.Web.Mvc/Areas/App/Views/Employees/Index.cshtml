@@ -1,0 +1,208 @@
+﻿@using CCPDemo.Authorization
+@using CCPDemo.Web.Areas.App.Models.Employees
+@using CCPDemo.Web.Areas.App.Startup
+@model EmployeesViewModel
+@{
+ViewBag.CurrentPageName = AppPageNames.Common.Employees;
+}
+@section Scripts
+{
+<script abp-src="/view-resources/Areas/App/Views/Employees/Index.js" asp-append-version="true"></script>
+}
+
+<div class="content d-flex flex-column flex-column-fluid">
+
+    <abp-page-subheader title='@L("Employees")' description='@L("EmployeesHeaderInfo")'>
+        <button id="ExportToExcelButton" class="btn btn-outline btn-outline-success btn-active-light-success me-1"><i class="fa fa-file-excel"></i> @L("ExportToExcel")</button>
+
+        @if (IsGranted(AppPermissions.Pages_Employees_Create))
+        {
+        <button id="CreateNewEmployeesButton" class="btn btn-primary blue"><i class="fa fa-plus"></i> @L("CreateNewEmployees")</button>
+        }
+    </abp-page-subheader>
+
+    <div class="@(await GetContainerClass())">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <div class="form">
+                    <div class="row align-items-center mb-4">
+                        <div class="col-xl-12">
+
+                            <div class="my-3">
+                                <div class="input-group">
+                                    <input type="text" id="EmployeesTableFilter" class="form-control" placeholder='@L("SearchWithThreeDot")' value="">
+                                    <button id="GetEmployeesButton" class="btn btn-primary" type="submit"><i class="flaticon-search-1"></i></button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div id="AdvacedAuditFiltersArea" style="display: none" class="row mb-4">
+                    <div class="col-md-12">
+
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="MinEmployeeIDFilterId">@L("MinMax") @L("EmployeeID")</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control m-input" placeholder="@L(" MinValue")" name="minEmployeeIDFilter" id="MinEmployeeIDFilterId" />
+                                <input type="number" class="form-control m-input" placeholder="@L(" MaxValue")" name="maxEmployeeIDFilter" id="MaxEmployeeIDFilterId" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="LastNameFilterId">@L("LastName")</label>
+                            <input type="text" class="form-control" name="lastNameFilter" id="LastNameFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="FirstNameFilterId">@L("FirstName")</label>
+                            <input type="text" class="form-control" name="firstNameFilter" id="FirstNameFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="TitleFilterId">@L("Title")</label>
+                            <input type="text" class="form-control" name="titleFilter" id="TitleFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="TitleOfCourtesyFilterId">@L("TitleOfCourtesy")</label>
+                            <input type="text" class="form-control" name="titleOfCourtesyFilter" id="TitleOfCourtesyFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="MinBirthDateFilterId">@L("BirthDateRange")</label>
+                            <div class="input-group">
+                                <input class="form-control m-input date-picker" type="text" placeholder="@L(" MinValue")" id="MinBirthDateFilterId">
+                                <span style="line-height: 40px;padding: 0 15px 0 15px;"> &mdash; </span>
+                                <input class="form-control m-input date-picker" type="text" placeholder="@L(" MaxValue")" id="MaxBirthDateFilterId">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="MinHireDateFilterId">@L("HireDateRange")</label>
+                            <div class="input-group">
+                                <input class="form-control m-input date-picker" type="text" placeholder="@L(" MinValue")" id="MinHireDateFilterId">
+                                <span style="line-height: 40px;padding: 0 15px 0 15px;"> &mdash; </span>
+                                <input class="form-control m-input date-picker" type="text" placeholder="@L(" MaxValue")" id="MaxHireDateFilterId">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="AddressFilterId">@L("Address")</label>
+                            <input type="text" class="form-control" name="addressFilter" id="AddressFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="CityFilterId">@L("City")</label>
+                            <input type="text" class="form-control" name="cityFilter" id="CityFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="RegionFilterId">@L("Region")</label>
+                            <input type="text" class="form-control" name="regionFilter" id="RegionFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="PostalCodeFilterId">@L("PostalCode")</label>
+                            <input type="text" class="form-control" name="postalCodeFilter" id="PostalCodeFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="CountryFilterId">@L("Country")</label>
+                            <input type="text" class="form-control" name="countryFilter" id="CountryFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="HomePhoneFilterId">@L("HomePhone")</label>
+                            <input type="text" class="form-control" name="homePhoneFilter" id="HomePhoneFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="ExtensionFilterId">@L("Extension")</label>
+                            <input type="text" class="form-control" name="extensionFilter" id="ExtensionFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="PhotoFilterId">@L("Photo")</label>
+                            <input type="text" class="form-control" name="photoFilter" id="PhotoFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="NotesFilterId">@L("Notes")</label>
+                            <input type="text" class="form-control" name="notesFilter" id="NotesFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="MinReportsToFilterId">@L("MinMax") @L("ReportsTo")</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control m-input" placeholder="@L(" MinValue")" name="minReportsToFilter" id="MinReportsToFilterId" />
+                                <input type="number" class="form-control m-input" placeholder="@L(" MaxValue")" name="maxReportsToFilter" id="MaxReportsToFilterId" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="PhotoPathFilterId">@L("PhotoPath")</label>
+                            <input type="text" class="form-control" name="photoPathFilter" id="PhotoPathFilterId">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row my-4">
+                    <div class="col-xl-12">
+                        <span id="ShowAdvancedFiltersSpan" class="text-muted clickable-item"><i class="fa fa-angle-down"></i> @L("ShowAdvancedFilters")</span>
+                        <span id="HideAdvancedFiltersSpan" class="text-muted clickable-item" style="display: none"><i class="fa fa-angle-up"></i> @L("HideAdvancedFilters")</span>
+                    </div>
+                </div>
+                <div class="row align-items-center">
+                    <table id="EmployeesTable" class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer">
+                        <thead>
+                            <tr>
+                                <th></th>
+
+                                <th>@L("Actions")</th>
+                                <th>@L("EmployeeID")</th>
+                                <th>@L("LastName")</th>
+                                <th>@L("FirstName")</th>
+                                <th>@L("Title")</th>
+                                <th>@L("TitleOfCourtesy")</th>
+                                <th>@L("BirthDate")</th>
+                                <th>@L("HireDate")</th>
+                                <th>@L("Address")</th>
+                                <th>@L("City")</th>
+                                <th>@L("Region")</th>
+                                <th>@L("PostalCode")</th>
+                                <th>@L("Country")</th>
+                                <th>@L("HomePhone")</th>
+                                <th>@L("Extension")</th>
+                                <th>@L("Photo")</th>
+                                <th>@L("Notes")</th>
+                                <th>@L("ReportsTo")</th>
+                                <th>@L("PhotoPath")</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

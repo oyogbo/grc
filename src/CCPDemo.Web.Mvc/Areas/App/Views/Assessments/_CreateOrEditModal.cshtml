@@ -1,0 +1,27 @@
+﻿
+@using System.Globalization
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.Assessments
+@model CreateOrEditAssessmentModalViewModel
+@using Abp.Extensions
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("EditAssessment")) : L("CreateNewAssessment")))
+
+<div class="modal-body">
+    <div id="AssessmentInformationsTab">
+        <form name="AssessmentInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+            <input type="hidden" name="id" value="@Model.Assessment.Id" />
+            }
+
+            <div class="my-3">
+                <label class="form-label" for="Assessment_Name">@L("Name")</label>
+                <input class="form-control" id="Assessment_Name" value="@Model.Assessment.Name" type="text" name="name" required maxlength="@CCPDemo.Assessments.AssessmentConsts.MaxNameLength" minlength="@CCPDemo.Assessments.AssessmentConsts.MinNameLength" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

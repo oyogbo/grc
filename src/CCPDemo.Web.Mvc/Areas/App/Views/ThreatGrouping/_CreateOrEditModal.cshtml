@@ -1,0 +1,42 @@
+﻿
+@using System.Globalization
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.ThreatGrouping
+@model CreateOrEditThreatGroupingModalViewModel
+@using Abp.Extensions
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("EditThreatGrouping")) : L("CreateNewThreatGrouping")))
+
+<div class="modal-body">
+    <div id="ThreatGroupingInformationsTab">
+        <form name="ThreatGroupingInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+            <input type="hidden" name="id" value="@Model.ThreatGrouping.Id" />
+            }
+
+            <div class="my-3">
+                <label class="form-label" for="ThreatGrouping_Value">@L("Value")</label>
+                <input class="form-control m-input" id="ThreatGrouping_Value" value="@Model.ThreatGrouping.Value.ToString(CultureInfo.InvariantCulture)" type="number" name="value" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="ThreatGrouping_Name">@L("Name")</label>
+                <input class="form-control" id="ThreatGrouping_Name" value="@Model.ThreatGrouping.Name" type="text" name="name" required maxlength="@CCPDemo.ThreatGroupings.ThreatGroupingConsts.MaxNameLength" minlength="@CCPDemo.ThreatGroupings.ThreatGroupingConsts.MinNameLength" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="ThreatGrouping_Default">@L("Default")</label>
+                <input class="form-control m-input" id="ThreatGrouping_Default" value="@Model.ThreatGrouping.Default.ToString(CultureInfo.InvariantCulture)" type="number" name="default" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="ThreatGrouping_Order">@L("Order")</label>
+                <input class="form-control m-input" id="ThreatGrouping_Order" value="@Model.ThreatGrouping.Order.ToString(CultureInfo.InvariantCulture)" type="number" name="order" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

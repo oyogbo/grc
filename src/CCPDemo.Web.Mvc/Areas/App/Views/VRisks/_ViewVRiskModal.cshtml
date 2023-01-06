@@ -1,0 +1,66 @@
+﻿
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.VRisks
+@model VRiskViewModel
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("Details")))
+
+<div class="modal-body">
+    <div id="VRiskInformationsTab">
+
+        <div class="row">
+            <div class="col-6 mb-3">
+                <h6>@L("Name") :</h6>
+                @Model.VRisk.Name
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("Description") :</h6>
+                @Model.VRisk.Description
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("Department") :</h6>
+                @Model.VRisk.Department
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("RiskOwner") :</h6>
+                @Model.VRisk.RiskOwner
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("ResolutionTimeLine") :</h6>
+                @Model.VRisk.ResolutionTimeLine
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("ERMComment") :</h6>
+                @Model.VRisk.ERMComment
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("RiskOwnerComment") :</h6>
+                @Model.VRisk.RiskOwnerComment
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("Status") :</h6>
+                @Model.VRisk.Status
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("ActualClosureDate") :</h6>
+                @Model.VRisk.ActualClosureDate
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("MitigationDate") :</h6>
+                @Model.VRisk.MitigationDate
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("AcceptRisk") :</h6>
+                @Model.VRisk.AcceptRisk  ? "Yes" : 'Declined or Yet to be Reviewed by User'
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("AcceptanceDate") :</h6>
+                @Model.VRisk.AcceptanceDate
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithClose.cshtml")

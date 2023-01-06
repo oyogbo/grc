@@ -1,0 +1,57 @@
+﻿
+@using System.Globalization
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.ManagementReviews
+@model CreateOrEditManagementReviewModalViewModel
+@using Abp.Extensions
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("EditManagementReview")) : L("CreateNewManagementReview")))
+
+<div class="modal-body">
+    <div id="ManagementReviewInformationsTab">
+        <form name="ManagementReviewInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+            <input type="hidden" name="id" value="@Model.ManagementReview.Id" />
+            }
+
+            <div class="my-3">
+                <label class="form-label" for="ManagementReview_risk_id">@L("risk_id")</label>
+                <input class="form-control m-input" id="ManagementReview_risk_id" value="@Model.ManagementReview.risk_id.ToString(CultureInfo.InvariantCulture)" type="number" name="risk_id" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="ManagementReview_submission_date">@L("submission_date")</label>
+                <input class="form-control m-input date-picker" id="ManagementReview_submission_date" type="text" name="submission_date" value="@Model.ManagementReview.submission_date" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="ManagementReview_review">@L("review")</label>
+                <input class="form-control m-input" id="ManagementReview_review" value="@Model.ManagementReview.review.ToString(CultureInfo.InvariantCulture)" type="number" name="review" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="ManagementReview_reviewer">@L("reviewer")</label>
+                <input class="form-control m-input" id="ManagementReview_reviewer" value="@Model.ManagementReview.reviewer.ToString(CultureInfo.InvariantCulture)" type="number" name="reviewer" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="ManagementReview_next_step">@L("next_step")</label>
+                <input class="form-control m-input" id="ManagementReview_next_step" value="@Model.ManagementReview.next_step.ToString(CultureInfo.InvariantCulture)" type="number" name="next_step" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="ManagementReview_comments">@L("comments")</label>
+                <input class="form-control" id="ManagementReview_comments" value="@Model.ManagementReview.comments" type="text" name="comments" required />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="ManagementReview_next_review">@L("next_review")</label>
+                <input class="form-control m-input date-picker" id="ManagementReview_next_review" type="text" name="next_review" value="@Model.ManagementReview.next_review" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

@@ -1,6 +1,6 @@
 ﻿(function ($) {
   app.modals.CreateOrEditUserModal = function () {
-    var _userService = abp.services.app.user;
+      var _userService = abp.services.app.user;
 
     var _modalManager;
     var _$userInformationForm = null;

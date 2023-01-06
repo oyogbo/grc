@@ -1,0 +1,112 @@
+﻿
+@using System.Globalization
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.Employees
+@model CreateOrEditEmployeesModalViewModel
+@using Abp.Extensions
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("EditEmployees")) : L("CreateNewEmployees")))
+
+<div class="modal-body">
+    <div id="EmployeesInformationsTab">
+        <form name="EmployeesInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+            <input type="hidden" name="id" value="@Model.Employees.Id" />
+            }
+
+            <div class="my-3">
+                <label class="form-label" for="Employees_EmployeeID">@L("EmployeeID")</label>
+                <input class="form-control m-input" id="Employees_EmployeeID" value="@Model.Employees.EmployeeID.ToString(CultureInfo.InvariantCulture)" type="number" name="employeeID" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Employees_LastName">@L("LastName")</label>
+                <input class="form-control" id="Employees_LastName" value="@Model.Employees.LastName" type="text" name="lastName" required maxlength="@CCPDemo.Employee.EmployeesConsts.MaxLastNameLength" minlength="@CCPDemo.Employee.EmployeesConsts.MinLastNameLength" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Employees_FirstName">@L("FirstName")</label>
+                <input class="form-control" id="Employees_FirstName" value="@Model.Employees.FirstName" type="text" name="firstName" required maxlength="@CCPDemo.Employee.EmployeesConsts.MaxFirstNameLength" minlength="@CCPDemo.Employee.EmployeesConsts.MinFirstNameLength" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Employees_Title">@L("Title")</label>
+                <input class="form-control" id="Employees_Title" value="@Model.Employees.Title" type="text" name="title" maxlength="@CCPDemo.Employee.EmployeesConsts.MaxTitleLength" minlength="@CCPDemo.Employee.EmployeesConsts.MinTitleLength" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Employees_TitleOfCourtesy">@L("TitleOfCourtesy")</label>
+                <input class="form-control" id="Employees_TitleOfCourtesy" value="@Model.Employees.TitleOfCourtesy" type="text" name="titleOfCourtesy" maxlength="@CCPDemo.Employee.EmployeesConsts.MaxTitleOfCourtesyLength" minlength="@CCPDemo.Employee.EmployeesConsts.MinTitleOfCourtesyLength" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Employees_BirthDate">@L("BirthDate")</label>
+                <input class="form-control m-input date-picker" id="Employees_BirthDate" type="text" name="birthDate" value="@Model.Employees.BirthDate" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Employees_HireDate">@L("HireDate")</label>
+                <input class="form-control m-input date-picker" id="Employees_HireDate" type="text" name="hireDate" value="@Model.Employees.HireDate" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Employees_Address">@L("Address")</label>
+                <input class="form-control" id="Employees_Address" value="@Model.Employees.Address" type="text" name="address" maxlength="@CCPDemo.Employee.EmployeesConsts.MaxAddressLength" minlength="@CCPDemo.Employee.EmployeesConsts.MinAddressLength" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Employees_City">@L("City")</label>
+                <input class="form-control" id="Employees_City" value="@Model.Employees.City" type="text" name="city" maxlength="@CCPDemo.Employee.EmployeesConsts.MaxCityLength" minlength="@CCPDemo.Employee.EmployeesConsts.MinCityLength" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Employees_Region">@L("Region")</label>
+                <input class="form-control" id="Employees_Region" value="@Model.Employees.Region" type="text" name="region" maxlength="@CCPDemo.Employee.EmployeesConsts.MaxRegionLength" minlength="@CCPDemo.Employee.EmployeesConsts.MinRegionLength" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Employees_PostalCode">@L("PostalCode")</label>
+                <input class="form-control" id="Employees_PostalCode" value="@Model.Employees.PostalCode" type="text" name="postalCode" maxlength="@CCPDemo.Employee.EmployeesConsts.MaxPostalCodeLength" minlength="@CCPDemo.Employee.EmployeesConsts.MinPostalCodeLength" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Employees_Country">@L("Country")</label>
+                <input class="form-control" id="Employees_Country" value="@Model.Employees.Country" type="text" name="country" maxlength="@CCPDemo.Employee.EmployeesConsts.MaxCountryLength" minlength="@CCPDemo.Employee.EmployeesConsts.MinCountryLength" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Employees_HomePhone">@L("HomePhone")</label>
+                <input class="form-control" id="Employees_HomePhone" value="@Model.Employees.HomePhone" type="text" name="homePhone" maxlength="@CCPDemo.Employee.EmployeesConsts.MaxHomePhoneLength" minlength="@CCPDemo.Employee.EmployeesConsts.MinHomePhoneLength" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Employees_Extension">@L("Extension")</label>
+                <input class="form-control" id="Employees_Extension" value="@Model.Employees.Extension" type="text" name="extension" maxlength="@CCPDemo.Employee.EmployeesConsts.MaxExtensionLength" minlength="@CCPDemo.Employee.EmployeesConsts.MinExtensionLength" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Employees_Photo">@L("Photo")</label>
+                <input class="form-control" id="Employees_Photo" value="@Model.Employees.Photo" type="text" name="photo" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Employees_Notes">@L("Notes")</label>
+                <input class="form-control" id="Employees_Notes" value="@Model.Employees.Notes" type="text" name="notes" maxlength="@CCPDemo.Employee.EmployeesConsts.MaxNotesLength" minlength="@CCPDemo.Employee.EmployeesConsts.MinNotesLength" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Employees_ReportsTo">@L("ReportsTo")</label>
+                <input class="form-control m-input" id="Employees_ReportsTo" value="@Model.Employees.ReportsTo?.ToString(CultureInfo.InvariantCulture)" type="number" name="reportsTo" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Employees_PhotoPath">@L("PhotoPath")</label>
+                <input class="form-control" id="Employees_PhotoPath" value="@Model.Employees.PhotoPath" type="text" name="photoPath" maxlength="@CCPDemo.Employee.EmployeesConsts.MaxPhotoPathLength" minlength="@CCPDemo.Employee.EmployeesConsts.MinPhotoPathLength" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

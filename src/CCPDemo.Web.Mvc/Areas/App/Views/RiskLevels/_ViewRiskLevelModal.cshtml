@@ -1,0 +1,34 @@
+﻿
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.RiskLevels
+@model RiskLevelViewModel
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("Details")))
+
+<div class="modal-body">
+    <div id="RiskLevelInformationsTab">
+
+        <div class="row">
+            <div class="col-6 mb-3">
+                <h6>@L("Value") :</h6>
+                @Model.RiskLevel.Value
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("Name") :</h6>
+                @Model.RiskLevel.Name
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("Color") :</h6>
+                @Model.RiskLevel.Color
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("DisplayName") :</h6>
+                @Model.RiskLevel.DisplayName
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithClose.cshtml")

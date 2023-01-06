@@ -1,0 +1,32 @@
+﻿
+@using System.Globalization
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.RiskFunctions
+@model CreateOrEditRiskFunctionModalViewModel
+@using Abp.Extensions
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("EditRiskFunction")) : L("CreateNewRiskFunction")))
+
+<div class="modal-body">
+    <div id="RiskFunctionInformationsTab">
+        <form name="RiskFunctionInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+            <input type="hidden" name="id" value="@Model.RiskFunction.Id" />
+            }
+
+            <div class="my-3">
+                <label class="form-label" for="RiskFunction_Value">@L("Value")</label>
+                <input class="form-control m-input" id="RiskFunction_Value" value="@Model.RiskFunction.Value.ToString(CultureInfo.InvariantCulture)" type="number" name="value" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="RiskFunction_Name">@L("Name")</label>
+                <input class="form-control" id="RiskFunction_Name" value="@Model.RiskFunction.Name" type="text" name="name" required maxlength="@CCPDemo.RiskFunctions.RiskFunctionConsts.MaxNameLength" minlength="@CCPDemo.RiskFunctions.RiskFunctionConsts.MinNameLength" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

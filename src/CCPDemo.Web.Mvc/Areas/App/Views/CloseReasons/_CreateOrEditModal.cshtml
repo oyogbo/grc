@@ -1,0 +1,32 @@
+﻿
+@using System.Globalization
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.CloseReasons
+@model CreateOrEditCloseReasonModalViewModel
+@using Abp.Extensions
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("EditCloseReason")) : L("CreateNewCloseReason")))
+
+<div class="modal-body">
+    <div id="CloseReasonInformationsTab">
+        <form name="CloseReasonInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+            <input type="hidden" name="id" value="@Model.CloseReason.Id" />
+            }
+
+            <div class="my-3">
+                <label class="form-label" for="CloseReason_value">@L("value")</label>
+                <input class="form-control m-input" id="CloseReason_value" value="@Model.CloseReason.value.ToString(CultureInfo.InvariantCulture)" type="number" name="value" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="CloseReason_name">@L("name")</label>
+                <input class="form-control" id="CloseReason_name" value="@Model.CloseReason.name" type="text" name="name" required maxlength="@CCPDemo.RiskCloseReason.CloseReasonConsts.MaxnameLength" minlength="@CCPDemo.RiskCloseReason.CloseReasonConsts.MinnameLength" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

@@ -117,15 +117,15 @@
 					{
 					"type" : "bool",
 					"content" : "
-                                <label class="form-check form-check-custom">
+                                <label class=\"form-check form-check-custom\">
                                     <input
                                         id=\"{{Entity_Name_Here}}_{{Property_Name_Here}}\"
                                         name=\"{{property_Name_Here}}\"                                        
-                                        type="checkbox"
-                                        class="form-check-input"
+                                        type=\"checkbox\"
+                                        class=\"form-check-input\"
                                         @Html.Raw(Model.{{Entity_Name_Here}}.{{Property_Name_Here}} ?\"checked=\\\"checked\\\"\":\"\") 
                                     />
-                                    <span class="form-check-label">
+                                    <span class=\"form-check-label\">
                                         @L(\"{{Property_Name_Here}}\")
                                     </span>
                                 </label>

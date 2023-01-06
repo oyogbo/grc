@@ -1,0 +1,62 @@
+﻿
+@using System.Globalization
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.Projects
+@model CreateOrEditProjectModalViewModel
+@using Abp.Extensions
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("EditProject")) : L("CreateNewProject")))
+
+<div class="modal-body">
+    <div id="ProjectInformationsTab">
+        <form name="ProjectInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+            <input type="hidden" name="id" value="@Model.Project.Id" />
+            }
+
+            <div class="my-3">
+                <label class="form-label" for="Project_Value">@L("Value")</label>
+                <input class="form-control m-input" id="Project_Value" value="@Model.Project.Value.ToString(CultureInfo.InvariantCulture)" type="number" name="value" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Project_Name">@L("Name")</label>
+                <input class="form-control" id="Project_Name" value="@Model.Project.Name" type="text" name="name" required maxlength="@CCPDemo.Projects.ProjectConsts.MaxNameLength" minlength="@CCPDemo.Projects.ProjectConsts.MinNameLength" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Project_DueDate">@L("DueDate")</label>
+                <input class="form-control m-input date-picker" id="Project_DueDate" type="text" name="dueDate" value="@Model.Project.DueDate" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Project_ConsultantId">@L("ConsultantId")</label>
+                <input class="form-control m-input" id="Project_ConsultantId" value="@Model.Project.ConsultantId?.ToString(CultureInfo.InvariantCulture)" type="number" name="consultantId" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Project_BusinessOwnerId">@L("BusinessOwnerId")</label>
+                <input class="form-control m-input" id="Project_BusinessOwnerId" value="@Model.Project.BusinessOwnerId?.ToString(CultureInfo.InvariantCulture)" type="number" name="businessOwnerId" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Project_DataClassificationId">@L("DataClassificationId")</label>
+                <input class="form-control m-input" id="Project_DataClassificationId" value="@Model.Project.DataClassificationId?.ToString(CultureInfo.InvariantCulture)" type="number" name="dataClassificationId" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Project_Order">@L("Order")</label>
+                <input class="form-control m-input" id="Project_Order" value="@Model.Project.Order.ToString(CultureInfo.InvariantCulture)" type="number" name="order" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Project_status">@L("status")</label>
+                <input class="form-control m-input" id="Project_status" value="@Model.Project.status.ToString(CultureInfo.InvariantCulture)" type="number" name="status" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

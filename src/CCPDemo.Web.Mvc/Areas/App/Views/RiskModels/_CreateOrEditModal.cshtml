@@ -1,0 +1,32 @@
+﻿
+@using System.Globalization
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.RiskModels
+@model CreateOrEditRiskModelModalViewModel
+@using Abp.Extensions
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("EditRiskModel")) : L("CreateNewRiskModel")))
+
+<div class="modal-body">
+    <div id="RiskModelInformationsTab">
+        <form name="RiskModelInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+            <input type="hidden" name="id" value="@Model.RiskModel.Id" />
+            }
+
+            <div class="my-3">
+                <label class="form-label" for="RiskModel_Value">@L("Value")</label>
+                <input class="form-control m-input" id="RiskModel_Value" value="@Model.RiskModel.Value.ToString(CultureInfo.InvariantCulture)" type="number" name="value" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="RiskModel_Name">@L("Name")</label>
+                <input class="form-control" id="RiskModel_Name" value="@Model.RiskModel.Name" type="text" name="name" required maxlength="@CCPDemo.RiskModels.RiskModelConsts.MaxNameLength" minlength="@CCPDemo.RiskModels.RiskModelConsts.MinNameLength" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

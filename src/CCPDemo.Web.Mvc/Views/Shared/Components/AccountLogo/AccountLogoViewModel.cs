@@ -18,7 +18,7 @@ namespace CCPDemo.Web.Views.Shared.Components.AccountLogo
         {
             if (LoginInformations?.Tenant?.LogoId == null)
             {
-                return appPath + "Common/Images/app-logo-on-" + _skin + ".svg";
+                return appPath + "Common/Images/logo.png";
             }
 
             return appPath + "TenantCustomization/GetLogo?tenantId=" + LoginInformations?.Tenant?.Id;

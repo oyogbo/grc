@@ -1,0 +1,47 @@
+﻿
+@using System.Globalization
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.Closures
+@model CreateOrEditClosureModalViewModel
+@using Abp.Extensions
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("EditClosure")) : L("CreateNewClosure")))
+
+<div class="modal-body">
+    <div id="ClosureInformationsTab">
+        <form name="ClosureInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+            <input type="hidden" name="id" value="@Model.Closure.Id" />
+            }
+
+            <div class="my-3">
+                <label class="form-label" for="Closure_RiskId">@L("RiskId")</label>
+                <input class="form-control m-input" id="Closure_RiskId" value="@Model.Closure.RiskId.ToString(CultureInfo.InvariantCulture)" type="number" name="riskId" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Closure_UserId">@L("UserId")</label>
+                <input class="form-control m-input" id="Closure_UserId" value="@Model.Closure.UserId.ToString(CultureInfo.InvariantCulture)" type="number" name="userId" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Closure_ClosureDate">@L("ClosureDate")</label>
+                <input class="form-control m-input date-picker" id="Closure_ClosureDate" type="text" name="closureDate" value="@Model.Closure.ClosureDate" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Closure_CloseReasonId">@L("CloseReasonId")</label>
+                <input class="form-control m-input" id="Closure_CloseReasonId" value="@Model.Closure.CloseReasonId.ToString(CultureInfo.InvariantCulture)" type="number" name="closeReasonId" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Closure_Note">@L("Note")</label>
+                <input class="form-control" id="Closure_Note" value="@Model.Closure.Note" type="text" name="note" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

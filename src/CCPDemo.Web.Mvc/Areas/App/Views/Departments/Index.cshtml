@@ -1,0 +1,298 @@
+﻿@using CCPDemo.Authorization
+@using CCPDemo.Web.Areas.App.Models.Departments
+@using CCPDemo.Web.Areas.App.Startup
+@model DepartmentsViewModel
+@{
+ViewBag.CurrentPageName = AppPageNames.Common.Departments;
+}
+
+
+<div class="content d-flex flex-column flex-column-fluid">
+
+    <abp-page-subheader title='@L("Departments")' description='@L("DepartmentsHeaderInfo")'>
+        <button id="ExportToExcelButton" class="btn btn-outline btn-outline-success btn-active-light-success me-1"><i class="fa fa-file-excel"></i> @L("ExportToExcel")</button>
+
+        @if (IsGranted(AppPermissions.Pages_Departments_Create))
+        {
+        <button id="CreateNewDepartmentButton" class="btn btn-primary blue"><i class="fa fa-plus"></i> @L("CreateNewDepartment")</button>
+        }
+    </abp-page-subheader>
+
+    <div class="@(await GetContainerClass())">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <div class="form">
+                    <div class="row align-items-center mb-4">
+                        <div class="col-xl-12">
+
+                            <div class="my-3">
+                                <div class="input-group">
+                                    <input type="text" id="DepartmentsTableFilter" class="form-control" placeholder='@L("SearchWithThreeDot")' value="@Model.FilterText">
+                                    <button id="GetDepartmentsButton" class="btn btn-primary" type="submit"><i class="flaticon-search-1"></i></button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div id="AdvacedAuditFiltersArea" style="display: none" class="row mb-4">
+                    <div class="col-md-12">
+
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="NameFilterId">@L("Name")</label>
+                            <input type="text" class="form-control" name="nameFilter" id="NameFilterId">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row my-4">
+                    <div class="col-xl-12">
+                        <span id="ShowAdvancedFiltersSpan" class="text-muted clickable-item"><i class="fa fa-angle-down"></i> @L("ShowAdvancedFilters")</span>
+                        <span id="HideAdvancedFiltersSpan" class="text-muted clickable-item" style="display: none"><i class="fa fa-angle-up"></i> @L("HideAdvancedFilters")</span>
+                    </div>
+                </div>
+                <div class="row align-items-center">
+                    <table id="DepartmentsTable" class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer">
+                        <thead>
+                            <tr>
+                                <th></th>
+
+                                <th>@L("Actions")</th>
+                                <th>@L("Name")</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+
+    <script>
+    $.noConflict;
+        var $ = jQuery;
+       
+        $(function() {
+            var _$departmentsTable = $('#DepartmentsTable');
+    var _departmentsService = abp.services.app.departments;
+
+    //$('.date-picker').datetimepicker({
+    //  locale: abp.localization.currentLanguage.name,
+    //  format: 'L',
+    //});
+
+    var _permissions = {
+      create: abp.auth.hasPermission('Pages.Departments.Create'),
+      edit: abp.auth.hasPermission('Pages.Departments.Edit'),
+      delete: abp.auth.hasPermission('Pages.Departments.Delete'),
+    };
+
+    var _createOrEditModal = new app.ModalManager({
+      viewUrl: abp.appPath + 'App/Departments/CreateOrEditModal',
+      //scriptUrl: abp.appPath + 'view-resources/Areas/App/Views/Departments/_CreateOrEditModal.js',
+      modalClass: 'CreateOrEditDepartmentModal',
+    });
+
+    var _viewDepartmentModal = new app.ModalManager({
+      viewUrl: abp.appPath + 'App/Departments/ViewdepartmentModal',
+      modalClass: 'ViewDepartmentModal',
+    });
+
+    var getDateFilter = function (element) {
+      if (element.data('DateTimePicker').date() == null) {
+        return null;
+      }
+      return element.data('DateTimePicker').date().format('YYYY-MM-DDT00:00:00Z');
+    };
+
+    var getMaxDateFilter = function (element) {
+      if (element.data('DateTimePicker').date() == null) {
+        return null;
+      }
+      return element.data('DateTimePicker').date().format('YYYY-MM-DDT23:59:59Z');
+    };
+
+    var dataTable = _$departmentsTable.DataTable({
+      paging: true,
+      serverSide: true,
+      processing: true,
+      listAction: {
+        ajaxFunction: _departmentsService.getAll,
+        inputFilter: function () {
+          return {
+            filter: $('#DepartmentsTableFilter').val(),
+            nameFilter: $('#NameFilterId').val(),
+          };
+        },
+      },
+      columnDefs: [
+        {
+          className: 'control responsive',
+          orderable: false,
+          render: function () {
+            return '';
+          },
+          targets: 0,
+        },
+        {
+          width: 120,
+          targets: 1,
+          data: null,
+          orderable: false,
+          autoWidth: false,
+          defaultContent: '',
+          rowAction: {
+            cssClass: 'btn btn-brand dropdown-toggle',
+            text: '<i class="fa fa-cog"></i> ' + app.localize('Actions') + ' <span class="caret"></span>',
+            items: [
+              {
+                text: app.localize('View'),
+                iconStyle: 'far fa-eye mr-2',
+                action: function (data) {
+                  _viewDepartmentModal.open({ id: data.record.department.id });
+                },
+              },
+              {
+                text: app.localize('Edit'),
+                iconStyle: 'far fa-edit mr-2',
+                visible: function () {
+                  return _permissions.edit;
+                },
+                action: function (data) {
+                  _createOrEditModal.open({ id: data.record.department.id });
+                },
+              },
+              {
+                text: app.localize('Delete'),
+                iconStyle: 'far fa-trash-alt mr-2',
+                visible: function () {
+                  return _permissions.delete;
+                },
+                action: function (data) {
+                  deleteDepartment(data.record.department);
+                },
+              },
+            ],
+          },
+        },
+        {
+          targets: 2,
+          data: 'department.name',
+          name: 'name',
+        },
+      ],
+    });
+
+    function getDepartments() {
+      dataTable.ajax.reload();
+    }
+
+    function deleteDepartment(department) {
+      abp.message.confirm('', app.localize('AreYouSure'), function (isConfirmed) {
+        if (isConfirmed) {
+          _departmentsService
+            .delete({
+              id: department.id,
+            })
+            .done(function () {
+              getDepartments(true);
+              abp.notify.success(app.localize('SuccessfullyDeleted'));
+            });
+        }
+      });
+    }
+
+    $('#ShowAdvancedFiltersSpan').click(function () {
+      $('#ShowAdvancedFiltersSpan').hide();
+      $('#HideAdvancedFiltersSpan').show();
+      $('#AdvacedAuditFiltersArea').slideDown();
+    });
+
+    $('#HideAdvancedFiltersSpan').click(function () {
+      $('#HideAdvancedFiltersSpan').hide();
+      $('#ShowAdvancedFiltersSpan').show();
+      $('#AdvacedAuditFiltersArea').slideUp();
+    });
+
+    $('#CreateNewDepartmentButton').click(function () {
+      _createOrEditModal.open();
+    });
+
+    $('#ExportToExcelButton').click(function () {
+      _departmentsService
+        .getDepartmentsToExcel({
+          filter: $('#DepartmentsTableFilter').val(),
+          nameFilter: $('#NameFilterId').val(),
+        })
+        .done(function (result) {
+          app.downloadTempFile(result);
+        });
+    });
+
+    abp.event.on('app.createOrEditDepartmentModalSaved', function () {
+      getDepartments();
+    });
+
+    $('#GetDepartmentsButton').click(function (e) {
+      e.preventDefault();
+      getDepartments();
+    });
+
+    $(document).keypress(function (e) {
+      if (e.which === 13) {
+        getDepartments();
+      }
+    });
+
+    // cREATE OR EDIT MODAL
+     app.modals.CreateOrEditDepartmentModal = function () {
+    var _departmentsService = abp.services.app.departments;
+
+    var _modalManager;
+    var _$departmentInformationForm = null;
+
+    this.init = function (modalManager) {
+      _modalManager = modalManager;
+
+      var modal = _modalManager.getModal();
+      //modal.find('.date-picker').datetimepicker({
+      //  locale: abp.localization.currentLanguage.name,
+      //  format: 'L',
+      //});
+
+      _$departmentInformationForm = _modalManager.getModal().find('form[name=DepartmentInformationsForm]');
+      _$departmentInformationForm.validate();
+    };
+
+    this.save = function () {
+      if (!_$departmentInformationForm.valid()) {
+        return;
+      }
+
+      var department = _$departmentInformationForm.serializeFormToObject();
+
+      _modalManager.setBusy(true);
+      _departmentsService
+        .createOrEdit(department)
+        .done(function () {
+          abp.notify.info(app.localize('SavedSuccessfully'));
+          _modalManager.close();
+          abp.event.trigger('app.createOrEditDepartmentModalSaved');
+        })
+        .always(function () {
+          _modalManager.setBusy(false);
+        });
+    };
+  };
+
+
+        });
+
+</script>
+}

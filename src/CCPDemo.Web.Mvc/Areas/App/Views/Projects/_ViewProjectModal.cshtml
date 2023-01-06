@@ -1,0 +1,50 @@
+﻿
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.Projects
+@model ProjectViewModel
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("Details")))
+
+<div class="modal-body">
+    <div id="ProjectInformationsTab">
+
+        <div class="row">
+            <div class="col-6 mb-3">
+                <h6>@L("Value") :</h6>
+                @Model.Project.Value
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("Name") :</h6>
+                @Model.Project.Name
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("DueDate") :</h6>
+                @Model.Project.DueDate
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("ConsultantId") :</h6>
+                @Model.Project.ConsultantId
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("BusinessOwnerId") :</h6>
+                @Model.Project.BusinessOwnerId
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("DataClassificationId") :</h6>
+                @Model.Project.DataClassificationId
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("Order") :</h6>
+                @Model.Project.Order
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("status") :</h6>
+                @Model.Project.status
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithClose.cshtml")

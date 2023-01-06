@@ -1,0 +1,46 @@
+﻿
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.ManagementReviews
+@model ManagementReviewViewModel
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("Details")))
+
+<div class="modal-body">
+    <div id="ManagementReviewInformationsTab">
+
+        <div class="row">
+            <div class="col-6 mb-3">
+                <h6>@L("risk_id") :</h6>
+                @Model.ManagementReview.risk_id
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("submission_date") :</h6>
+                @Model.ManagementReview.submission_date
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("review") :</h6>
+                @Model.ManagementReview.review
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("reviewer") :</h6>
+                @Model.ManagementReview.reviewer
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("next_step") :</h6>
+                @Model.ManagementReview.next_step
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("comments") :</h6>
+                @Model.ManagementReview.comments
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("next_review") :</h6>
+                @Model.ManagementReview.next_review
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithClose.cshtml")

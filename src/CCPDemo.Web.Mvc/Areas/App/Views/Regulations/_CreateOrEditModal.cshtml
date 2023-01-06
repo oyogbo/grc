@@ -1,0 +1,32 @@
+﻿
+@using System.Globalization
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.Regulations
+@model CreateOrEditRegulationModalViewModel
+@using Abp.Extensions
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("EditRegulation")) : L("CreateNewRegulation")))
+
+<div class="modal-body">
+    <div id="RegulationInformationsTab">
+        <form name="RegulationInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+            <input type="hidden" name="id" value="@Model.Regulation.Id" />
+            }
+
+            <div class="my-3">
+                <label class="form-label" for="Regulation_value">@L("value")</label>
+                <input class="form-control m-input" id="Regulation_value" value="@Model.Regulation.value.ToString(CultureInfo.InvariantCulture)" type="number" name="value" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Regulation_name">@L("name")</label>
+                <input class="form-control" id="Regulation_name" value="@Model.Regulation.name" type="text" name="name" required maxlength="@CCPDemo.Regulations.RegulationConsts.MaxnameLength" minlength="@CCPDemo.Regulations.RegulationConsts.MinnameLength" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")
