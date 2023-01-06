@@ -7,7 +7,6 @@ using CCPDemo.Web.Areas.App.Startup;
 using Abp.Domain.Repositories;
 using CCPDemo.VRisks;
 using CCPDemo.Web.Areas.App.Models.VRisks;
-using CCPDemo.KeyRiskIndicators;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 
@@ -18,16 +17,14 @@ namespace CCPDemo.Web.Areas.App.Controllers
     public class TenantDashboardController : CustomizableDashboardControllerBase
     {
         private readonly IRepository<VRisk> _vRiskRepository;
-        private readonly IRepository<KeyRiskIndicator> _keyRiskIndicatorRepository;
         private readonly VRisksAppService _vriskAppService;
    
         public TenantDashboardController(DashboardViewConfiguration dashboardViewConfiguration, 
             IDashboardCustomizationAppService dashboardCustomizationAppService, IRepository<VRisk> vRiskRepository,
-            IRepository<KeyRiskIndicator> keyRiskIndicatorRepository, VRisksAppService vRisksAppService) 
+            VRisksAppService vRisksAppService) 
             : base(dashboardViewConfiguration, dashboardCustomizationAppService)
         {
             _vRiskRepository= vRiskRepository;
-           _keyRiskIndicatorRepository = keyRiskIndicatorRepository;
             _vriskAppService = vRisksAppService;
         }
 
@@ -51,7 +48,6 @@ namespace CCPDemo.Web.Areas.App.Controllers
             var model = new VRisksViewModel
             {
                 RiskCount = riskCount,
-                KeyRiskIndicatorCount = _keyRiskIndicatorRepository.Count(),
                 Risks = risks,
                 Low = low,
                 Medium = medium,

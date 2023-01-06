@@ -277,6 +277,52 @@ namespace CCPDemo.Web.Areas.App.Controllers
             //return View();
         }
 
+        [HttpPost]
+        [AbpMvcAuthorize(AppPermissions.Pages_Risks_Create)]
+        public async Task<JsonResult> UpDownGradeRisk([FromBody] RiskTransactionDto model)
+        {
+            return Json(model);
+
+            var riskTransactionDto = new RiskTransaction();
+            riskTransactionDto.RiskId = model.RiskId;
+            riskTransactionDto.CurrentValue = model.CurrentValue;
+            riskTransactionDto.NewValue = model.NewValue;
+            riskTransactionDto.UserId = model.UserId;
+            riskTransactionDto.Date = model.Date;
+            riskTransactionDto.TransactionType = model.TransactionType;
+
+
+
+            var riskDto = new Risk();
+            riskDto.Id = model.RiskId;
+            riskDto.Rating = model.NewValue;
+
+            var upDateRiskDto = new CreateOrEditRiskDto();
+            upDateRiskDto.Id = model.Id;
+            upDateRiskDto.RiskOwner = model.NewValue;
+
+
+            await _riskTransactionRepository.InsertAsync(riskTransactionDto);
+
+            //var user = _userManager.Users.Where(u => u.Id == model.UserId).FirstOrDefault();
+            //var roles = user.Roles;
+            //var isAdmin = _userManager.IsInRoleAsync(user, "Admin").Result ? "Admin" : "User";
+            //var isUser = _userManager.IsInRoleAsync(user, "User").Result ? "User" : "Admin";
+            //var isSupervisor = _userManager.IsInRoleAsync(user, "Supervisor").Result ? "Supervisor" : "Not a Supervisor";
+
+            //string[] userRoles = { isAdmin, isUser, isSupervisor };
+
+
+            // Update risk owner
+            //var riskUpdate = await _riskRepo.UpdateAsync(riskDto);
+            //await _vRisksAppService.CreateOrEdit(upDateRiskDto);
+
+
+            return Json(model);
+
+            //return View();
+        }
+
         public async Task<PartialViewResult> ViewRiskModal(int id)
         {
             var getRiskForViewDto = await _risksAppService.GetRiskForView(id);

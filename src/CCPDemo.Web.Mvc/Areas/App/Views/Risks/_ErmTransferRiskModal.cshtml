@@ -21,7 +21,7 @@
             }
 
             <input type="hidden" id="riskId" name="id" value="@Model.Risk.Id" />
-            <input type="hidden" id="currentOwner" name="id" value="@Model.Risk.RiskOwner" />
+            <input type="hidden" id="currentOwner" name="id" value="@Model.Risk.Rating" />
             <input type="hidden" id="loggedInUserId" name="loggedInUserId" value="@AbpSession.UserId" />
 
             <div class="my-3">
@@ -115,7 +115,7 @@
             </div>
 
             <div class="my-3">
-                <label class="form-label" for="Risk_Department">@L("Rating")</label>
+                <label class="form-label" for="Risk_Rating">@L("Rating")</label>
                 @*<input class="form-control form-control-solid" id="VRisk_Department" value="@Model.VRisk.Department" type="text" name="department" />*@
                 <select id="Risk_Rating" name="rating" class="form-control">
 

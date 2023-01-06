@@ -54,7 +54,6 @@ using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using CCPDemo.Web.Extensions;
 using SecurityStampValidatorCallback = CCPDemo.Identity.SecurityStampValidatorCallback;
-using CCPDemo.KeyRiskIndicators;
 using AutoMapper;
 
 

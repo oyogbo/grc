@@ -11,12 +11,18 @@ $(function () {
         var transactionType = "Transfer";
         var currentValue = $("#currentOwner").val();
 
+        var newValue;
+
+        $("#Risk_Department").change(function () {
+            newValue = $(this).val();
+        });
+
         var riskTransferData = {
             'RiskId': $("#riskId").val(),
             'Date': new Date().toLocaleString(),
             'TransactionType': transactionType,
             'CurrentValue': currentValue,
-            'NewValue': $("#VRisk_RiskOwner").val(),
+            'NewValue': newValue,
             'UserId': $("#loggedInUserId").val()
         };
         var baseUrl = window.location.origin;

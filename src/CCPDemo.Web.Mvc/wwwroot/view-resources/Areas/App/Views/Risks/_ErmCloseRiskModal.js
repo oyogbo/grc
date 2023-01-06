@@ -2,9 +2,7 @@
 var $ = jQuery;
 
 $(function () {
-    $("#transferRiskSaveBtn").click(function () {
-
-        console.log('Transferring Risk');
+    $("#closeRiskSaveBtn").click(function () {
 
         var riskId = $("riskId").val();
         var _date = new Date().toLocaleString();

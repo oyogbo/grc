@@ -8,19 +8,25 @@ $(function () {
 
         var riskId = $("riskId").val();
         var _date = new Date().toLocaleString();
-        var transactionType = "Transfer";
+        var transactionType = "Downgrade/Upgrade";
         var currentValue = $("#currentOwner").val();
+
+        var newValue;
+
+        $("#Risk_Rating").change(function () {
+            newValue = $(this).val();
+        });
 
         var riskTransferData = {
             'RiskId': $("#riskId").val(),
             'Date': new Date().toLocaleString(),
             'TransactionType': transactionType,
             'CurrentValue': currentValue,
-            'NewValue': $("#VRisk_RiskOwner").val(),
+            'NewValue': newValue,
             'UserId': $("#loggedInUserId").val()
         };
         var baseUrl = window.location.origin;
-        var url = baseUrl + "Risks/TransferRisk";
+        var url = baseUrl + "Risks/UpDownGradeRisk";
 
         abp.ajax({
             url: $("#RiskTransferForm").attr('action'),
@@ -28,7 +34,7 @@ $(function () {
             abpHandleError: false,
         }).done(function (data) {
             console.log(data)
-            abp.notify.success('Risk Transfer Was Successful!');
+            abp.notify.success('Risk Upgrade/Downgrade Was Successful!');
             $(".modal").modal('hide');
         }).fail(function (error) {
             //setCaptchaToken();

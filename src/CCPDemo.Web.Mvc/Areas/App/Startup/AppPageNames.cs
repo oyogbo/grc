@@ -11,8 +11,6 @@
             public const string VRisks = "VRisks.VRisks";
             public const string RisksForMitigation = "VRisks.VRisks";
             public const string Risks = "Risks.Risks";
-            public const string UploadKeyRiskIndicator = "UploadKeyRiskIndicator";
-            public const string KeyRiskIndicators = "KeyRiskIndicators.KeyRiskIndicators";
             public const string Regulations = "Administration.Regulations.Regulations";
             public const string ManagementReviews = "Administration.ManagementReviews.ManagementReviews";
             public const string Projects = "Administration.Projects.Projects";
