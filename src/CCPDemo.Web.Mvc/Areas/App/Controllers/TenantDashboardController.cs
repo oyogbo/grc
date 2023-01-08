@@ -5,10 +5,14 @@ using CCPDemo.DashboardCustomization;
 using System.Threading.Tasks;
 using CCPDemo.Web.Areas.App.Startup;
 using Abp.Domain.Repositories;
-using CCPDemo.VRisks;
-using CCPDemo.Web.Areas.App.Models.VRisks;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using CCPDemo.Risks;
+using CCPDemo.Web.Areas.App.Models.Risks;
+using Microsoft.EntityFrameworkCore;
+using Abp.Organizations;
+using CCPDemo.Risks.Dtos;
+using System.Collections.Generic;
 
 namespace CCPDemo.Web.Areas.App.Controllers
 {
@@ -16,36 +20,65 @@ namespace CCPDemo.Web.Areas.App.Controllers
     [AbpMvcAuthorize(AppPermissions.Pages_Tenant_Dashboard)]
     public class TenantDashboardController : CustomizableDashboardControllerBase
     {
-        private readonly IRepository<VRisk> _vRiskRepository;
-        private readonly VRisksAppService _vriskAppService;
-   
-        public TenantDashboardController(DashboardViewConfiguration dashboardViewConfiguration, 
-            IDashboardCustomizationAppService dashboardCustomizationAppService, IRepository<VRisk> vRiskRepository,
-            VRisksAppService vRisksAppService) 
+        private readonly IRepository<Risk> _riskRepository;
+        private readonly RisksAppService _risksAppService;
+		private readonly IRepository<OrganizationUnit, long> _lookup_organizationUnitRepository;
+
+		public TenantDashboardController(DashboardViewConfiguration dashboardViewConfiguration, 
+            IDashboardCustomizationAppService dashboardCustomizationAppService,
+            IRepository<Risk> riskRepository, RisksAppService risksAppService,
+			IRepository<OrganizationUnit, long> lookup_organizationUnitRepository) 
             : base(dashboardViewConfiguration, dashboardCustomizationAppService)
         {
-            _vRiskRepository= vRiskRepository;
-            _vriskAppService = vRisksAppService;
-        }
+            _riskRepository= riskRepository;
+            _risksAppService=risksAppService;
+			_lookup_organizationUnitRepository = lookup_organizationUnitRepository;
+		}
 
         public async Task<ActionResult> Index()
         {
             //return await GetView(CCPDemoDashboardCustomizationConsts.DashboardNames.DefaultTenantDashboard);
 
-            string[] depts = { "OPERATIONS", "SALES", "APPLICATION SUPPORT", "DATA & DIGITAL SERVICES" };
-            var opsCount = _vRiskRepository.GetAll().Where(dept => dept.Department.ToUpper() == depts[0]).Count();
-            var salesCount = _vRiskRepository.GetAll().Where(dept => dept.Department.ToUpper() == depts[1]).Count();
-            var appsCount = _vRiskRepository.GetAll().Where(dept => dept.Department.ToUpper() == depts[2]).Count();
-            var digisCount = _vRiskRepository.GetAll().Where(dept => dept.Department.ToUpper() == depts[3]).Count();
-            int[] deptsCount = { opsCount, salesCount, appsCount, digisCount };
+            var filteredRisks = _riskRepository.GetAll()
+                .Include(e=>e.OrganizationUnitFk);
+            var risksTable = from o in filteredRisks
 
-			var riskCount = _vRiskRepository.Count();
-            var risks = _vRiskRepository.GetAllList();
-            var low = _vRiskRepository.GetAll().Where(rating => rating.Rating.ToUpper() == "LOW").Count();
-            var medium = _vRiskRepository.GetAll().Where(rating => rating.Rating.ToUpper() == "MEDIUM").Count();
-            var high = _vRiskRepository.GetAll().Where(rating => rating.Rating.ToUpper() == "HIGH").Count();
-            var critical = _vRiskRepository.GetAll().Where(rating => rating.Rating.ToUpper() == "CRITICAL").Count();
-            var model = new VRisksViewModel
+                             join o1 in _lookup_organizationUnitRepository.GetAll() on o.OrganizationUnitId equals o1.Id into j1
+                             from s1 in j1.DefaultIfEmpty()
+                             select new
+                             {
+                                 o.Summary,
+								 OrganizationUnitDisplayName = s1 == null || s1.DisplayName == null ? "" : s1.DisplayName.ToString(),
+                                 o.TargetDate
+							 };
+
+			var dbList = await risksTable.ToListAsync();
+
+
+			var tableData = new List<RiskTableForDisplayDto>();
+            foreach (var data in dbList)
+            {
+                var riskTable = new RiskTableForDisplayDto
+                {
+                    Summary = data.Summary,
+                    OrganizationUnitDisplayName = data.OrganizationUnitDisplayName,
+                    TargetDate = data.TargetDate,
+                };
+                tableData.Add(riskTable);
+			}
+
+
+			var riskCount = _riskRepository.Count();
+            var risks = _riskRepository.GetAllList();
+            var low = _riskRepository.GetAll().Where(r=>r.RiskRatingId == 5).Count();
+            var medium = _riskRepository.GetAll().Where(r => r.RiskRatingId == 4).Count();
+            var high = _riskRepository.GetAll().Where(r => r.RiskRatingId == 3).Count();
+            var veryHigh = _riskRepository.GetAll().Where(r => r.RiskRatingId == 2).Count();
+            var critical = _riskRepository.GetAll().Where(r => r.RiskRatingId == 1).Count();
+
+            ViewBag.dbList = dbList;
+
+            var model = new RiskViewModel
             {
                 RiskCount = riskCount,
                 Risks = risks,
@@ -53,8 +86,8 @@ namespace CCPDemo.Web.Areas.App.Controllers
                 Medium = medium,
                 Critical = critical,
                 High = high,
-                DepartmentsCounts = deptsCount,
-                
+                VeryHigh= veryHigh,
+                dbList = tableData,
             };
 
             return View(model);

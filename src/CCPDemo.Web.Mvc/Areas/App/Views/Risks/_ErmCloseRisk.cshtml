@@ -1,0 +1,103 @@
+﻿@using System.Globalization
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.Risks
+@model CreateOrEditRiskModalViewModel
+@using Abp.Extensions
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel("Close Risk"))
+
+@{
+    var accepted = Model.Risk.RiskAccepted ? true : false;
+}
+
+<div class="modal-body">
+    <div id="RiskInformationsTab">
+        <form name="RiskInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+            <input type="hidden" name="id" value="@Model.Risk.Id" />
+            }
+
+            <div class="my-3">
+                <label class="form-label" for="riskTypeId">Risk Type</label>
+                @Html.DropDownList("riskTypeId", new SelectList(Model.RiskRiskTypeList,"Id","DisplayName", (Model.IsEditMode ? Model.Risk.RiskTypeId.ToString() : "")),"Select Risk Type", new { @class = "form-control form-control-solid h-auto py-7 px-6 rounded-lg font-size-h6" , @required="required" })
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="organizationUnitId">Department/Unit</label>
+                @Html.DropDownList("organizationUnitId", new SelectList(Model.RiskOrganizationUnitList,"Id","DisplayName", (Model.IsEditMode ? Model.Risk.OrganizationUnitId.ToString() : "")),"Select Unit or Department", new { @class = "form-control form-control-solid h-auto py-7 px-6 rounded-lg font-size-h6" })
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="statusId">@L("Status")</label>
+                @Html.DropDownList("statusId", new SelectList(Model.RiskStatusList,"Id","DisplayName", (Model.IsEditMode ? Model.Risk.StatusId.ToString() : "")),"Select Status", new { @class = "form-control form-control-solid h-auto py-7 px-6 rounded-lg font-size-h6" })
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="riskRatingId">Risk Rating</label>
+                @Html.DropDownList("riskRatingId", new SelectList(Model.RiskRiskRatingList,"Id","DisplayName", (Model.IsEditMode ? Model.Risk.RiskRatingId.ToString() : "")),"Select Risk Rating", new { @class = "form-control form-control-solid h-auto py-7 px-6 rounded-lg font-size-h6" })
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="userId">Risk Owner</label>
+                @Html.DropDownList("userId", new SelectList(Model.RiskUserList,"Id","DisplayName", (Model.IsEditMode ? Model.Risk.UserId.ToString() : "")),"Select Risk Owner", new { @class = "form-control form-control-solid h-auto py-7 px-6 rounded-lg font-size-h6" })
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Risk_Summary">@L("Summary")</label>
+                @*<input class="form-control" id="Risk_Summary" value="@Model.Risk.Summary" type="text" name="summary" required />*@
+                <textarea class="form-control form-control-solid" id="Risk_Summary" name="summary" rows="5" placeholder="Risk Sumarry" required>@Model.Risk.Summary</textarea>
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Risk_ExistingControl">Existing Conrol</label>
+                @*<input class="form-control" id="Risk_ExistingControl" value="@Model.Risk.ExistingControl" type="text" name="existingControl" />*@
+                <textarea class="form-control form-control-solid" id="Risk_ExistingControl" name="existingControl" rows="5" placeholder="Existing Conrol">@Model.Risk.ExistingControl</textarea>
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Risk_ERMRecommendation">ERM Recommendation</label>
+                @*<input class="form-control" id="Risk_ERMRecommendation" value="@Model.Risk.ERMRecommendation" type="text" name="ermRecommendation" />*@
+                <textarea class="form-control form-control-solid" id="Risk_ERMRecommendation" name="ermRecommendation" rows="5" placeholder="ERM Recommendation">@Model.Risk.ERMRecommendation</textarea>
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Risk_ActionPlan">Action Plan</label>
+                @*<input class="form-control" id="Risk_ActionPlan" value="@Model.Risk.ActionPlan" type="text" name="actionPlan" />*@
+                <textarea class="form-control form-control-solid" id="Risk_ActionPlan" name="actionPlan" rows="5" placeholder="Action Plan (Risk Owner)">@Model.Risk.ActionPlan</textarea>
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Risk_RiskOwnerComment">Risk Owner's Comment</label>
+                @*<input class="form-control" id="Risk_RiskOwnerComment" value="@Model.Risk.RiskOwnerComment" type="text" name="riskOwnerComment" />*@
+                <textarea class="form-control form-control-solid" id="Risk_RiskOwnerComment" name="riskOwnerComment" rows="5" placeholder="Risk Owner's Comment'">@Model.Risk.RiskOwnerComment</textarea>
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Risk_TargetDate">Target Date</label>
+                <input class="form-control m-input date-picker" id="Risk_TargetDate" type="text" name="targetDate" value="@Model.Risk.TargetDate" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Risk_ActualClosureDate">Actual Date</label>
+                <input class="form-control m-input date-picker" id="Risk_ActualClosureDate" type="text" name="actualClosureDate" value="@Model.Risk.ActualClosureDate" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="Risk_AcceptanceDate">Acceptance Date</label>
+                <input class="form-control m-input date-picker" id="Risk_AcceptanceDate" type="text" name="acceptanceDate" value="@Model.Risk.AcceptanceDate" />
+            </div>
+
+            <label class="form-check form-check-custom">
+                @*<input id="Risk_RiskAccepted" name="riskAccepted" type="checkbox" class="form-check-input" @Html.Raw(Model.Risk.RiskAccepted ?"checked=\"checked\"":"") />*@
+                @Html.CheckBoxFor(m=>m.Risk.RiskAccepted, new {@class="form-check-input", @checked=accepted, @id="Risk_RiskAccepted"})
+                <span class="form-check-label">
+                    Risk Accepted
+                </span>
+            </label>
+
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

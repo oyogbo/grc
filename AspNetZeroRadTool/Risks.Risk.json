@@ -1,5 +1,5 @@
 {
-  "IsRegenerate": true,
+  "IsRegenerate": false,
   "MenuPosition": "main",
   "RelativeNamespace": "Risks",
   "EntityName": "Risk",
@@ -21,7 +21,7 @@
   },
   "Properties": [
     {
-      "Name": "RiskType",
+      "Name": "Summary",
       "Type": "string",
       "MaxLength": -1,
       "MinLength": -1,
@@ -30,67 +30,7 @@
         "MinimumValue": 0.0,
         "MaximumValue": 0.0
       },
-      "Required": false,
-      "Nullable": false,
-      "Regex": "",
-      "UserInterface": {
-        "AdvancedFilter": true,
-        "List": true,
-        "CreateOrUpdate": true
-      },
-      "ViewType": null
-    },
-    {
-      "Name": "RiskSummary",
-      "Type": "string",
-      "MaxLength": -1,
-      "MinLength": -1,
-      "Range": {
-        "IsRangeSet": false,
-        "MinimumValue": 0.0,
-        "MaximumValue": 0.0
-      },
-      "Required": false,
-      "Nullable": false,
-      "Regex": "",
-      "UserInterface": {
-        "AdvancedFilter": true,
-        "List": true,
-        "CreateOrUpdate": true
-      },
-      "ViewType": null
-    },
-    {
-      "Name": "Department",
-      "Type": "string",
-      "MaxLength": -1,
-      "MinLength": -1,
-      "Range": {
-        "IsRangeSet": false,
-        "MinimumValue": 0.0,
-        "MaximumValue": 0.0
-      },
-      "Required": false,
-      "Nullable": false,
-      "Regex": "",
-      "UserInterface": {
-        "AdvancedFilter": true,
-        "List": true,
-        "CreateOrUpdate": true
-      },
-      "ViewType": null
-    },
-    {
-      "Name": "RiskOwner",
-      "Type": "string",
-      "MaxLength": -1,
-      "MinLength": -1,
-      "Range": {
-        "IsRangeSet": false,
-        "MinimumValue": 0.0,
-        "MaximumValue": 0.0
-      },
-      "Required": false,
+      "Required": true,
       "Nullable": false,
       "Regex": "",
       "UserInterface": {
@@ -121,7 +61,7 @@
       "ViewType": null
     },
     {
-      "Name": "ERMComment",
+      "Name": "ERMRecommendation",
       "Type": "string",
       "MaxLength": -1,
       "MinLength": -1,
@@ -181,50 +121,10 @@
       "ViewType": null
     },
     {
-      "Name": "Status",
-      "Type": "string",
-      "MaxLength": -1,
-      "MinLength": -1,
-      "Range": {
-        "IsRangeSet": false,
-        "MinimumValue": 0.0,
-        "MaximumValue": 0.0
-      },
-      "Required": false,
-      "Nullable": false,
-      "Regex": "",
-      "UserInterface": {
-        "AdvancedFilter": true,
-        "List": true,
-        "CreateOrUpdate": true
-      },
-      "ViewType": null
-    },
-    {
-      "Name": "Rating",
-      "Type": "string",
-      "MaxLength": -1,
-      "MinLength": -1,
-      "Range": {
-        "IsRangeSet": false,
-        "MinimumValue": 0.0,
-        "MaximumValue": 0.0
-      },
-      "Required": false,
-      "Nullable": false,
-      "Regex": "",
-      "UserInterface": {
-        "AdvancedFilter": true,
-        "List": true,
-        "CreateOrUpdate": true
-      },
-      "ViewType": null
-    },
-    {
       "Name": "TargetDate",
-      "Type": "string",
-      "MaxLength": -1,
-      "MinLength": -1,
+      "Type": "DateTime",
+      "MaxLength": 0,
+      "MinLength": 0,
       "Range": {
         "IsRangeSet": false,
         "MinimumValue": 0.0,
@@ -242,9 +142,9 @@
     },
     {
       "Name": "ActualClosureDate",
-      "Type": "string",
-      "MaxLength": -1,
-      "MinLength": -1,
+      "Type": "DateTime",
+      "MaxLength": 0,
+      "MinLength": 0,
       "Range": {
         "IsRangeSet": false,
         "MinimumValue": 0.0,
@@ -262,9 +162,9 @@
     },
     {
       "Name": "AcceptanceDate",
-      "Type": "string",
-      "MaxLength": -1,
-      "MinLength": -1,
+      "Type": "DateTime",
+      "MaxLength": 0,
+      "MinLength": 0,
       "Range": {
         "IsRangeSet": false,
         "MinimumValue": 0.0,
@@ -274,8 +174,8 @@
       "Nullable": false,
       "Regex": "",
       "UserInterface": {
-        "AdvancedFilter": false,
-        "List": false,
+        "AdvancedFilter": true,
+        "List": true,
         "CreateOrUpdate": true
       },
       "ViewType": null
@@ -283,8 +183,8 @@
     {
       "Name": "RiskAccepted",
       "Type": "bool",
-      "MaxLength": -1,
-      "MinLength": -1,
+      "MaxLength": 0,
+      "MinLength": 0,
       "Range": {
         "IsRangeSet": false,
         "MinimumValue": 0.0,
@@ -301,7 +201,63 @@
       "ViewType": null
     }
   ],
-  "NavigationProperties": [],
+  "NavigationProperties": [
+    {
+      "Namespace": "CCPDemo.RiskTypes",
+      "ForeignEntityName": "RiskType",
+      "IdType": "int",
+      "IsNullable": false,
+      "PropertyName": "RiskTypeId",
+      "DisplayPropertyName": "Name",
+      "DuplicationNumber": 0,
+      "RelationType": "single",
+      "ViewType": "Dropdown"
+    },
+    {
+      "Namespace": "Abp.Organizations",
+      "ForeignEntityName": "OrganizationUnit",
+      "IdType": "long",
+      "IsNullable": true,
+      "PropertyName": "OrganizationUnitId",
+      "DisplayPropertyName": "DisplayName",
+      "DuplicationNumber": 0,
+      "RelationType": "single",
+      "ViewType": "Dropdown"
+    },
+    {
+      "Namespace": "CCPDemo.RiskStatus",
+      "ForeignEntityName": "Status",
+      "IdType": "int",
+      "IsNullable": true,
+      "PropertyName": "StatusId",
+      "DisplayPropertyName": "Name",
+      "DuplicationNumber": 0,
+      "RelationType": "single",
+      "ViewType": "Dropdown"
+    },
+    {
+      "Namespace": "CCPDemo.RiskRatings",
+      "ForeignEntityName": "RiskRating",
+      "IdType": "int",
+      "IsNullable": true,
+      "PropertyName": "RiskRatingId",
+      "DisplayPropertyName": "Name",
+      "DuplicationNumber": 0,
+      "RelationType": "single",
+      "ViewType": "Dropdown"
+    },
+    {
+      "Namespace": "CCPDemo.Authorization.Users",
+      "ForeignEntityName": "User",
+      "IdType": "long",
+      "IsNullable": true,
+      "PropertyName": "UserId",
+      "DisplayPropertyName": "Name",
+      "DuplicationNumber": 0,
+      "RelationType": "single",
+      "ViewType": "Dropdown"
+    }
+  ],
   "NavigationPropertyOneToManyTables": [],
   "EnumDefinitions": [],
   "DbContext": null

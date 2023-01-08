@@ -2022,71 +2022,6 @@ namespace CCPDemo.Migrations
                     b.ToTable("AppFriendships");
                 });
 
-            modelBuilder.Entity("CCPDemo.KeyRiskIndicators.KeyRiskIndicator", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Activity")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BusinessLines")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ControlEffectiveness")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsControlInUse")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("KeyControl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LikelihoodOfImpact_irr")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LikelihoodOfImpact_rrr")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LikelihoodOfOccurrence_irr")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LikelihoodOfOccurrence_rrr")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MitigationPlan")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OwnerComment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PotentialRisk")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Process")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ReferenceId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SubProcess")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("KeyRiskIndicators");
-                });
-
             modelBuilder.Entity("CCPDemo.ManagementReviews.ManagementReview", b =>
                 {
                     b.Property<int>("Id")
@@ -2849,6 +2784,26 @@ namespace CCPDemo.Migrations
                     b.ToTable("RiskModels");
                 });
 
+            modelBuilder.Entity("CCPDemo.RiskRatings.RiskRating", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Color")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RiskRatings");
+                });
+
             modelBuilder.Entity("CCPDemo.Risks.Risk", b =>
                 {
                     b.Property<int>("Id")
@@ -2857,14 +2812,14 @@ namespace CCPDemo.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("AcceptanceDate")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("AcceptanceDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ActionPlan")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ActualClosureDate")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("ActualClosureDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
@@ -2878,11 +2833,7 @@ namespace CCPDemo.Migrations
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Department")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ERMComment")
+                    b.Property<string>("ERMRecommendation")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ExistingControl")
@@ -2897,40 +2848,64 @@ namespace CCPDemo.Migrations
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("Rating")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long?>("OrganizationUnitId")
+                        .HasColumnType("bigint");
 
                     b.Property<bool>("RiskAccepted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("RiskOwner")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("RiskOwnerComment")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("RiskOwnerId")
+                    b.Property<int?>("RiskRatingId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RiskTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Summary")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("TargetDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("UserId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("RiskSummary")
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("Id");
 
-                    b.Property<string>("RiskType")
+                    b.HasIndex("OrganizationUnitId");
+
+                    b.HasIndex("RiskRatingId");
+
+                    b.HasIndex("RiskTypeId");
+
+                    b.HasIndex("StatusId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Risks");
+                });
+
+            modelBuilder.Entity("CCPDemo.RiskStatus.Status", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TargetDate")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Risks");
+                    b.ToTable("Status");
                 });
 
             modelBuilder.Entity("CCPDemo.RiskTransactions.RiskTransaction", b =>
@@ -3137,7 +3112,7 @@ namespace CCPDemo.Migrations
                     b.ToTable("ThreatGrouping");
                 });
 
-            modelBuilder.Entity("CCPDemo.VRisks.VRisk", b =>
+            modelBuilder.Entity("CCPDemo.UsersLookups.UsersLookup", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -3145,74 +3120,17 @@ namespace CCPDemo.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<bool>("AcceptRisk")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("AcceptanceDate")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ActualClosureDate")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("CreatorUserId")
+                    b.Property<long>("User")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("DeleterUserId")
+                    b.Property<long?>("UserId")
                         .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Department")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ERMComment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("LastModifierUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("MitigationDate")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Rating")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ResolutionTimeLine")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RiskOwner")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RiskOwnerComment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("TenantId")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TenantId");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("vRisks");
+                    b.ToTable("UsersLookups");
                 });
 
             modelBuilder.Entity("Abp.Application.Features.EditionFeatureSetting", b =>
@@ -3527,6 +3445,50 @@ namespace CCPDemo.Migrations
                     b.Navigation("Person");
 
                     b.Navigation("PhoneType");
+                });
+
+            modelBuilder.Entity("CCPDemo.Risks.Risk", b =>
+                {
+                    b.HasOne("Abp.Organizations.OrganizationUnit", "OrganizationUnitFk")
+                        .WithMany()
+                        .HasForeignKey("OrganizationUnitId");
+
+                    b.HasOne("CCPDemo.RiskRatings.RiskRating", "RiskRatingFk")
+                        .WithMany()
+                        .HasForeignKey("RiskRatingId");
+
+                    b.HasOne("CCPDemo.RiskTypes.RiskType", "RiskTypeFk")
+                        .WithMany()
+                        .HasForeignKey("RiskTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CCPDemo.RiskStatus.Status", "StatusFk")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
+
+                    b.HasOne("CCPDemo.Authorization.Users.User", "UserFk")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("OrganizationUnitFk");
+
+                    b.Navigation("RiskRatingFk");
+
+                    b.Navigation("RiskTypeFk");
+
+                    b.Navigation("StatusFk");
+
+                    b.Navigation("UserFk");
+                });
+
+            modelBuilder.Entity("CCPDemo.UsersLookups.UsersLookup", b =>
+                {
+                    b.HasOne("CCPDemo.Authorization.Users.User", "UserFk")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("UserFk");
                 });
 
             modelBuilder.Entity("Abp.Application.Features.EditionFeatureSetting", b =>

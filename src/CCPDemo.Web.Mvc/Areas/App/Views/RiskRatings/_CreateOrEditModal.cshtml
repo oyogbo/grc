@@ -1,0 +1,32 @@
+﻿
+@using System.Globalization
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.RiskRatings
+@model CreateOrEditRiskRatingModalViewModel
+@using Abp.Extensions
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("EditRiskRating")) : L("CreateNewRiskRating")))
+
+<div class="modal-body">
+    <div id="RiskRatingInformationsTab">
+        <form name="RiskRatingInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+            <input type="hidden" name="id" value="@Model.RiskRating.Id" />
+            }
+
+            <div class="my-3">
+                <label class="form-label" for="RiskRating_Name">@L("Name")</label>
+                <input class="form-control" id="RiskRating_Name" value="@Model.RiskRating.Name" type="text" name="name" required />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="RiskRating_Color">@L("Color")</label>
+                <input class="form-control" id="RiskRating_Color" value="@Model.RiskRating.Color" type="text" name="color" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

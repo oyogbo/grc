@@ -1,9 +1,24 @@
 ﻿(function () {
+   
   $(function () {
     var _$risksTable = $('#RisksTable');
-    var _risksService = abp.services.app.risks;
+      var _risksService = abp.services.app.risks;
 
-      $('.date-picker').flatpickr({
+      $.datetimepicker.setDateFormatter({
+          parseDate: function (date, format) {
+              var d = moment(date, format);
+              return d.isValid() ? d.toDate() : false;
+          },
+          formatDate: function (date, format) {
+              return moment(date).format(format);
+          },
+          date: function (date) {
+              return moment(date);
+          }
+      });
+
+
+      $('.date-picker').datetimepicker({
       locale: abp.localization.currentLanguage.name,
       format: 'L',
     });
@@ -20,22 +35,20 @@
       modalClass: 'CreateOrEditRiskModal',
     });
 
-      var _ermTransferRiskModal = new app.ModalManager({
-          viewUrl: abp.appPath + 'App/Risks/ErmTransferRiskModal',
-          scriptUrl: abp.appPath + 'view-resources/Areas/App/Views/Risks/_ErmTransferRiskModal.js',
-          modalClass: 'ErmTransferRiskModal',
+      var _ermTransferRisk = new app.ModalManager({
+          viewUrl: abp.appPath + 'App/Risks/ErmTransferRisk',
+          scriptUrl: abp.appPath + 'view-resources/Areas/App/Views/Risks/_ErmTransferRisk.js',
+          modalClass: 'ErmTransferRisk',
       });
-
-      var _ermUpDownRiskModal = new app.ModalManager({
-          viewUrl: abp.appPath + 'App/Risks/ErmUpDownRiskModal',
-          scriptUrl: abp.appPath + 'view-resources/Areas/App/Views/Risks/_ErmUpDownRiskModal.js',
-          modalClass: 'ErmUpDownRiskModal',
+      var _ermUpgradeDowngradeRisk = new app.ModalManager({
+          viewUrl: abp.appPath + 'App/Risks/ErmUpgradeOrDowngradeRisk',
+          scriptUrl: abp.appPath + 'view-resources/Areas/App/Views/Risks/_ErmUpgradeOrDowngradeRisk.js',
+          modalClass: 'ErmUpgradeDowngradeRisk',
       });
-
-      var _ermCloseRiskModal = new app.ModalManager({
-          viewUrl: abp.appPath + 'App/Risks/ErmCloseRiskModal',
-          scriptUrl: abp.appPath + 'view-resources/Areas/App/Views/Risks/_ErmCloseRiskModal.js',
-          modalClass: 'ErmCloseRiskModal',
+      var _ermCloseRisk = new app.ModalManager({
+          viewUrl: abp.appPath + 'App/Risks/ErmCloseRisk',
+          scriptUrl: abp.appPath + 'view-resources/Areas/App/Views/Risks/_ErmCloseRisk.js',
+          modalClass: 'ErmCloseRisk',
       });
 
     var _viewRiskModal = new app.ModalManager({
@@ -43,42 +56,46 @@
       modalClass: 'ViewRiskModal',
     });
 
-    var getDateFilter = function (element) {
-      if (element.data('DateTimePicker').date() == null) {
-        return null;
-      }
-      return element.data('DateTimePicker').date().format('YYYY-MM-DDT00:00:00Z');
-    };
+    //var getDateFilter = function (element) {
+    //  if (element.data('DateTimePicker').date() == null) {
+    //    return null;
+    //  }
+    //  return element.data('DateTimePicker').date().format('YYYY-MM-DDT00:00:00Z');
+    //};
 
-    var getMaxDateFilter = function (element) {
-      if (element.data('DateTimePicker').date() == null) {
-        return null;
-      }
-      return element.data('DateTimePicker').date().format('YYYY-MM-DDT23:59:59Z');
-    };
+    //var getMaxDateFilter = function (element) {
+    //  if (element.data('DateTimePicker').date() == null) {
+    //    return null;
+    //  }
+    //  return element.data('DateTimePicker').date().format('YYYY-MM-DDT23:59:59Z');
+    //};
 
     var dataTable = _$risksTable.DataTable({
-      paging: true,
-      serverSide: true,
-      processing: true,
-      listAction: {
+        paging: true,
+        serverSide: true,
+        processing: true,
+        listAction: {
         ajaxFunction: _risksService.getAll,
         inputFilter: function () {
           return {
             filter: $('#RisksTableFilter').val(),
-            riskTypeFilter: $('#RiskTypeFilterId').val(),
-            riskSummaryFilter: $('#RiskSummaryFilterId').val(),
-            departmentFilter: $('#DepartmentFilterId').val(),
-            riskOwnerFilter: $('#RiskOwnerFilterId').val(),
+            summaryFilter: $('#SummaryFilterId').val(),
             existingControlFilter: $('#ExistingControlFilterId').val(),
-            eRMCommentFilter: $('#ERMCommentFilterId').val(),
+            eRMRecommendationFilter: $('#ERMRecommendationFilterId').val(),
             actionPlanFilter: $('#ActionPlanFilterId').val(),
             riskOwnerCommentFilter: $('#RiskOwnerCommentFilterId').val(),
-            statusFilter: $('#StatusFilterId').val(),
-            ratingFilter: $('#RatingFilterId').val(),
-            targetDateFilter: $('#TargetDateFilterId').val(),
-            actualClosureDateFilter: $('#ActualClosureDateFilterId').val(),
+            //minTargetDateFilter: getDateFilter($('#MinTargetDateFilterId')),
+            //maxTargetDateFilter: getMaxDateFilter($('#MaxTargetDateFilterId')),
+            //minActualClosureDateFilter: getDateFilter($('#MinActualClosureDateFilterId')),
+            //maxActualClosureDateFilter: getMaxDateFilter($('#MaxActualClosureDateFilterId')),
+            //minAcceptanceDateFilter: getDateFilter($('#MinAcceptanceDateFilterId')),
+            //maxAcceptanceDateFilter: getMaxDateFilter($('#MaxAcceptanceDateFilterId')),
             riskAcceptedFilter: $('#RiskAcceptedFilterId').val(),
+            riskTypeNameFilter: $('#RiskTypeNameFilterId').val(),
+            organizationUnitDisplayNameFilter: $('#OrganizationUnitDisplayNameFilterId').val(),
+            statusNameFilter: $('#StatusNameFilterId').val(),
+            riskRatingNameFilter: $('#RiskRatingNameFilterId').val(),
+            userNameFilter: $('#UserNameFilterId').val(),
           };
         },
       },
@@ -121,32 +138,32 @@
                 },
                 {
                     text: 'Transfer Risk',
-                    iconStyle: 'far fa-paper-plane ml-2 mr-2',
+                    iconStyle: 'far fa-edit mr-2',
                     visible: function () {
                         return _permissions.create;
                     },
                     action: function (data) {
-                        _ermTransferRiskModal.open({ id: data.record.risk.id });
+                        _ermTransferRisk.open({ id: data.record.risk.id });
                     },
                 },
                 {
-                    text: 'Downgrade/Upgrade Risk',
-                    iconStyle: 'fas fa-arrows-alt-v ml-2 mr-2',
+                    text: 'Upgrade/Downgrade Risk',
+                    iconStyle: 'far fa-edit mr-2',
                     visible: function () {
                         return _permissions.create;
                     },
                     action: function (data) {
-                        _ermUpDownRiskModal.open({ id: data.record.risk.id });
+                        _ermUpgradeDowngradeRisk.open({ id: data.record.risk.id });
                     },
                 },
                 {
                     text: 'Close Risk',
-                    iconStyle: 'fas fa-power-off ml-2 mr-2',
+                    iconStyle: 'far fa-edit mr-2',
                     visible: function () {
                         return _permissions.create;
                     },
                     action: function (data) {
-                        _ermCloseRiskModal.open({ id: data.record.risk.id });
+                        _ermCloseRisk.open({ id: data.record.risk.id });
                     },
                 },
               {
@@ -164,66 +181,64 @@
         },
         {
           targets: 2,
-          data: 'risk.riskType',
-          name: 'riskType',
+          data: 'risk.summary',
+          name: 'summary',
         },
         {
           targets: 3,
-          data: 'risk.riskSummary',
-          name: 'riskSummary',
-        },
-        {
-          targets: 4,
-          data: 'risk.department',
-          name: 'department',
-        },
-        {
-          targets: 5,
-          data: 'risk.riskOwner',
-          name: 'riskOwner',
-        },
-        {
-          targets: 6,
           data: 'risk.existingControl',
           name: 'existingControl',
         },
         {
-          targets: 7,
-          data: 'risk.ermComment',
-          name: 'ermComment',
+          targets: 4,
+          data: 'risk.ermRecommendation',
+          name: 'ermRecommendation',
         },
         {
-          targets: 8,
+          targets: 5,
           data: 'risk.actionPlan',
           name: 'actionPlan',
         },
         {
-          targets: 9,
+          targets: 6,
           data: 'risk.riskOwnerComment',
           name: 'riskOwnerComment',
         },
         {
-          targets: 10,
-          data: 'risk.status',
-          name: 'status',
-        },
-        {
-          targets: 11,
-          data: 'risk.rating',
-          name: 'rating',
-        },
-        {
-          targets: 12,
+          targets: 7,
           data: 'risk.targetDate',
           name: 'targetDate',
+          render: function (targetDate) {
+            if (targetDate) {
+              return moment(targetDate).format('L');
+            }
+            return '';
+          },
         },
         {
-          targets: 13,
+          targets: 8,
           data: 'risk.actualClosureDate',
           name: 'actualClosureDate',
+          render: function (actualClosureDate) {
+            if (actualClosureDate) {
+              return moment(actualClosureDate).format('L');
+            }
+            return '';
+          },
         },
         {
-          targets: 14,
+          targets: 9,
+          data: 'risk.acceptanceDate',
+          name: 'acceptanceDate',
+          render: function (acceptanceDate) {
+            if (acceptanceDate) {
+              return moment(acceptanceDate).format('L');
+            }
+            return '';
+          },
+        },
+        {
+          targets: 10,
           data: 'risk.riskAccepted',
           name: 'riskAccepted',
           render: function (riskAccepted) {
@@ -232,6 +247,31 @@
             }
             return '<div class="text-center"><i class="fa fa-times-circle" title="False"></i></div>';
           },
+        },
+        {
+          targets: 11,
+          data: 'riskTypeName',
+          name: 'riskTypeFk.name',
+        },
+        {
+          targets: 12,
+          data: 'organizationUnitDisplayName',
+          name: 'organizationUnitFk.displayName',
+        },
+        {
+          targets: 13,
+          data: 'statusName',
+          name: 'statusFk.name',
+        },
+        {
+          targets: 14,
+          data: 'riskRatingName',
+          name: 'riskRatingFk.name',
+        },
+        {
+          targets: 15,
+          data: 'userName',
+          name: 'userFk.name',
         },
       ],
     });
@@ -275,19 +315,23 @@
       _risksService
         .getRisksToExcel({
           filter: $('#RisksTableFilter').val(),
-          riskTypeFilter: $('#RiskTypeFilterId').val(),
-          riskSummaryFilter: $('#RiskSummaryFilterId').val(),
-          departmentFilter: $('#DepartmentFilterId').val(),
-          riskOwnerFilter: $('#RiskOwnerFilterId').val(),
+          summaryFilter: $('#SummaryFilterId').val(),
           existingControlFilter: $('#ExistingControlFilterId').val(),
-          eRMCommentFilter: $('#ERMCommentFilterId').val(),
+          eRMRecommendationFilter: $('#ERMRecommendationFilterId').val(),
           actionPlanFilter: $('#ActionPlanFilterId').val(),
           riskOwnerCommentFilter: $('#RiskOwnerCommentFilterId').val(),
-          statusFilter: $('#StatusFilterId').val(),
-          ratingFilter: $('#RatingFilterId').val(),
-          targetDateFilter: $('#TargetDateFilterId').val(),
-          actualClosureDateFilter: $('#ActualClosureDateFilterId').val(),
+          //minTargetDateFilter: getDateFilter($('#MinTargetDateFilterId')),
+          //maxTargetDateFilter: getMaxDateFilter($('#MaxTargetDateFilterId')),
+          //minActualClosureDateFilter: getDateFilter($('#MinActualClosureDateFilterId')),
+          //maxActualClosureDateFilter: getMaxDateFilter($('#MaxActualClosureDateFilterId')),
+          //minAcceptanceDateFilter: getDateFilter($('#MinAcceptanceDateFilterId')),
+          //maxAcceptanceDateFilter: getMaxDateFilter($('#MaxAcceptanceDateFilterId')),
           riskAcceptedFilter: $('#RiskAcceptedFilterId').val(),
+          riskTypeNameFilter: $('#RiskTypeNameFilterId').val(),
+          organizationUnitDisplayNameFilter: $('#OrganizationUnitDisplayNameFilterId').val(),
+          statusNameFilter: $('#StatusNameFilterId').val(),
+          riskRatingNameFilter: $('#RiskRatingNameFilterId').val(),
+          userNameFilter: $('#UserNameFilterId').val(),
         })
         .done(function (result) {
           app.downloadTempFile(result);

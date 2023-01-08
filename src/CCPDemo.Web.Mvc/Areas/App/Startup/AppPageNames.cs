@@ -4,13 +4,14 @@
     {
         public static class Common
         {
+            public const string Risks = "Risks.Risks";
+            public const string RiskStatus = "Administration.RiskStatuses.RiskStatus";
+            public const string RiskRatings = "Administration.RiskRatings.RiskRatings";
+
+            public const string UsersLookups = "UsersLookups.UsersLookups";
             public const string RiskTypes = "Administration.RiskTypes.RiskTypes";
             public const string RiskTransactions = "RiskTransactions.RiskTransactions";
-            public const string UserRiskMitigations = "UserRiskMitigations.UserRiskMitigations";
             public const string Departments = "Departments.Departments";
-            public const string VRisks = "VRisks.VRisks";
-            public const string RisksForMitigation = "VRisks.VRisks";
-            public const string Risks = "Risks.Risks";
             public const string Regulations = "Administration.Regulations.Regulations";
             public const string ManagementReviews = "Administration.ManagementReviews.ManagementReviews";
             public const string Projects = "Administration.Projects.Projects";

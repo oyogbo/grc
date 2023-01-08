@@ -1,0 +1,79 @@
+﻿
+@using System.Globalization
+@using CCPDemo.Authorization
+@using CCPDemo.Web.Areas.App.Models.UsersLookups
+@using CCPDemo.Web.Areas.App.Startup
+@model CreateOrEditUsersLookupViewModel
+@using CCPDemo.Web.TagHelpers
+@{
+ViewBag.CurrentPageName = AppPageNames.Common.UsersLookups;
+}
+@section Scripts
+{
+<script abp-src="/view-resources/Areas/App/Views/UsersLookups/CreateOrEdit.js" asp-append-version="true"></script>
+}
+
+<div class="content d-flex flex-column flex-column-fluid">
+
+    @{
+    var breadcrumbs = new List<BreadcrumbItem>()
+        {
+        new BreadcrumbItem("/App/UsersLookups", L("UsersLookups")),
+        new BreadcrumbItem(Model.IsEditMode ? L("Edit") : L("Create"))
+        };
+        }
+        <abp-page-subheader title='@(Model.IsEditMode ? (L("EditUsersLookup")) : L("CreateNewUsersLookup"))' breadcrumbs="breadcrumbs">
+        </abp-page-subheader>
+
+        <div class="@(await GetContainerClass())">
+            <div class="card card-custom gutter-b">
+                <form name="UsersLookupInformationsForm" role="form" novalidate class="form-validation">
+                    <div class="card-body">
+                        <div class="form">
+                            <div id="UsersLookupInformationsTab">
+                                @if (Model.IsEditMode)
+                                {
+                                <input type="hidden" name="id" value="@Model.UsersLookup.Id" />
+                                }
+
+                                <div class="my-3">
+                                    <label class="form-label" for="UserName">@L("User")</label>
+                                    <div class="input-group">
+                                        <input class="form-control" id="UserName" name="userName" value="@Model.UserName" type="text" disabled>
+                                        <button class="btn btn-primary blue" id="OpenUserLookupTableButton" type="button"><i class="fa fa-search"></i> @L("Pick")</button>
+                                        <button class="btn btn-danger btn-icon" type="button" id="ClearUserNameButton"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </div>
+
+                                @if (Model.IsEditMode)
+                                {
+                                <input class="form-control" id="UsersLookup_UserId" value="@Model.UsersLookup.UserId" type="text" name="userId" hidden />
+                                }
+                                else
+                                {
+                                <input class="form-control" id="UsersLookup_UserId" value="" type="text" name="userId" hidden />
+                                }
+
+                                <div class="my-3">
+                                    <label class="form-label" for="UsersLookup_User">@L("User")</label>
+                                    <input class="form-control m-input" id="UsersLookup_User" value="@Model.UsersLookup.User.ToString(CultureInfo.InvariantCulture)" type="number" name="user" />
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row align-items-center">
+                            <div class="col-lg-12">
+                                <button type="button" id="saveBtn" class="btn btn-success float-right"><i class="fa fa-save"></i> @L("Save")</button>
+                                @if (!Model.IsEditMode)
+                                {
+                                <button type="button" id="saveAndNewBtn" class="btn btn-success float-right"><i class="fa fa-save"></i> @L("SaveAndNew")</button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+</div>

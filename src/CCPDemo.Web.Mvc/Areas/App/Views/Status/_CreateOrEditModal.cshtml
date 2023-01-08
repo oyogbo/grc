@@ -1,0 +1,27 @@
+﻿
+@using System.Globalization
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.Status
+@model CreateOrEditStatusModalViewModel
+@using Abp.Extensions
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("EditStatus")) : L("CreateNewStatus")))
+
+<div class="modal-body">
+    <div id="StatusInformationsTab">
+        <form name="StatusInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+            <input type="hidden" name="id" value="@Model.Status.Id" />
+            }
+
+            <div class="my-3">
+                <label class="form-label" for="Status_Name">@L("Name")</label>
+                <input class="form-control" id="Status_Name" value="@Model.Status.Name" type="text" name="name" required />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

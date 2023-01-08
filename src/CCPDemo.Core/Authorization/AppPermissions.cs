@@ -11,6 +11,21 @@
         public const string Pages_Risks_Edit = "Pages.Risks.Edit";
         public const string Pages_Risks_Delete = "Pages.Risks.Delete";
 
+        public const string Pages_Administration_RiskStatus = "Pages.Administration.RiskStatus";
+        public const string Pages_Administration_RiskStatus_Create = "Pages.Administration.RiskStatus.Create";
+        public const string Pages_Administration_RiskStatus_Edit = "Pages.Administration.RiskStatus.Edit";
+        public const string Pages_Administration_RiskStatus_Delete = "Pages.Administration.RiskStatus.Delete";
+
+        public const string Pages_Administration_RiskRatings = "Pages.Administration.RiskRatings";
+        public const string Pages_Administration_RiskRatings_Create = "Pages.Administration.RiskRatings.Create";
+        public const string Pages_Administration_RiskRatings_Edit = "Pages.Administration.RiskRatings.Edit";
+        public const string Pages_Administration_RiskRatings_Delete = "Pages.Administration.RiskRatings.Delete";
+
+        public const string Pages_UsersLookups = "Pages.UsersLookups";
+        public const string Pages_UsersLookups_Create = "Pages.UsersLookups.Create";
+        public const string Pages_UsersLookups_Edit = "Pages.UsersLookups.Edit";
+        public const string Pages_UsersLookups_Delete = "Pages.UsersLookups.Delete";
+
         public const string Pages_Administration_RiskTypes = "Pages.Administration.RiskTypes";
         public const string Pages_Administration_RiskTypes_Create = "Pages.Administration.RiskTypes.Create";
         public const string Pages_Administration_RiskTypes_Edit = "Pages.Administration.RiskTypes.Edit";
@@ -20,12 +35,6 @@
         public const string Pages_Departments_Create = "Pages.Departments.Create";
         public const string Pages_Departments_Edit = "Pages.Departments.Edit";
         public const string Pages_Departments_Delete = "Pages.Departments.Delete";
-
-        public const string Pages_VRisks = "Pages.VRisks";
-        public const string Pages_VRisks_Create = "Pages.VRisks.Create";
-        public const string Pages_VRisks_Edit = "Pages.VRisks.Edit";
-        public const string Pages_VRisks_Delete = "Pages.VRisks.Delete";
-
 
         public const string Pages_Administration_Regulations = "Pages.Administration.Regulations";
         public const string Pages_Administration_Regulations_Create = "Pages.Administration.Regulations.Create";

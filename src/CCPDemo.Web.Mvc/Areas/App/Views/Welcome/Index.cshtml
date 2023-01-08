@@ -1,18 +1,22 @@
 ﻿@using CCPDemo.Authorization
-@using CCPDemo.Web.Areas.App.Models.VRisks
+@using CCPDemo.Web.Areas.App.Models.Risks
 @using CCPDemo.Web.Areas.App.Startup
-@model VRisksViewModel
+@model RiskViewModel
+@{
+	var dbList = ViewBag.dbList;
+}
 
 @section Scripts {
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 	<script>
-		var xValues = ["Critical", "High", "Medium", "Low"];
-		var yValues = [@Model.Critical, @Model.High, @Model.Medium, @Model.Low];
+		var xValues = ["Critical", "Very High", "High", "Medium", "Low"];
+		var yValues = [@Model.Critical, @Model.VeryHigh, @Model.High, @Model.Medium, @Model.Low];
 		var barColors = [
 			"#b91d47",
 			"#00aba9",
 			"#2b5797",
 			"#e8c3b9",
+			"#e2c3b9"
 		];
 
 		new Chart("riskProfile", {
@@ -31,252 +35,248 @@
 				}
 			}
 		});
+
+
+		
 	</script>
 }
 
+
 <div class="app-main flex-column flex-row-fluid" id="kt_app_main">
 <!--begin::Content wrapper-->
-				<div class="d-flex flex-column flex-column-fluid">
+						<div class="d-flex flex-column flex-column-fluid">
 							
-					<div id="kt_app_content" class="app-content flex-column-fluid">
-						<!--begin::Content container-->
-						<div id="kt_app_content_container" class="app-container container-xxl">
-							<div class="row gx-5 gx-xl-10">
+							<div id="kt_app_content" class="app-content flex-column-fluid">
+								<!--begin::Content container-->
+								<div id="kt_app_content_container" class="app-container container-xxl">
+									<div class="row gx-5 gx-xl-10">
 
 
-								<div class="col-xl-6 mb-5 mb-xl-10">
-									<!--begin::Table widget 10-->
-									<div class="card card-flush h-xl-100">
-										<!--begin::Header-->
-										<div class="card-header pt-5">
-											<!--begin::Title-->
-											<h3 class="card-title align-items-start flex-column">
-							<span class="card-label fw-bold text-gray-800">RISK PROFILE</span>
+										<div class="col-xl-6 mb-5 mb-xl-10">
+											<!--begin::Table widget 10-->
+											<div class="card card-flush h-xl-100">
+												<!--begin::Header-->
+												<div class="card-header pt-5">
+													<!--begin::Title-->
+													<h3 class="card-title align-items-start flex-column">
+									<span class="card-label fw-bold text-gray-800">RISK PROFILE</span>
 
-											</h3>
-										</div>
+													</h3>
+												</div>
 
-										<div class="card-body py-3">
+												<div class="card-body py-3">
 													
 
-						<canvas id="riskProfile" style="width:100%;max-width:600px"></canvas>
+								<canvas id="riskProfile" style="width:100%;"></canvas>
 
 
-										</div>
-										<!--end::Body-->
-									</div>
-									<!--end::Table Widget 10-->
-								</div>
-
-								<!--begin::Col-->
-								<div class="col-xl-6 mb-5 mb-xl-10">
-									<!--begin::Table widget 9-->
-									<div class="card card-flush h-xl-100">
-										<!--begin::Header-->
-										<div class="card-header pt-5">
-											<!--begin::Title-->
-											<h3 class="card-title align-items-start flex-column">
-											<span class="card-label fw-bold text-gray-800">UPCOMING RESOLUTION</span>
-													
-											</h3>
-													
-										</div>
-										<!--end::Header-->
-										<!--begin::Body-->
-										<div class="card-body py-3">
-											<!--begin::Table container-->
-											<div class="table-responsive">
-												<!--begin::Table-->
-												<table class="table table-row-dashed align-middle gs-0 gy-4">
-													<!--begin::Table head-->
-													<thead>
-														<tr class="fs-7 fw-bold border-0 text-gray-400">
-															<th class="min-w-150px" colspan="2">S/N</th>
-															<th class="min-w-150px text-center pe-0" colspan="2">DEPT</th>
-															<th class="text-center min-w-150px" colspan="2">RISK</th>
-															<th class="text-center min-w-150px" colspan="2">DUE DATE</th>
-														</tr>
-													</thead>
-													<!--end::Table head-->
-													<!--begin::Table body-->
-													<tbody>
-													@{
-														var count = 0;
-													}
-													@foreach (var risk in Model.Risks)
-													{
-															count++;
-															<tr>
-															<td class="" colspan="2">
-																@count
-															</td>
-															<td class="pe-0" colspan="2">
-																@risk.Department
-															</td>
-															<td class="" colspan="2">
-																@risk.Name
-															</td>
-															<td class="" colspan="2">
-																@risk.ResolutionTimeLine
-															</td>
-														</tr>
-									}
-
-																															
-													</tbody>
-													<!--end::Table body-->
-												</table>
-												<!--end::Table-->
+												</div>
+												<!--end::Body-->
 											</div>
-											<!--end::Table container-->
+											<!--end::Table Widget 10-->
 										</div>
-										<!--end::Body-->
-									</div>
-									<!--end::Table Widget 9-->
-								</div>
+
+										<!--begin::Col-->
+										<div class="col-xl-6 mb-5 mb-xl-10">
+											<!--begin::Table widget 9-->
+											<div class="card card-flush h-xl-100">
+												<!--begin::Header-->
+												<div class="card-header pt-5">
+													<!--begin::Title-->
+													<h3 class="card-title align-items-start flex-column">
+													<span class="card-label fw-bold text-gray-800">UPCOMING RESOLUTION</span>
+													
+													</h3>
+													
+												</div>
+												<!--end::Header-->
+												<!--begin::Body-->
+												<div class="card-body py-3">
+													<!--begin::Table container-->
+													<div class="table-responsive">
+														<!--begin::Table-->
+														<table class="table table-row-dashed align-middle gs-0 gy-4 table-success table-striped">
+															<!--begin::Table head-->
+															<thead class="thead-dark">
+																<tr class="fs-7 fw-bold border-0 text-gray-400">
+																	<th class="min-w-150px text-dark" colspan="2">S/N</th>
+																	<th class="min-w-150px text-center pe-0 text-dark" colspan="2">DEPT</th>
+																	<th class="text-center min-w-150px text-dark" colspan="2">RISK</th>
+																	<th class="text-center min-w-150px text-dark" colspan="2">DUE DATE</th>
+																</tr>
+															</thead>
+															<!--end::Table head-->
+															<!--begin::Table body-->
+															<tbody>
+															@{
+																var count = 0;
+															}
+															@foreach (var rowData in Model.dbList)
+															{
+																count++;
+																<tr>
+													<td class="min-w-150px" colspan="2">@count</td>
+													<td class="min-w-150px text-center pe-0" colspan="2">@rowData.OrganizationUnitDisplayName</td>
+													<td class="text-center min-w-150px" colspan="2">@rowData.Summary</td>
+													<td class="text-center min-w-150px" colspan="2">@rowData.TargetDate</td>
+																</tr>
+															}
+
+															</tbody>
+															<!--end::Table body-->
+														</table>
+														<!--end::Table-->
+													</div>
+													<!--end::Table container-->
+												</div>
+												<!--end::Body-->
+											</div>
+											<!--end::Table Widget 9-->
+										</div>
 										
+									</div>
+
+
+				<div class="row gx-5 gx-xl-10">
+
+
+					<div class="col-xl-6 mb-5 mb-xl-10">
+						<!--begin::Table widget 10-->
+						<div class="card card-flush h-xl-100">
+							<!--begin::Header-->
+							<div class="card-header pt-5">
+								<!--begin::Title-->
+								<h3 class="card-title align-items-start flex-column">
+									<span class="card-label fw-bold text-gray-800">RISK BY DEPARTMENT</span>
+
+								</h3>
 							</div>
 
+							<div class="card-body py-3">
+								<h3 class="card-title align-items-start flex-column">
+									<span class="card-label fw-bold text-gray-800">Categorization of Risk</span>
+								</h3>
 
-		<div class="row gx-5 gx-xl-10">
-
-
-			<div class="col-xl-6 mb-5 mb-xl-10">
-				<!--begin::Table widget 10-->
-				<div class="card card-flush h-xl-100">
-					<!--begin::Header-->
-					<div class="card-header pt-5">
-						<!--begin::Title-->
-						<h3 class="card-title align-items-start flex-column">
-							<span class="card-label fw-bold text-gray-800">RISK BY DEPARTMENT</span>
-
-						</h3>
-					</div>
-
-					<div class="card-body py-3">
-						<h3 class="card-title align-items-start flex-column">
-							<span class="card-label fw-bold text-gray-800">Categorization of Risk</span>
-						</h3>
-
-						<h3>Bar Chart</h3>
+								<canvas id="riskByDept" style="width:100%;max-width:600px"></canvas>
 
 
-					</div>
-					<!--end::Body-->
-				</div>
-				<!--end::Table Widget 10-->
-			</div>
-
-			<!--begin::Col-->
-			<div class="col-xl-6 mb-5 mb-xl-10">
-				<!--begin::Table widget 9-->
-				<div class="card card-flush h-xl-100">
-					<!--begin::Header-->
-					<div class="card-header pt-5">
-						<!--begin::Title-->
-						<h3 class="card-title align-items-start flex-column">
-							<span class="card-label fw-bold text-gray-800">OVERDUE RESOLUTION</span>
-
-						</h3>
-
-					</div>
-					<!--end::Header-->
-					<!--begin::Body-->
-					<div class="card-body py-3">
-						<!--begin::Table container-->
-						<div class="table-responsive">
-							<!--begin::Table-->
-							<table class="table table-row-dashed align-middle gs-0 gy-4">
-								<!--begin::Table head-->
-								<thead>
-									<tr class="fs-7 fw-bold border-0 text-gray-400">
-										<th class="min-w-150px" colspan="2">S/N</th>
-										<th class="min-w-150px text-end pe-0" colspan="2">DEPT</th>
-										<th class="text-end min-w-150px" colspan="2">RISK</th>
-										<th class="text-end min-w-150px" colspan="2">DUE DATE</th>
-									</tr>
-								</thead>
-								<!--end::Table head-->
-								<!--begin::Table body-->
-								<tbody>
-									<tr>
-										<td class="" colspan="2">
-											1
-										</td>
-										<td class="pe-0" colspan="2">
-											Data & Digital Services
-										</td>
-										<td class="" colspan="2">
-											Data Loss
-										</td>
-										<td class="" colspan="2">
-											09/11/2022
-										</td>
-									</tr>
-									<tr>
-										<td class="" colspan="2">
-											2
-										</td>
-										<td class="pe-0" colspan="2">
-											Application Support
-										</td>
-										<td class="" colspan="2">
-											Application Time-out
-										</td>
-										<td class="" colspan="2">
-											10/11/2022
-										</td>
-									</tr>
-									<tr>
-										<td class="" colspan="2">
-											3
-										</td>
-										<td class="pe-0" colspan="2">
-											Sales
-										</td>
-										<td class="" colspan="2">
-											Marketing Metrics Unreachable
-										</td>
-										<td class="" colspan="2">
-											10/11/2022
-										</td>
-									</tr>
-									<tr>
-										<td class="" colspan="2">
-											4
-										</td>
-										<td class="pe-0" colspan="2">
-											Operations
-										</td>
-										<td class="" colspan="2">
-											Account Creation Metric Unavailable
-										</td>
-										<td class="" colspan="2">
-											11/11/2022
-										</td>
-									</tr>
-
-
-								</tbody>
-								<!--end::Table body-->
-							</table>
-							<!--end::Table-->
+							</div>
+							<!--end::Body-->
 						</div>
-						<!--end::Table container-->
+						<!--end::Table Widget 10-->
 					</div>
-					<!--end::Body-->
-				</div>
-				<!--end::Table Widget 9-->
-			</div>
+
+					<!--begin::Col-->
+					<div class="col-xl-6 mb-5 mb-xl-10">
+						<!--begin::Table widget 9-->
+						<div class="card card-flush h-xl-100">
+							<!--begin::Header-->
+							<div class="card-header pt-5">
+								<!--begin::Title-->
+								<h3 class="card-title align-items-start flex-column">
+									<span class="card-label fw-bold text-gray-800">OVERDUE RESOLUTION</span>
+
+								</h3>
+
+							</div>
+							<!--end::Header-->
+							<!--begin::Body-->
+							<div class="card-body py-3">
+								<!--begin::Table container-->
+								<div class="table-responsive">
+									<!--begin::Table-->
+									<table class="table table-row-dashed align-middle gs-0 gy-4">
+										<!--begin::Table head-->
+										<thead>
+											<tr class="fs-7 fw-bold border-0 text-gray-400">
+												<th class="min-w-150px" colspan="2">S/N</th>
+												<th class="min-w-150px text-end pe-0" colspan="2">DEPT</th>
+												<th class="text-end min-w-150px" colspan="2">RISK</th>
+												<th class="text-end min-w-150px" colspan="2">DUE DATE</th>
+											</tr>
+										</thead>
+										<!--end::Table head-->
+										<!--begin::Table body-->
+										<tbody>
+											<tr>
+												<td class="" colspan="2">
+													1
+												</td>
+												<td class="pe-0" colspan="2">
+													Data & Digital Services
+												</td>
+												<td class="" colspan="2">
+													Data Loss
+												</td>
+												<td class="" colspan="2">
+													09/11/2022
+												</td>
+											</tr>
+											<tr>
+												<td class="" colspan="2">
+													2
+												</td>
+												<td class="pe-0" colspan="2">
+													Application Support
+												</td>
+												<td class="" colspan="2">
+													Application Time-out
+												</td>
+												<td class="" colspan="2">
+													10/11/2022
+												</td>
+											</tr>
+											<tr>
+												<td class="" colspan="2">
+													3
+												</td>
+												<td class="pe-0" colspan="2">
+													Sales
+												</td>
+												<td class="" colspan="2">
+													Marketing Metrics Unreachable
+												</td>
+												<td class="" colspan="2">
+													10/11/2022
+												</td>
+											</tr>
+											<tr>
+												<td class="" colspan="2">
+													4
+												</td>
+												<td class="pe-0" colspan="2">
+													Operations
+												</td>
+												<td class="" colspan="2">
+													Account Creation Metric Unavailable
+												</td>
+												<td class="" colspan="2">
+													11/11/2022
+												</td>
+											</tr>
 
 
-
-
-		</div>
-						<!--end::Content container-->
+										</tbody>
+										<!--end::Table body-->
+									</table>
+									<!--end::Table-->
+								</div>
+								<!--end::Table container-->
+							</div>
+							<!--end::Body-->
+						</div>
+						<!--end::Table Widget 9-->
 					</div>
-					<!--end::Content-->
+
+
+
+
 				</div>
-				<!--end::Content wrapper-->
-				</div>
-				</div>
+								<!--end::Content container-->
+							</div>
+							<!--end::Content-->
+						</div>
+						<!--end::Content wrapper-->
+						</div>
+
+												</div>

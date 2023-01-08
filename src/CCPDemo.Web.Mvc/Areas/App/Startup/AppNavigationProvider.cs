@@ -22,7 +22,6 @@ namespace CCPDemo.Web.Areas.App.Startup
                         permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Administration_Host_Dashboard)
                     )
                 )
-                
                 .AddItem(new MenuItemDefinition(
                     AppPageNames.Host.Tenants,
                     L("Tenants"),
@@ -49,17 +48,16 @@ namespace CCPDemo.Web.Areas.App.Startup
                         AppPageNames.Common.RiskManagement,
                         L("RiskManagement"),
                         icon: "flaticon-interface-8"
-                    )
-                .AddItem(new MenuItemDefinition(
-                        AppPageNames.Common.Risks,
-                        L("Risks"),
-                        url: "App/Risks",
-                        icon: "flaticon-file-2",
-                        permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Risks)
-                    )
-                )
+                    ).AddItem(new MenuItemDefinition(
+						AppPageNames.Common.Risks,
+						L("Risks"),
+						url: "App/Risks",
+						icon: "flaticon2-indent-dots",
+						permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Risks)
+					)
+				)
 
-                 )
+				 )
                 .AddItem(new MenuItemDefinition(
                         AppPageNames.Common.Administration,
                         L("Administration"),
@@ -86,6 +84,31 @@ namespace CCPDemo.Web.Areas.App.Startup
                             permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Administration_Users)
                         )
                     )
+                .AddItem(new MenuItemDefinition(
+                        AppPageNames.Common.Status,
+                        L("Status"),
+                        url: "App/Status",
+                        icon: "flaticon-more",
+                        permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Administration_Status)
+                    )
+                )
+                .AddItem(new MenuItemDefinition(
+                        AppPageNames.Common.RiskStatus,
+                        L("RiskStatus"),
+                        url: "App/RiskStatus",
+                        icon: "flaticon-more",
+                        permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Administration_RiskStatus)
+                    )
+                )
+                .AddItem(new MenuItemDefinition(
+                        AppPageNames.Common.RiskRatings,
+                        L("RiskRatings"),
+                        url: "App/RiskRatings",
+                        icon: "flaticon-more",
+                        permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Administration_RiskRatings)
+                    )
+                )
+
                 .AddItem(new MenuItemDefinition(
                         AppPageNames.Common.RiskTypes,
                         L("RiskTypes"),
@@ -120,13 +143,6 @@ namespace CCPDemo.Web.Areas.App.Startup
                             url: "App/UiCustomization",
                             icon: "flaticon-medical",
                             permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Administration_UiCustomization)
-                        )
-                    ).AddItem(new MenuItemDefinition(
-                            AppPageNames.Common.Status,
-                             L("Status"),
-                            url: "App/Status",
-                            icon: "flaticon-medical",
-                            permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Administration_Status)
                         )
                     )
                     .AddItem(new MenuItemDefinition(

@@ -1,0 +1,45 @@
+﻿@using CCPDemo.Web.Areas.App.Startup
+@using CCPDemo.Web.Areas.App.Models.UsersLookups
+@model UsersLookupViewModel
+@using CCPDemo.Web.TagHelpers
+@{
+ViewBag.CurrentPageName = AppPageNames.Common.UsersLookups;
+}
+@section Scripts
+{
+<script abp-src="/view-resources/Areas/App/Views/UsersLookups/CreateOrEdit.js" asp-append-version="true"></script>
+}
+
+<div class="content d-flex flex-column flex-column-fluid">
+
+    @{
+    var breadcrumbs = new List<BreadcrumbItem>()
+        {
+        new BreadcrumbItem("/App/UsersLookups", L("UsersLookups")),
+        new BreadcrumbItem(L("Details")),
+        };
+        }
+        <abp-page-subheader title='@L("Details")' breadcrumbs="breadcrumbs">
+        </abp-page-subheader>
+
+        <div class="@(await GetContainerClass())">
+            <div class=" card card-custom gutter-b">
+                <div class=" card-body">
+                    <div id="UsersLookupInformationsTab">
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <h6>@L("User") :</h6>
+                                @Model.UsersLookup.User
+                            </div>
+
+                            <div class="col-6 mb-3">
+                                <h6>(@L("User")) @L("Name") :</h6>
+                                @Model.UserName
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>

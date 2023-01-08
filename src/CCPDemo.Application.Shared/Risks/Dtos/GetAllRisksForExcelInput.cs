@@ -7,31 +7,36 @@ namespace CCPDemo.Risks.Dtos
     {
         public string Filter { get; set; }
 
-        public string RiskTypeFilter { get; set; }
-
-        public string RiskSummaryFilter { get; set; }
-
-        public string DepartmentFilter { get; set; }
-
-        public string RiskOwnerFilter { get; set; }
+        public string SummaryFilter { get; set; }
 
         public string ExistingControlFilter { get; set; }
 
-        public string ERMCommentFilter { get; set; }
+        public string ERMRecommendationFilter { get; set; }
 
         public string ActionPlanFilter { get; set; }
 
         public string RiskOwnerCommentFilter { get; set; }
 
-        public string StatusFilter { get; set; }
+        public DateTime? MaxTargetDateFilter { get; set; }
+        public DateTime? MinTargetDateFilter { get; set; }
 
-        public string RatingFilter { get; set; }
+        public DateTime? MaxActualClosureDateFilter { get; set; }
+        public DateTime? MinActualClosureDateFilter { get; set; }
 
-        public string TargetDateFilter { get; set; }
-
-        public string ActualClosureDateFilter { get; set; }
+        public DateTime? MaxAcceptanceDateFilter { get; set; }
+        public DateTime? MinAcceptanceDateFilter { get; set; }
 
         public int? RiskAcceptedFilter { get; set; }
+
+        public string RiskTypeNameFilter { get; set; }
+
+        public string OrganizationUnitDisplayNameFilter { get; set; }
+
+        public string StatusNameFilter { get; set; }
+
+        public string RiskRatingNameFilter { get; set; }
+
+        public string UserNameFilter { get; set; }
 
     }
 }

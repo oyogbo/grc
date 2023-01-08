@@ -35,15 +35,15 @@ namespace CCPDemo.Authorization
             risks.CreateChildPermission(AppPermissions.Pages_Risks_Edit, L("EditRisk"));
             risks.CreateChildPermission(AppPermissions.Pages_Risks_Delete, L("DeleteRisk"));
 
+            var usersLookups = pages.CreateChildPermission(AppPermissions.Pages_UsersLookups, L("UsersLookups"));
+            usersLookups.CreateChildPermission(AppPermissions.Pages_UsersLookups_Create, L("CreateNewUsersLookup"));
+            usersLookups.CreateChildPermission(AppPermissions.Pages_UsersLookups_Edit, L("EditUsersLookup"));
+            usersLookups.CreateChildPermission(AppPermissions.Pages_UsersLookups_Delete, L("DeleteUsersLookup"));
+
             var departments = pages.CreateChildPermission(AppPermissions.Pages_Departments, L("Departments"));
             departments.CreateChildPermission(AppPermissions.Pages_Departments_Create, L("CreateNewDepartment"));
             departments.CreateChildPermission(AppPermissions.Pages_Departments_Edit, L("EditDepartment"));
             departments.CreateChildPermission(AppPermissions.Pages_Departments_Delete, L("DeleteDepartment"));
-
-            var vRisks = pages.CreateChildPermission(AppPermissions.Pages_VRisks, L("VRisks"));
-            vRisks.CreateChildPermission(AppPermissions.Pages_VRisks_Create, L("CreateNewVRisk"));
-            vRisks.CreateChildPermission(AppPermissions.Pages_VRisks_Edit, L("EditVRisk"));
-            vRisks.CreateChildPermission(AppPermissions.Pages_VRisks_Delete, L("DeleteVRisk"));
 
             var assessments = pages.CreateChildPermission(AppPermissions.Pages_Assessments, L("Assessments"));
             assessments.CreateChildPermission(AppPermissions.Pages_Assessments_Create, L("CreateNewAssessment"));
@@ -66,6 +66,21 @@ namespace CCPDemo.Authorization
             phoneBook.CreateChildPermission(AppPermissions.Pages_Tenant_PhoneBook_DeletePerson, L("DeletePerson"), multiTenancySides: MultiTenancySides.Tenant);
 
             var administration = pages.CreateChildPermission(AppPermissions.Pages_Administration, L("Administration"));
+
+            var status = administration.CreateChildPermission(AppPermissions.Pages_Administration_Status, L("Status"));
+            status.CreateChildPermission(AppPermissions.Pages_Administration_Status_Create, L("CreateNewStatus"));
+            status.CreateChildPermission(AppPermissions.Pages_Administration_Status_Edit, L("EditStatus"));
+            status.CreateChildPermission(AppPermissions.Pages_Administration_Status_Delete, L("DeleteStatus"));
+
+            var riskStatus = administration.CreateChildPermission(AppPermissions.Pages_Administration_RiskStatus, L("RiskStatus"));
+            riskStatus.CreateChildPermission(AppPermissions.Pages_Administration_RiskStatus_Create, L("CreateNewRiskStatus"));
+            riskStatus.CreateChildPermission(AppPermissions.Pages_Administration_RiskStatus_Edit, L("EditRiskStatus"));
+            riskStatus.CreateChildPermission(AppPermissions.Pages_Administration_RiskStatus_Delete, L("DeleteRiskStatus"));
+
+            var riskRatings = administration.CreateChildPermission(AppPermissions.Pages_Administration_RiskRatings, L("RiskRatings"));
+            riskRatings.CreateChildPermission(AppPermissions.Pages_Administration_RiskRatings_Create, L("CreateNewRiskRating"));
+            riskRatings.CreateChildPermission(AppPermissions.Pages_Administration_RiskRatings_Edit, L("EditRiskRating"));
+            riskRatings.CreateChildPermission(AppPermissions.Pages_Administration_RiskRatings_Delete, L("DeleteRiskRating"));
 
             var riskTypes = administration.CreateChildPermission(AppPermissions.Pages_Administration_RiskTypes, L("RiskTypes"));
             riskTypes.CreateChildPermission(AppPermissions.Pages_Administration_RiskTypes_Create, L("CreateNewRiskType"));
@@ -111,11 +126,6 @@ namespace CCPDemo.Authorization
             category.CreateChildPermission(AppPermissions.Pages_Administration_Category_Create, L("CreateNewCategory"));
             category.CreateChildPermission(AppPermissions.Pages_Administration_Category_Edit, L("EditCategory"));
             category.CreateChildPermission(AppPermissions.Pages_Administration_Category_Delete, L("DeleteCategory"));
-
-            var status = administration.CreateChildPermission(AppPermissions.Pages_Administration_Status, L("Status"));
-            status.CreateChildPermission(AppPermissions.Pages_Administration_Status_Create, L("CreateNewStatus"));
-            status.CreateChildPermission(AppPermissions.Pages_Administration_Status_Edit, L("EditStatus"));
-            status.CreateChildPermission(AppPermissions.Pages_Administration_Status_Delete, L("DeleteStatus"));
 
             var riskModels = administration.CreateChildPermission(AppPermissions.Pages_Administration_RiskModels, L("RiskModels"));
             riskModels.CreateChildPermission(AppPermissions.Pages_Administration_RiskModels_Create, L("CreateNewRiskModel"));

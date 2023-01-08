@@ -1,8 +1,11 @@
 ﻿using CCPDemo.Risks;
+using CCPDemo.RiskStatus;
+using CCPDemo.RiskStatuses;
+using CCPDemo.RiskRatings;
+using CCPDemo.UsersLookups;
 using CCPDemo.RiskTypes;
 using CCPDemo.RiskTransactions;
 using CCPDemo.Departments;
-using CCPDemo.VRisks;
 using CCPDemo.Regulations;
 using CCPDemo.ManagementReviews;
 using CCPDemo.Projects;
@@ -42,12 +45,16 @@ namespace CCPDemo.EntityFrameworkCore
     {
         public virtual DbSet<Risk> Risks { get; set; }
 
+        public virtual DbSet<Status> Status { get; set; }
+
+        public virtual DbSet<RiskRating> RiskRatings { get; set; }
+
+        public virtual DbSet<UsersLookup> UsersLookups { get; set; }
+
         public virtual DbSet<RiskType> RiskTypes { get; set; }
 
         public virtual DbSet<RiskTransaction> RiskTransactions { get; set; }
         public virtual DbSet<Department> Departments { get; set; }
-
-        public virtual DbSet<VRisk> VRisks { get; set; }
 
         public virtual DbSet<Regulation> Regulations { get; set; }
 
@@ -123,10 +130,7 @@ namespace CCPDemo.EntityFrameworkCore
             {
                 d.HasIndex(e => new { e.TenantId });
             });
-            modelBuilder.Entity<VRisk>(v =>
-                       {
-                           v.HasIndex(e => new { e.TenantId });
-                       });
+
             modelBuilder.Entity<Regulation>(r =>
                                              {
                                                  r.HasIndex(e => new { e.TenantId });
