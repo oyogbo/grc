@@ -8,6 +8,8 @@ using Abp.Threading;
 using Microsoft.AspNetCore.Identity;
 using CCPDemo.Authorization.Users;
 using CCPDemo.MultiTenancy;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CCPDemo
 {
@@ -47,6 +49,24 @@ namespace CCPDemo
             {
                 return TenantManager.GetByIdAsync(AbpSession.GetTenantId());
             }
+        }
+
+
+        protected virtual async Task<User> GetUserByIdAsync(long Id)
+        {
+            var user = await UserManager.FindByIdAsync(Id.ToString());
+            if (user == null)
+            {
+                throw new Exception("There is no current user!");
+            }
+
+            return user;
+        }
+
+        protected virtual async Task<List<User>> GetAllErm()
+        {
+            var users = await UserManager.GetUsersInRoleAsync("c593c83d0f6b4463a6997eea9e7f45d7");
+            return users.ToList();
         }
 
         protected virtual Tenant GetCurrentTenant()

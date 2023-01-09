@@ -4,7 +4,9 @@
     <text name="ERMRecommendation">E r m recommendation</text>
     <text name="StatusName">Status name</text>
     <text name="PickStatus">Pick status</text>
-    <text name="SelectAStatus">Select a status</text>
+	 <text name="KeyRiskIndicatorManagement"> Key Risk Indicator Management</text>
+	 <text name="KeyRiskIndicatorHistory"> Key Risk Indicator History</text>
+	 <text name="SelectAStatus">Select a status</text>
     <text name="RiskStatuses">Risk statuses</text>
     <text name="CCPDemo.RiskStatuses.RiskStatus">RiskStatus</text>
     <text name="RiskStatusHeaderInfo">Risk status header info</text>

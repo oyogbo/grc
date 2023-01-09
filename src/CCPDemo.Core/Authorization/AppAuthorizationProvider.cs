@@ -30,6 +30,11 @@ namespace CCPDemo.Authorization
 
             var pages = context.GetPermissionOrNull(AppPermissions.Pages) ?? context.CreatePermission(AppPermissions.Pages, L("Pages"));
 
+            var keyRiskIndicators = pages.CreateChildPermission(AppPermissions.Pages_KeyRiskIndicators, L("KeyRiskIndicators"));
+            keyRiskIndicators.CreateChildPermission(AppPermissions.Pages_KeyRiskIndicators_Create, L("CreateNewKeyRiskIndicator"));
+            keyRiskIndicators.CreateChildPermission(AppPermissions.Pages_KeyRiskIndicators_Edit, L("EditKeyRiskIndicator"));
+            keyRiskIndicators.CreateChildPermission(AppPermissions.Pages_KeyRiskIndicators_Delete, L("DeleteKeyRiskIndicator"));
+
             var risks = pages.CreateChildPermission(AppPermissions.Pages_Risks, L("Risks"));
             risks.CreateChildPermission(AppPermissions.Pages_Risks_Create, L("CreateNewRisk"));
             risks.CreateChildPermission(AppPermissions.Pages_Risks_Edit, L("EditRisk"));

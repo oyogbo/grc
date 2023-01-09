@@ -1,0 +1,49 @@
+﻿@using CCPDemo.Authorization
+@using CCPDemo.Web.Areas.App.Models.KeyRiskIndicators
+@using CCPDemo.Web.Areas.App.Startup
+@model KeyRiskIndicatorsViewModel
+@{
+//ViewBag.CurrentPageName = AppPageNames.Common.KeyRiskIndicators;
+}
+
+@section Styles
+{
+    <link rel="stylesheet" abp-href="/view-resources/Areas/App/Views/Common/_KeyValueListManager.css" asp-append-version="true"/>
+}
+
+@section Scripts
+{
+    <script>
+   
+
+    </script>
+}
+
+<div class="content d-flex flex-column flex-column-fluid">
+
+    <div class="@(await GetContainerClass())">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <form id="SettingsLogoUploadFormKRI" method="POST" action="@Url.Action("ReadCSV", "KeyRiskIndicators")" enctype="multipart/form-data">
+                           
+
+                            <div class="input-group mb-3">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name="KeyRiskIndicator">
+                                    <label class="custom-file-label form-label" id="KeyRiskIndicator"
+                                           for="KeyRiskIndicator">@L("ChooseAFile")</label>
+                                </div>
+                                <span class="form-text text-muted col-lg-12">@L("UploadCSV_Info")</span>
+                            </div>
+
+                            <button class="btn btn-primary" type="submit">@L("Upload")</button>
+                            <button class="btn btn-secondary" type="reset">@L("Clear")</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

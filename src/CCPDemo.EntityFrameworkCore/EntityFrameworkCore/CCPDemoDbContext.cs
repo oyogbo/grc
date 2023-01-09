@@ -38,11 +38,19 @@ using CCPDemo.Storage;
 using CCPDemo.Persons;
 using CCPDemo.Phones;
 using CCPDemo.PhoneTypeEntityDir;
+using CCPDemo.Comments;
+using CCPDemo.KeyRiskIndicatorHistorys;
+using CCPDemo.KeyRiskIndicators;
 
 namespace CCPDemo.EntityFrameworkCore
 {
     public class CCPDemoDbContext : AbpZeroDbContext<Tenant, Role, User, CCPDemoDbContext>, IAbpPersistedGrantDbContext
     {
+        public virtual DbSet<KeyRiskIndicator> KeyRiskIndicators { get; set; }
+
+        public virtual DbSet<Comment> Comments { get; set; }
+
+        public virtual DbSet<KeyRiskIndicatorHistory> KeyRiskIndicatorHistories { get; set; }
         public virtual DbSet<Risk> Risks { get; set; }
 
         public virtual DbSet<Status> Status { get; set; }

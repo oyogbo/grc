@@ -1864,6 +1864,31 @@ namespace CCPDemo.Migrations
                     b.ToTable("Closures");
                 });
 
+            modelBuilder.Entity("CCPDemo.Comments.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("CommentText")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DateCreated")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("KRIId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Comment");
+                });
+
             modelBuilder.Entity("CCPDemo.Departments.Department", b =>
                 {
                     b.Property<int>("Id")
@@ -2020,6 +2045,103 @@ namespace CCPDemo.Migrations
                     b.HasIndex("TenantId", "UserId");
 
                     b.ToTable("AppFriendships");
+                });
+
+            modelBuilder.Entity("CCPDemo.KeyRiskIndicatorHistorys.KeyRiskIndicatorHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("BussinessLine")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Department")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReferenceId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TotalRecord")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("KeyRiskIndicatorHistory");
+                });
+
+            modelBuilder.Entity("CCPDemo.KeyRiskIndicators.KeyRiskIndicator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Activity")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BusinessLines")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ControlEffectiveness")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsControlInUse")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("KeyControl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LikelihoodOfImpact_irr")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LikelihoodOfImpact_rrr")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LikelihoodOfOccurrence_irr")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LikelihoodOfOccurrence_rrr")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MitigationPlan")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OwnerComment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PotentialRisk")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Process")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReferenceId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SubProcess")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("KeyRiskIndicators");
                 });
 
             modelBuilder.Entity("CCPDemo.ManagementReviews.ManagementReview", b =>

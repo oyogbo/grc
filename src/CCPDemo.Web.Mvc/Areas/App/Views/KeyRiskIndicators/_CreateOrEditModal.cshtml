@@ -1,0 +1,109 @@
+﻿
+@using System.Globalization
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.KeyRiskIndicators
+@model CreateOrEditKeyRiskIndicatorModalViewModel
+@using Abp.Extensions
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("EditKeyRiskIndicator")) : L("CreateNewKeyRiskIndicator")))
+
+<div class="modal-body">
+    <div id="KeyRiskIndicatorInformationsTab">
+        <form name="KeyRiskIndicatorInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+            <input type="hidden" name="id" value="@Model.KeyRiskIndicator.Id" />
+            }
+
+            <div class="my-3">
+                <label class="form-label" for="KeyRiskIndicator_ReferenceId">@L("ReferenceId")</label>
+                <input class="form-control" id="KeyRiskIndicator_ReferenceId" value="@Model.KeyRiskIndicator.ReferenceId" type="text" name="referenceId" required />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="KeyRiskIndicator_BusinessLines">@L("BusinessLines")</label>
+                <input class="form-control" id="KeyRiskIndicator_BusinessLines" value="@Model.KeyRiskIndicator.BusinessLines" type="text" name="businessLines" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="KeyRiskIndicator_Activity">@L("Activity")</label>
+                <input class="form-control" id="KeyRiskIndicator_Activity" value="@Model.KeyRiskIndicator.Activity" type="text" name="activity" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="KeyRiskIndicator_Process">@L("Process")</label>
+                <input class="form-control" id="KeyRiskIndicator_Process" value="@Model.KeyRiskIndicator.Process" type="text" name="process" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="KeyRiskIndicator_SubProcess">@L("SubProcess")</label>
+                <input class="form-control" id="KeyRiskIndicator_SubProcess" value="@Model.KeyRiskIndicator.SubProcess" type="text" name="subProcess" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="KeyRiskIndicator_PotentialRisk">@L("PotentialRisk")</label>
+                <input class="form-control" id="KeyRiskIndicator_PotentialRisk" value="@Model.KeyRiskIndicator.PotentialRisk" type="text" name="potentialRisk" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="KeyRiskIndicator_LikelihoodOfOccurrence_irr">@L("LikelihoodOfOccurrence_irr")</label>
+                <input class="form-control" id="KeyRiskIndicator_LikelihoodOfOccurrence_irr" value="@Model.KeyRiskIndicator.LikelihoodOfOccurrence_irr" type="text" name="likelihoodOfOccurrence_irr" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="KeyRiskIndicator_LikelihoodOfImpact_irr">@L("LikelihoodOfImpact_irr")</label>
+                <input class="form-control" id="KeyRiskIndicator_LikelihoodOfImpact_irr" value="@Model.KeyRiskIndicator.LikelihoodOfImpact_irr" type="text" name="likelihoodOfImpact_irr" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="KeyRiskIndicator_KeyControl">@L("KeyControl")</label>
+                <input class="form-control" id="KeyRiskIndicator_KeyControl" value="@Model.KeyRiskIndicator.KeyControl" type="text" name="keyControl" />
+            </div>
+
+            <label class="form-check form-check-custom">
+                <input id="KeyRiskIndicator_IsControlInUse" name="isControlInUse" type="checkbox" class="form-check-input" @Html.Raw(Model.KeyRiskIndicator.IsControlInUse ?"checked=\"checked\"":"") />
+                <span class="form-check-label">
+                    @L("IsControlInUse")
+                </span>
+            </label>
+
+            <div class="my-3">
+                <label class="form-label" for="KeyRiskIndicator_ControlEffectiveness">@L("ControlEffectiveness")</label>
+                <input class="form-control" id="KeyRiskIndicator_ControlEffectiveness" value="@Model.KeyRiskIndicator.ControlEffectiveness" type="text" name="controlEffectiveness" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="KeyRiskIndicator_LikelihoodOfOccurrence_rrr">@L("LikelihoodOfOccurrence_rrr")</label>
+                <input class="form-control" id="KeyRiskIndicator_LikelihoodOfOccurrence_rrr" value="@Model.KeyRiskIndicator.LikelihoodOfOccurrence_rrr" type="text" name="likelihoodOfOccurrence_rrr" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="KeyRiskIndicator_LikelihoodOfImpact_rrr">@L("LikelihoodOfImpact_rrr")</label>
+                <input class="form-control" id="KeyRiskIndicator_LikelihoodOfImpact_rrr" value="@Model.KeyRiskIndicator.LikelihoodOfImpact_rrr" type="text" name="likelihoodOfImpact_rrr" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="KeyRiskIndicator_MitigationPlan">@L("MitigationPlan")</label>
+                <input class="form-control" id="KeyRiskIndicator_MitigationPlan" value="@Model.KeyRiskIndicator.MitigationPlan" type="text" name="mitigationPlan" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="KeyRiskIndicator_Comment">@L("Comment")</label>
+                <input class="form-control" id="KeyRiskIndicator_Comment" value="@Model.KeyRiskIndicator.Comment" type="text" name="comment" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="KeyRiskIndicator_Status">@L("Status")</label>
+                <input class="form-control" id="KeyRiskIndicator_Status" value="@Model.KeyRiskIndicator.Status" type="text" name="status" />
+            </div>
+
+            <div class="my-3">
+                <label class="form-label" for="KeyRiskIndicator_OwnerComment">@L("OwnerComment")</label>
+                <input class="form-control" id="KeyRiskIndicator_OwnerComment" value="@Model.KeyRiskIndicator.OwnerComment" type="text" name="ownerComment" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

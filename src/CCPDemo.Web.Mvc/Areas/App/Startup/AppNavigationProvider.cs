@@ -49,15 +49,36 @@ namespace CCPDemo.Web.Areas.App.Startup
                         L("RiskManagement"),
                         icon: "flaticon-interface-8"
                     ).AddItem(new MenuItemDefinition(
-						AppPageNames.Common.Risks,
-						L("Risks"),
-						url: "App/Risks",
-						icon: "flaticon2-indent-dots",
-						permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Risks)
-					)
-				)
+                        AppPageNames.Common.Risks,
+                        L("Risks"),
+                        url: "App/Risks",
+                        icon: "flaticon2-indent-dots",
+                        permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Risks)
+                    )
+                )
 
-				 )
+                 ).AddItem(new MenuItemDefinition(
+                        AppPageNames.Common.KeyRiskIndicatorManagement,
+                        L("KeyRiskIndicatorManagement"),
+                        icon: "flaticon-line-graph"
+                    ).AddItem(new MenuItemDefinition(
+                        AppPageNames.Common.UploadKeyRiskIndicator,
+                        L("UploadKeyRiskIndicator"),
+                        url: "App/UploadKeyRiskIndicator",
+                        icon: "flaticon-upload",
+                        permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_KeyRiskIndicators)
+                    )
+                    )
+                    .AddItem(new MenuItemDefinition(
+                       AppPageNames.Common.KeyRiskIndicatorHistory,
+                        L("KeyRiskIndicatorHistory"),
+                        url: "App/KeyRiskIndicatorHistory",
+                        icon: "flaticon-time",
+                    //  permissionDependency: new SimplePermissionDependency(AppPermissions.)
+                    permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_KeyRiskIndicators)
+                    )
+                 ))
+
                 .AddItem(new MenuItemDefinition(
                         AppPageNames.Common.Administration,
                         L("Administration"),

@@ -6,6 +6,13 @@
     /// </summary>
     public static class AppPermissions
     {
+
+        public const string Pages_KeyRiskIndicators = "Pages.KeyRiskIndicators";
+        public const string Pages_UploadKeyRiskIndicator = "Pages.UploadKeyRiskIndicator";
+        public const string Pages_KeyRiskIndicators_Create = "Pages.KeyRiskIndicators.Create";
+        public const string Pages_KeyRiskIndicators_Edit = "Pages.KeyRiskIndicators.Edit";
+        public const string Pages_KeyRiskIndicators_Delete = "Pages.KeyRiskIndicators.Delete";
+
         public const string Pages_Risks = "Pages.Risks";
         public const string Pages_Risks_Create = "Pages.Risks.Create";
         public const string Pages_Risks_Edit = "Pages.Risks.Edit";

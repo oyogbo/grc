@@ -1,0 +1,317 @@
+﻿@using CCPDemo.Authorization
+@using CCPDemo.KeyRiskIndicators;
+@using CCPDemo.Web.Areas.App.Models.KeyRiskIndicators
+@using CCPDemo.Web.Areas.App.Startup
+@model KeyRiskIndicatorViewModel
+@{
+   // ViewBag.CurrentPageName = AppPageNames.Common.KeyRiskIndicators;
+   
+}
+<link href="/Common/Styles/StyleSheet.css" rel="stylesheet" type="text/css" />
+<div style="width:95%; height:700px;  margin: 0 auto; margin-bottom:100px; background-color:#fff; padding:20px;">
+
+    <div >
+        <div class="card card-custom gutter-b" style="width:fit-content;">
+            <div class="card-body">
+                <div class="form">
+                    <div class="row align-items-center mb-4">
+                        <div class="col-xl-12">
+
+                            <div class="my-3" style="display:flex; justify-content:end;  width: 1100px;">
+                                <div class="input-group" style=" width:fit-content;">
+                                  <button id="ApproveiskIndicatorsButton" class="btn btn-primary" disabled>Approve</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section style="height:600px; overflow-y:auto;">
+        <div class="table-responsive text-nowrap" style="height:600px; overflow-y:auto;">
+            <!--Table-->
+            <table class="table table-striped" style="height:600px; overflow-y:auto;">
+                <!--Table head-->
+                <thead>
+                    <tr style="font-weight:bolder">
+                        <th></th>
+                        <th>ReferenceId</th>
+                        <th> Business Line</th>
+                        <th>Activity</th>
+                        <th>Process</th>
+                        <th>SubProcess</th>
+                        <th>PotentialRisk</th>
+                        <th>Like lihood Of Occurrence_irr</th>
+                        <th>LikelihoodOfImpact_irr</th>
+                        <th>KeyControl</th>
+                        <th>IsControlInUse</th>
+                        <th>ControlEffectiveness</th>
+                        <th>LikelihoodOfOccurrence_rrr</th>
+                        <th>LikelihoodOfImpact_rrr</th>
+                        <th>MitigationPlan</th>
+                        <th>Comment</th>
+                        <th>Status</th>
+                        <th>OwnerComment</th>
+                        <th>Action</th>
+
+                    </tr>
+                </thead>
+                <!--Table head-->
+                <!--Table body-->
+                <tbody>
+                    @foreach (var obj in Model.KeyRiskIndicators)
+                    {
+                        <tr scope="row" id="rowId">
+                           @if(@obj.Status == "Approved"){
+                                <td> <input type="checkbox" data-id="@obj.Id" class="approve-selector" disabled/></td>
+                                }
+                                else{
+                                 <td> <input type="checkbox" data-id="@obj.Id" class="approve-selector" /></td>
+                                }
+                                <td>@obj.ReferenceId</td>
+                            <td>@obj.BusinessLines</td>
+                            <td>@obj.Activity</td>
+                            <td>@obj.Process</td>
+                            <td>@obj.SubProcess</td>
+                            <td>@obj.PotentialRisk</td>
+                            <td>@obj.LikelihoodOfImpact_irr</td>
+                            <td>@obj.LikelihoodOfImpact_rrr</td>
+                            <td>@obj.KeyControl</td>
+                            <td>@obj.IsControlInUse</td>
+                            <td>@obj.ControlEffectiveness</td>
+                            <td>@obj.LikelihoodOfOccurrence_rrr</td>
+                            <td>@obj.LikelihoodOfImpact_rrr</td>
+                            <td>@obj.MitigationPlan</td>
+                            <td>@obj.Comment</td>
+                            <td>@obj.Status</td>
+                            <td>@obj.OwnerComment</td>
+                            <th>
+                                @if (obj.Status == "Approved")
+                                {
+                                 <button data-bs-toggle="modal" data="@obj.Id" data-bs-target="#exampleModal" type="button" class="btn btn-outline-info commentIdSetter" onclick="setId(@obj.Id)" disabled>Comments @*<div class="id-data" hidden>@obj.Id</div>*@</button>
+                                    <button data-toggle="modal" data-target="#approveModalLabel" type="button" class="btn btn-outline-primary" disabled>Edit</button>
+                                }
+                                else
+                                {
+                                    <button data-bs-toggle="modal" data="@obj.Id" data-bs-target="#exampleModal" type="button" class="btn btn-outline-info commentIdSetter" onclick="setId(@obj.Id)">Comments @*<div class="id-data" hidden>@obj.Id</div>*@</button>
+                                    <button data-toggle="modal" data-target="#approveModalLabel" type="button" class="btn btn-outline-primary">Edit</button>
+                                }
+                            </th>
+
+                        </tr>
+                    }
+                </tbody>
+                <!--Table body-->
+            </table>
+            <!--Table-->
+        </div>
+    </section>
+    </div>
+
+
+<!-- Approve modal-->
+@*<div class="modal fade" id="approveKri" tabindex="-1" role="dialog" aria-labelledby="approveKri" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Approver Confirmation</h5>
+       
+      </div>
+      <div class="modal-body">
+                Are you sure you want to approve the Record Entry
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="goApprove">
+           <div id="ayes">
+               Yes
+           </div> 
+            </button>
+      </div>
+    </div>
+  </div>
+</div>*@
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Comments</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="display-comment-box" style="height:380px; border:1px solid #eee; overflow:auto; margin-bottom:15px;">
+                    
+                </div>
+                <div class="form-floating">
+                    <textarea class="form-control" id="kriComment" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
+                    <label for="floatingTextarea2">Leave a comment here</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="addComment"  class="btn btn-primary" disabled>Comment</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="loading" style="display:none"; class="loading">Loading&#8230;</div>
+
+
+ @section scripts {
+
+<script type="text/javascript">
+
+     var Ids = [];
+     var kriToCommentId;
+
+     $(".approve-selector").click(function () {
+
+            var checkboxs = document.getElementsByClassName("approve-selector");
+            var okay = false;
+            for (var i = 0, l = checkboxs.length; i < l; i++) {
+                if (checkboxs[i].checked) {
+                    okay = true;
+                    break;
+                }
+            }
+            if (okay)
+            {
+                if(this.checked){
+                    Ids.push(this.dataset.id);
+                }
+                if(!this.checked){
+                     Ids = Ids.filter(element => element !== this.dataset.id);
+                }
+                temp = document.getElementById("ApproveiskIndicatorsButton");
+                temp.removeAttribute('disabled');
+            }
+            
+            else 
+            {
+                Ids = [];
+                console.log(Ids);
+                temp = document.getElementById("ApproveiskIndicatorsButton"); 
+                temp.disabled = true;
+            }
+    });
+
+
+        $("#ApproveiskIndicatorsButton").on('click', (e) => {
+
+            var loader =  document.getElementById("loading");
+            loader.style.display = 'block';
+            var newId = Ids
+            //ajax call
+            $.ajax({
+                type: "PATCH",
+                url: `KeyRiskIndicators/ApproveKRI`,
+                traditional: true,
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(newId),
+                dataType: "json",
+                success: function (recData) {
+                    document.querySelector('#loading').style.display = 'none'
+                    window.location.reload();
+                },
+                error: function () {  }
+            });
+       });
+
+        $("#kriComment").on('keyup', (e) => {
+            if (e.target.value.length > 0) {
+                temp = document.getElementById("addComment");
+                temp.removeAttribute('disabled');
+            }
+            if (e.target.value.length < 1) {
+                temp = document.getElementById("addComment");
+                temp.disabled = true;
+            }
+        });
+
+
+      function setId(Id){
+          kriToCommentId = Id;
+      }
+
+
+      function loadComment(){
+
+            $.ajax({
+                type: "Get",
+                url: `Comment/GetAllCommentByKRIID/${kriToCommentId}`,
+                //traditional: true,
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(kriToCommentId),
+                dataType: "json",
+                success: function (recData) {
+
+                    console.log(recData.result.length);
+                    if (recData.result.length > 0)
+                    {
+                        document.getElementById("display-comment-box").innerHTML = "";
+                        recData.result.forEach((item, index) => {
+                            var content = "<div style='width:99%; padding:20px; margin-top:10px; background-color:#F5F8FA;'>"
+                                                                                         + "<h6>" + "Commenter: " + "</h6>" + "<p>" + item.userId + "</p>" +
+                                                                                          "<h6>" + "Comment: " + "</h6>" + "<p>" + item.commentText  + "</p>" +
+                                                                                          "<h6>" + "Date: " + "</h6>" + "<p>" + item.dateCreated + "</p>" +                                                                                    
+                                                                                     "</div>";
+                            document.getElementById("display-comment-box").insertAdjacentHTML('beforeend', content);
+                        })
+                    }
+                    else
+                    {
+                        var message = "<h5 style='margin:0 auto; margin-top:20px; '>" + "No Comments Yet" + "</h5>"
+                        document.getElementById("display-comment-box").innerHTML = "";
+                        document.getElementById("display-comment-box").insertAdjacentHTML('beforeend', message);
+                    }
+                    //document.querySelector('#loading').style.display = 'none'
+                    //window.location.reload();
+                },
+                error: function () { }
+            });
+
+      }
+
+
+        $("#exampleModal").on('shown.bs.modal', (e) => {
+            loadComment();
+        });
+
+        $("#addComment").on('click', (e) => {
+
+            var comment = document.querySelector("#kriComment").value;
+
+            var addCommenDto = {
+                Comment : comment,
+                KRIId : kriToCommentId
+            };
+
+            $.ajax({
+                type: "POST",
+                url: `Comment/Index/`,
+                //traditional: true,
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(addCommenDto),
+                dataType: "json",
+                success: function (recData) {
+                    document.querySelector('#loading').style.display = 'none'
+                    window.location.reload();
+                },
+                error: function () { }
+            });
+        });
+      
+
+</script>
+ }
+ 

@@ -55,7 +55,11 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using CCPDemo.Web.Extensions;
 using SecurityStampValidatorCallback = CCPDemo.Identity.SecurityStampValidatorCallback;
 using AutoMapper;
-
+using CCPDemo.KeyRiskIndicators.Service.Interface;
+using CCPDemo.KeyRiskIndicatorHistories;
+using CCPDemo.KeyRiskIndicators;
+using CCPDemo.KeyRiskIndicators.Service.Implementation;
+using CCPDemo.KRIComents;
 
 namespace CCPDemo.Web.Startup
 {
@@ -137,13 +141,13 @@ namespace CCPDemo.Web.Startup
             services.AddScoped<IWebResourceManager, WebResourceManager>();
 
             services.AddSignalR();
-            //services.AddScoped<ISerialiserService, SerialiserService>();
-            //services.AddScoped<IKeyRiskIndicatorsAppService, IKeyRiskIndicatorsAppService>();
-            //var config = new MapperConfiguration(cfg =>
-
-             //cfg.CreateMap<RCSAModel, CreateOrEditKeyRiskIndicatorDto>().ReverseMap()
-
-             //   );
+            services.AddScoped<ISerialiserService, SerialiserService>();
+            services.AddScoped<IEmailService, SendGridService>();
+            services.AddScoped<IKRIService, KRIService>();
+            services.AddScoped<IKeyRiskIndicatorHistoryRepo, KeyRiskIndicatorHistoryRepo>();
+            services.AddScoped<IKeyRiskIndicatorService, KeyRiskIndicatorHistoryAppService>();
+            services.AddScoped<IKRICommentRepo, KRICommentRepo>();
+           
 
 
             if (WebConsts.GraphQL.Enabled)

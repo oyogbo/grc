@@ -1,0 +1,86 @@
+﻿
+@using CCPDemo.Web.Areas.App.Models.Common.Modals
+@using CCPDemo.Web.Areas.App.Models.KeyRiskIndicators
+@model KeyRiskIndicatorViewModel
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("Details")))
+
+<div class="modal-body">
+    <div id="KeyRiskIndicatorInformationsTab">
+
+        <div class="row">
+            <div class="col-8 mb-3">
+                <h2>@L("BusinessLines") :</h2>
+                @Model.KeyRiskIndicator.ReferenceId
+            </div>
+            <div class="col-8 mb-3" >
+                <h2>@L("BusinessLines") :</h2>
+                @Model.KeyRiskIndicator.BusinessLines
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("Activity") :</h6>
+                @Model.KeyRiskIndicator.Activity
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("Process") :</h6>
+                @Model.KeyRiskIndicator.Process
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("SubProcess") :</h6>
+                @Model.KeyRiskIndicator.SubProcess
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("PotentialRisk") :</h6>
+                @Model.KeyRiskIndicator.PotentialRisk
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("LikelihoodOfOccurrence_irr") :</h6>
+                @Model.KeyRiskIndicator.LikelihoodOfOccurrence_irr
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("LikelihoodOfImpact_irr") :</h6>
+                @Model.KeyRiskIndicator.LikelihoodOfImpact_irr
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("KeyControl") :</h6>
+                @Model.KeyRiskIndicator.KeyControl
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("IsControlInUse") :</h6>
+                @Model.KeyRiskIndicator.IsControlInUse
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("ControlEffectiveness") :</h6>
+                @Model.KeyRiskIndicator.ControlEffectiveness
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("LikelihoodOfOccurrence_rrr") :</h6>
+                @Model.KeyRiskIndicator.LikelihoodOfOccurrence_rrr
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("LikelihoodOfImpact_rrr") :</h6>
+                @Model.KeyRiskIndicator.LikelihoodOfImpact_rrr
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("MitigationPlan") :</h6>
+                @Model.KeyRiskIndicator.MitigationPlan
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("Comment") :</h6>
+                @Model.KeyRiskIndicator.Comment
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("Status") :</h6>
+                @Model.KeyRiskIndicator.Status
+            </div>
+            <div class="col-6 mb-3">
+                <h6>@L("OwnerComment") :</h6>
+                @Model.KeyRiskIndicator.OwnerComment
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithClose.cshtml")

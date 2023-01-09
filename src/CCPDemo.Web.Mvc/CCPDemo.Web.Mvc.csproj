@@ -31,6 +31,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Areas\App\Views\KeyRiskIndicatorHistory\Index.cshtml" />
+    <None Include="Areas\App\Views\KeyRiskIndicators\EditKRI.cshtml" />
+    <None Include="Areas\App\Views\KeyRiskIndicators\Index.cshtml" />
+    <None Include="Areas\App\Views\KeyRiskIndicators\Index1.cshtml" />
+    <None Include="Areas\App\Views\KeyRiskIndicators\Index2.cshtml" />
+    <None Include="Areas\App\Views\KeyRiskIndicators\Index_old.cshtml" />
+    <None Include="Areas\App\Views\KeyRiskIndicators\KRIView.cshtml" />
+    <None Include="Areas\App\Views\KeyRiskIndicators\_CreateOrEditModal.cshtml" />
+    <None Include="Areas\App\Views\KeyRiskIndicators\_ViewKeyRiskIndicatorModal.cshtml" />
     <None Include="wwwroot\Plugins\.gitkeep" />
     <None Update="Dockerfile">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

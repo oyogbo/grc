@@ -1,0 +1,113 @@
+﻿@using  CCPDemo.KeyRiskIndicators;
+@using CCPDemo.Web.Areas.App.Startup;
+@model IEnumerable<CCPDemo.KeyRiskIndicatorHistorys.KeyRiskIndicatorHistory>
+       <style>
+           .info-btn:hover{
+               color:#fff;
+           }
+       </style>
+    <body>
+@{
+    ViewBag.CurrentPageName = AppPageNames.Common.KeyRiskIndicatorHistory;
+    <div class="content d-flex flex-column flex-column-fluid">
+
+    <div class="@(await GetContainerClass()) border"  style="width:1900px; overflow:scroll; ">
+        <div  class="card card-custom gutter-b"  style="width:fit-content; width:1200px; overflow:scroll;">
+            <div class="card-body">
+                <div class="form">
+                    <div class="row align-items-center mb-4">
+                        <div class="col-xl-12">
+                           
+                            <div class="my-3">
+                                <div class="input-group">
+@*                                    <input type="text" id="KeyRiskIndicatorsTableFilter" class="form-control" placeholder='@L("SearchWithThreeDot")' value="">
+*@                                    <button id="GetKeyRiskIndicatorsButton" class="btn btn-primary" type="submit"><i class="flaticon-search-1"></i></button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                    
+                <div class="row align-items-center">
+     
+                    <table id="KeyRiskIndicatorsTable" class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer">
+                        <thead>
+                            <tr>
+                                    <th>Reference Id</th>
+                                    <th>Bussiness Line</th>
+                                    <th>Department</th>
+                                    <th>TotalRecord</th>
+                                    <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var history in (IEnumerable<CCPDemo.KeyRiskIndicatorHistorys.KeyRiskIndicatorHistory>)ViewData["KeyRiskIndicatorHistory"])
+                             {
+                                    
+                                         <tr>
+                                             <td>@history.ReferenceId</td>
+                                             <td>@history.BussinessLine</td>
+                                             <td>@history.Department</td>
+                                             <td>@history.TotalRecord</td>
+                                        <td>
+                                                <button  type="button" class="info-btn btn btn-outline-info">@Html.ActionLink("Review", "Index", "KeyRiskIndicators", new { ReferenceId = @history.ReferenceId }, null )</button>
+                                           
+                                        </td>
+                                     </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+   </div>
+
+}
+
+  
+
+    </body>
+
+      @*   <div class="modal fade" id="approveModalLabel" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Approval Confirmation</h5>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want approve this Key Risk Indicator ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="rejectModalLabel" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Reject Confirmation</h5>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want reject this Key Risk Indicator ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>*@
+    <head>
+            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+@*             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"/>
+*@            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+       </head>

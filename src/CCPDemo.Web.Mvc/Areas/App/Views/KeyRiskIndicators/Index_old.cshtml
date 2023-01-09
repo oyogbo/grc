@@ -1,0 +1,183 @@
+﻿@using CCPDemo.Authorization
+@using CCPDemo.Web.Areas.App.Models.KeyRiskIndicators
+@using CCPDemo.Web.Areas.App.Startup
+@model KeyRiskIndicatorsViewModel
+@{
+//ViewBag.CurrentPageName = AppPageNames.Common.KeyRiskIndicators;
+}
+@section Scripts
+{
+<script abp-src="/view-resources/Areas/App/Views/KeyRiskIndicators/Index.js" asp-append-version="true"></script>
+}
+
+<div class="content d-flex flex-column flex-column-fluid">
+
+    <abp-page-subheader title='@L("KeyRiskIndicators")' description='@L("KeyRiskIndicatorsHeaderInfo")'>
+        <button id="ExportToExcelButton" class="btn btn-outline btn-outline-success btn-active-light-success me-1"><i class="fa fa-file-excel"></i> @L("ExportToExcel")</button>
+    </abp-page-subheader>
+
+    <div class="@(await GetContainerClass())">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <div class="form">
+                    <div class="row align-items-center mb-4">
+                        <div class="col-xl-12">
+
+                            <div class="my-3">
+                                <div class="input-group">
+                                    <input type="text" id="KeyRiskIndicatorsTableFilter" class="form-control" placeholder='@L("SearchWithThreeDot")' value="@Model.FilterText">
+                                    <button id="GetKeyRiskIndicatorsButton" class="btn btn-primary" type="submit"><i class="flaticon-search-1"></i></button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div id="AdvacedAuditFiltersArea" style="display: none" class="row mb-4">
+                    <div class="col-md-12">
+
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="ReferenceIdFilterId">@L("ReferenceId")</label>
+                            <input type="text" class="form-control" name="referenceIdFilter" id="ReferenceIdFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="BusinessLinesFilterId">@L("BusinessLines")</label>
+                            <input type="text" class="form-control" name="businessLinesFilter" id="BusinessLinesFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="ActivityFilterId">@L("Activity")</label>
+                            <input type="text" class="form-control" name="activityFilter" id="ActivityFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="ProcessFilterId">@L("Process")</label>
+                            <input type="text" class="form-control" name="processFilter" id="ProcessFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="SubProcessFilterId">@L("SubProcess")</label>
+                            <input type="text" class="form-control" name="subProcessFilter" id="SubProcessFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="PotentialRiskFilterId">@L("PotentialRisk")</label>
+                            <input type="text" class="form-control" name="potentialRiskFilter" id="PotentialRiskFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="LikelihoodOfOccurrence_irrFilterId">@L("LikelihoodOfOccurrence_irr")</label>
+                            <input type="text" class="form-control" name="likelihoodOfOccurrence_irrFilter" id="LikelihoodOfOccurrence_irrFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="LikelihoodOfImpact_irrFilterId">@L("LikelihoodOfImpact_irr")</label>
+                            <input type="text" class="form-control" name="likelihoodOfImpact_irrFilter" id="LikelihoodOfImpact_irrFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="KeyControlFilterId">@L("KeyControl")</label>
+                            <input type="text" class="form-control" name="keyControlFilter" id="KeyControlFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label" for="IsControlInUseFilterId">@L("IsControlInUse")</label>
+                        <select class="form-control" name="IsControlInUseFilter" id="IsControlInUseFilterId">
+                            <option value="-1">@L("All")</option>
+                            <option value="0">@L("False")</option>
+                            <option value="1">@L("True")</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="ControlEffectivenessFilterId">@L("ControlEffectiveness")</label>
+                            <input type="text" class="form-control" name="controlEffectivenessFilter" id="ControlEffectivenessFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="LikelihoodOfOccurrence_rrrFilterId">@L("LikelihoodOfOccurrence_rrr")</label>
+                            <input type="text" class="form-control" name="likelihoodOfOccurrence_rrrFilter" id="LikelihoodOfOccurrence_rrrFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="LikelihoodOfImpact_rrrFilterId">@L("LikelihoodOfImpact_rrr")</label>
+                            <input type="text" class="form-control" name="likelihoodOfImpact_rrrFilter" id="LikelihoodOfImpact_rrrFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="MitigationPlanFilterId">@L("MitigationPlan")</label>
+                            <input type="text" class="form-control" name="mitigationPlanFilter" id="MitigationPlanFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="CommentFilterId">@L("Comment")</label>
+                            <input type="text" class="form-control" name="commentFilter" id="CommentFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="StatusFilterId">@L("Status")</label>
+                            <input type="text" class="form-control" name="statusFilter" id="StatusFilterId">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="my-3">
+                            <label class="form-label" for="OwnerCommentFilterId">@L("OwnerComment")</label>
+                            <input type="text" class="form-control" name="ownerCommentFilter" id="OwnerCommentFilterId">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row my-4">
+                    <div class="col-xl-12">
+                        <span id="ShowAdvancedFiltersSpan" class="text-muted clickable-item"><i class="fa fa-angle-down"></i> @L("ShowAdvancedFilters")</span>
+                        <span id="HideAdvancedFiltersSpan" class="text-muted clickable-item" style="display: none"><i class="fa fa-angle-up"></i> @L("HideAdvancedFilters")</span>
+                    </div>
+                </div>
+                <div class="row align-items-center">
+                    <table id="KeyRiskIndicatorsTable" class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer">
+                        <thead>
+                            <tr>
+                                <th></th>
+
+                                <th>@L("Actions")</th>
+                                <th>@L("BusinessLines")</th>
+                                <th>@L("Activity")</th>
+                                <th>@L("Process")</th>
+                                <th>@L("SubProcess")</th>
+                                <th>@L("PotentialRisk")</th>
+                                <th>@L("LikelihoodOfOccurrence_irr")</th>
+                                <th>@L("LikelihoodOfImpact_irr")</th>
+                                <th>@L("KeyControl")</th>
+                                <th>@L("IsControlInUse")</th>
+                                <th>@L("ControlEffectiveness")</th>
+                                <th>@L("LikelihoodOfOccurrence_rrr")</th>
+                                <th>@L("LikelihoodOfImpact_rrr")</th>
+                                <th>@L("MitigationPlan")</th>
+                                <th>@L("Comment")</th>
+                                <th>@L("Status")</th>
+                                <th>@L("OwnerComment")</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
