@@ -323,7 +323,7 @@ namespace CCPDemo.Web.Areas.App.Controllers
                 dataToInsert.IsControlInUse = model.IsControlInUse; 
             }
             _keyRiskIndicatorRepository.Update(dataToInsert);
-            return RedirectToAction("ViewKRI", "KeyRiskIndicators", new { KRIToViewId = model.Id }, fragment: null);
+            return RedirectToAction("ViewKRIDetails", "KeyRiskIndicators", new { KRIToViewId = model.Id }, fragment: null);
         }
 
         public IActionResult ViewKRI(int KRIToViewId)
