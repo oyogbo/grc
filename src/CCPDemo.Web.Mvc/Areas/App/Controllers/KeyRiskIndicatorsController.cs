@@ -71,7 +71,7 @@ namespace CCPDemo.Web.Areas.App.Controllers
             KeyRiskIndicatorViewModel model = new KeyRiskIndicatorViewModel();
             var roles =  await _keyRiskIndicatorHistoryService.GetCurrentUserRoles();
 
-            if (roles.Contains("ERM"))
+            if (roles.Contains("b1215e54b25f48b3955509ec698961af"))
             {
                 model.IsERM = true;
             }

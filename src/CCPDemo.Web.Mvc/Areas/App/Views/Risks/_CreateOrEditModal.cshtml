@@ -18,6 +18,20 @@
     var setReadonly = Model.isERM ? "readonly" : "";
     var setReadonly2 = !Model.isERM ? "readonly" : "";
 }
+
+@section scripts {
+    <script>
+        document.getElementById("Risk_ActionPlan").focus();
+    </script>
+}
+
+@section styles {
+    <style>
+        input:focus, textarea:focus, select:focus{
+        outline: none;
+    }
+    </style>
+}
 <div class="modal-body">
     <div id="RiskInformationsTab">
         <form name="RiskInformationsForm" role="form" novalidate class="form-validation">
@@ -128,21 +142,20 @@
 
             @if (Model.IsEditMode && !Model.isERM)
             {
+                <div class="my-3">
+                    <label class="form-label" for="Risk_TargetDate">Target Date</label>
+                    <input class="form-control m-input date-picker" id="Risk_TargetDate" type="text" name="targetDate" value="@Model.Risk.TargetDate" tabindex="0"/>
+                </div>
                  <div class="my-3">
                     <label class="form-label" for="Risk_ActionPlan">Action Plan</label>
                     @*<input class="form-control" id="Risk_ActionPlan" value="@Model.Risk.ActionPlan" type="text" name="actionPlan" />*@
-                    <textarea class="form-control form-control-solid" id="Risk_ActionPlan" name="actionPlan" rows="5" placeholder="Action Plan (Risk Owner)" readonly>@Model.Risk.ActionPlan</textarea>
+                    <textarea class="form-control form-control-solid" id="Risk_ActionPlan" name="actionPlan" rows="5" placeholder="Action Plan (Risk Owner)" tabindex="1">@Model.Risk.ActionPlan</textarea>
                 </div>
 
                     <div class="my-3">
                     <label class="form-label" for="Risk_RiskOwnerComment">Risk Owner's Comment</label>
                     @*<input class="form-control" id="Risk_RiskOwnerComment" value="@Model.Risk.RiskOwnerComment" type="text" name="riskOwnerComment" />*@
-                    <textarea class="form-control form-control-solid" id="Risk_RiskOwnerComment" name="riskOwnerComment" rows="5" placeholder="Risk Owner's Comment" readonly>@Model.Risk.RiskOwnerComment</textarea>
-                </div>
-
-                <div class="my-3">
-                    <label class="form-label" for="Risk_TargetDate">Target Date</label>
-                    <input class="form-control m-input date-picker" id="Risk_TargetDate" type="text" name="targetDate" value="@Model.Risk.TargetDate"/>
+                    <textarea class="form-control form-control-solid" id="Risk_RiskOwnerComment" name="riskOwnerComment" rows="5" placeholder="Risk Owner's Comment" tabindex="2">@Model.Risk.RiskOwnerComment</textarea>
                 </div>
 
                 <div class="my-3">
