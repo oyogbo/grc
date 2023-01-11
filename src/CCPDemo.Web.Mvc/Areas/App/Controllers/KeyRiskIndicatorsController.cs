@@ -9,9 +9,11 @@ using CCPDemo.KeyRiskIndicatorHistories;
 using CCPDemo.KeyRiskIndicators;
 using CCPDemo.KeyRiskIndicators.Dtos;
 using CCPDemo.KeyRiskIndicators.Service.Interface;
+using CCPDemo.Web.Areas.App.Models.Error;
 using CCPDemo.Web.Areas.App.Models.KeyRiskIndicators;
 using CCPDemo.Web.Controllers;
 using CsvHelper;
+using GraphQL.NewtonsoftJson;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -23,6 +25,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace CCPDemo.Web.Areas.App.Controllers
 {
@@ -66,6 +69,18 @@ namespace CCPDemo.Web.Areas.App.Controllers
 
             var riskIndicators = await _keyRiskIndicatorsAppService.GetAllByRefId(ReferenceId);
             KeyRiskIndicatorViewModel model = new KeyRiskIndicatorViewModel();
+            var roles =  await _keyRiskIndicatorHistoryService.GetCurrentUserRoles();
+
+            if (roles.Contains("ERM"))
+            {
+                model.IsERM = true;
+            }
+
+            if (roles.Contains("Admin"))
+            {
+                model.IsAdmin = true;
+            }
+
             model.KeyRiskIndicators = riskIndicators.KeyRiskIndicators;
             return View(model);
         }
@@ -175,6 +190,17 @@ namespace CCPDemo.Web.Areas.App.Controllers
         {
 
             IFormFile fileToRead = Request.Form.Files[0];
+            string  nameForCheck = fileToRead.FileName;
+
+            if (!nameForCheck.EndsWith(".xlsx"))
+            {
+                ErrorView errorView = new ErrorView();
+                errorView.Message = "File type is invalid";
+                errorView.BackController = "UploadKeyRiskIndicator";
+                errorView.BackAction = "Index";
+                return RedirectToAction("Index", "Error",  errorView, fragment: null);
+            }
+
 
             string filePath = "";
             if (fileToRead != null)
@@ -286,6 +312,47 @@ namespace CCPDemo.Web.Areas.App.Controllers
             }
             return false;
         }
+
+
+        [HttpPost()]
+        public IActionResult EditKRI(EditKRI model)
+        {
+            KeyRiskIndicator dataToInsert = _keyRiskIndicatorRepository.Get(model.Id);
+
+            if (dataToInsert != null)
+            {
+                dataToInsert.Activity = model.Activity;
+                dataToInsert.MitigationPlan = model.MitigationPlan;
+                dataToInsert.PotentialRisk = model.PotentialRisk;
+                dataToInsert.LikelihoodOfOccurrence_rrr = model.LikelihoodOfOccurrence_rrr;
+                dataToInsert.LikelihoodOfOccurrence_irr = model.LikelihoodOfOccurrence_irr;
+                dataToInsert.LikelihoodOfImpact_irr = model.LikelihoodOfImpact_irr;
+                dataToInsert.LikelihoodOfImpact_rrr =   model.LikelihoodOfImpact_rrr;
+                dataToInsert.ControlEffectiveness = model.ControlEffectiveness;
+                dataToInsert.KeyControl = model.KeyControl;
+                dataToInsert.SubProcess = model.SubProcess;
+                dataToInsert.Process = model.Process;
+                dataToInsert.IsControlInUse = model.IsControlInUse; 
+            }
+            _keyRiskIndicatorRepository.Update(dataToInsert);
+            return RedirectToAction("ViewKRIDetails", "KeyRiskIndicators", new { KRIToViewId = model.Id }, fragment: null);
+        }
+
+        public IActionResult ViewKRI(int KRIToViewId)
+        {
+           var kriToView =  _keyRiskIndicatorRepository.Get(KRIToViewId);
+
+            return View(kriToView);
+        }
+
+
+        public IActionResult ViewKRIDetails(int KRIToViewId)
+        {
+            var kriToView = _keyRiskIndicatorRepository.Get(KRIToViewId);
+            return View(kriToView);
+        }
+
+
 
         public async Task<IActionResult> DelineKRI(int Id)
         {

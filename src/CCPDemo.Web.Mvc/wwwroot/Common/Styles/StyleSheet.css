@@ -131,3 +131,12 @@
 .approve-selector:hover{
     cursor:pointer;
 }
+.redback{
+    background-color:red;
+}
+.greenback{
+    background-color: green;
+}
+button:hover{
+    color:#fff;
+}

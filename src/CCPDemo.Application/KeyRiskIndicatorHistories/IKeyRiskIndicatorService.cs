@@ -1,5 +1,6 @@
 ﻿using CCPDemo.KeyRiskIndicatorHistorys;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,9 @@ namespace CCPDemo.KeyRiskIndicatorHistories
 
         public Task<bool> ApprovedKRIAsync(int Id);
         Task<bool> DeclineKRIAsync(int Id);
+
+        Task<IList<string>> GetCurrentUserRoles( );
+
 
         //Task<bool> DecleteKRIAsync(int Id);
 

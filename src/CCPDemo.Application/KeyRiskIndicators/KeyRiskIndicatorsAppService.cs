@@ -189,6 +189,10 @@ namespace CCPDemo.KeyRiskIndicators
 
         }
 
+        
+
+
+
 
         [AbpAuthorize(AppPermissions.Pages_KeyRiskIndicators_Edit)]
         protected virtual async Task Update(CreateOrEditKeyRiskIndicatorDto input)

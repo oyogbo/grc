@@ -1,0 +1,14 @@
+﻿@using CCPDemo.Authorization
+@using CCPDemo.KeyRiskIndicators;
+@using CCPDemo.Web.Areas.App.Models.Error;
+@using CCPDemo.Web.Areas.App.Models.KeyRiskIndicators
+@using CCPDemo.Web.Areas.App.Startup
+@model ErrorView 
+@{
+   
+
+}
+<div style="width:95%; height:700px; overflow:auto;  margin: 0 auto; margin-bottom:100px; background-color:#fff; padding:20px;">
+     <div>@Model.Message</div>
+    @Html.ActionLink("Go Back", Model.BackAction, Model.BackController)
+ </div>

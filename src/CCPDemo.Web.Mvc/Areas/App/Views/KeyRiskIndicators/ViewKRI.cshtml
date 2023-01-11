@@ -1,0 +1,101 @@
+﻿@using CCPDemo.Authorization
+@using CCPDemo.KeyRiskIndicators;
+@using CCPDemo.Web.Areas.App.Models.KeyRiskIndicators
+@using CCPDemo.Web.Areas.App.Startup
+@model KeyRiskIndicator
+@{
+    // ViewBag.CurrentPageName = AppPageNames.Common.KeyRiskIndicators;
+    var kriId = Model.Id.ToString();
+
+}
+<div style="width:95%; height:700px; overflow:auto;  margin: 0 auto; margin-bottom:100px; background-color:#fff; padding:20px;">
+
+    <form class="row g-3" asp-controller="KeyRiskIndicators" asp-action="EditKRI" enctype="multipart/form-data" method="post">
+        <div class="col-md-6" style="display:none;">
+            <label for="inputEmail4" class="form-label">Id</label>
+            <input type="number" class="form-control" name="Id" value="@Model.Id"  id="inputEmail4">
+        </div>
+        <div class="col-md-6">
+            <label for="inputEmail4" class="form-label">ReferenceId</label>
+            <input type="text" class="form-control" name="ReferenceId" value="@Model.ReferenceId" disabled id="inputEmail4">
+        </div>
+        <div class="col-md-6">
+            <label for="inputPassword4" class="form-label">BusinessLines</label>
+            <input type="text" class="form-control" name="BusinessLines" value="@Model.BusinessLines" disabled>
+        </div>
+        <div class="col-6">
+            <label for="Activity" class="form-label">Activity</label>
+            <input type="text" class="form-control" name="Activity" value="@Model.Activity" id="Activity">
+        </div>
+        <div class="col-6">
+            <label for="Process" class="form-label">Process</label>
+            <input type="text" class="form-control" name="Process" value="@Model.Process" id="Process">
+        </div>
+
+        <div class="col-6">
+            <label for="SubProcess" class="form-label">SubProcess</label>
+            <input type="text" class="form-control" name="SubProcess" value="@Model.SubProcess" id="SubProcess" />
+        </div>
+        <div class="col-md-6">
+            <label for="PotentialRisk" class="form-label">Potential Risk</label>
+            <input type="text" class="form-control" name="PotentialRisk" value="@Model.PotentialRisk" id="PotentialRisk">
+        </div>
+
+        <div class="col-6">
+            <label for="LikelihoodOfOccurrence_irr" class="form-label">LikelihoodOfOccurrence_irr</label>
+            <input type="text" class="form-control" name="LikelihoodOfOccurrence_irr" value="@Model.LikelihoodOfOccurrence_irr" id="LikelihoodOfOccurrence_irr" />
+        </div>
+        <div class="col-md-6">
+            <label for="LikelihoodOfImpact_irr" class="form-label">LikelihoodOfImpact_irr</label>
+            <input type="text" class="form-control" name="LikelihoodOfImpact_irr" value="@Model.LikelihoodOfImpact_irr" id="LikelihoodOfImpact_irr">
+        </div>
+
+        <div class="col-6">
+            <label for="KeyControl" class="form-label">Key Control</label>
+            <input type="text" class="form-control" name="KeyControl" value="@Model.KeyControl" id="KeyControl" />
+        </div>
+        <div class="col-md-6">
+            <label for="IsControlInUse" class="form-label">Is Control In Use</label>
+             <br />
+            <input type="radio" id="IsControlInUse"  class="form-check-input" name="IsControlInUse" value="1">Yes
+            <input type="radio" id="IsControlInUse"  class="form-check-input" name="IsControlInUse" value="2">No
+        </div>
+
+        <div class="col-6">
+            <label for="ControlEffectiveness" class="form-label">Control Effectiveness</label>
+            <input type="text" class="form-control" name="ControlEffectiveness" value="@Model.ControlEffectiveness" id="ControlEffectiveness" />
+        </div>
+        <div class="col-6">
+            <label for="LikelihoodOfOccurrence_rrr" class="form-label">LikelihoodOfOccurrence_rrr</label>
+            <input type="text" class="form-control" name="LikelihoodOfOccurrence_rrr" value="@Model.LikelihoodOfOccurrence_rrr" id="LikelihoodOfOccurrence_rrr" />
+        </div>
+
+        <div class="col-6">
+            <label for="LikelihoodOfImpact_rrr" class="form-label">LikelihoodOfImpact_rrr</label>
+            <input type="text" class="form-control" name="LikelihoodOfImpact_rrr" value="@Model.LikelihoodOfImpact_rrr" id="LikelihoodOfImpact_rrr" />
+        </div>
+        <div class="col-6">
+            <label for="MitigationPlan" class="form-label">Mitigation Plan</label>
+            <input type="text" class="form-control" name="MitigationPlan" value="@Model.MitigationPlan" id="MitigationPlan" />
+        </div>
+       
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+    </form>
+ </div>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+<div id="loading" style="display:none"; class="loading">Loading&#8230;</div>
+
+
+ @section scripts {
+
+<script type="text/javascript">
+
+
+</script>
+ }
+ 
