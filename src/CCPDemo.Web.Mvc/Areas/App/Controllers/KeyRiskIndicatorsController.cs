@@ -9,6 +9,7 @@ using CCPDemo.KeyRiskIndicatorHistories;
 using CCPDemo.KeyRiskIndicators;
 using CCPDemo.KeyRiskIndicators.Dtos;
 using CCPDemo.KeyRiskIndicators.Service.Interface;
+using CCPDemo.Web.Areas.App.Models.Error;
 using CCPDemo.Web.Areas.App.Models.KeyRiskIndicators;
 using CCPDemo.Web.Controllers;
 using CsvHelper;
@@ -189,6 +190,17 @@ namespace CCPDemo.Web.Areas.App.Controllers
         {
 
             IFormFile fileToRead = Request.Form.Files[0];
+            string  nameForCheck = fileToRead.FileName;
+
+            if (!nameForCheck.EndsWith(".xlsx"))
+            {
+                ErrorView errorView = new ErrorView();
+                errorView.Message = "File type is invalid";
+                errorView.BackController = "UploadKeyRiskIndicator";
+                errorView.BackAction = "Index";
+                return RedirectToAction("Index", "Error",  errorView, fragment: null);
+            }
+
 
             string filePath = "";
             if (fileToRead != null)

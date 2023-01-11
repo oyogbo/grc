@@ -112,7 +112,11 @@
                             <td>@obj.LikelihoodOfImpact_rrr</td>
                             <td>@obj.MitigationPlan</td>
                             <td>@obj.Comment</td>
-                            <td>@obj.Status</td>
+                            <td>
+                                <div style="@(obj.Status == "Not Approved" ? "Background-color:#F68182; color:#fff;" : "Background-color:#DCF5E7;color:#000;"); padding:5px; border-radius:5px; text-align:center;">
+                                 @obj.Status
+                                </div>
+                             </td>
                             <td>@obj.OwnerComment</td>
                         </tr>
                     }

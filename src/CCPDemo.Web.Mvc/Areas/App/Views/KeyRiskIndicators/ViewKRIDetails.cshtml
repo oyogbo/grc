@@ -73,6 +73,9 @@
             <label for="MitigationPlan" class="form-label">Mitigation Plan</label>
             <input type="text" class="form-control" value="@Model.MitigationPlan" id="MitigationPlan" disabled/>
         </div>
+        
+        <div>@Html.ActionLink("Back to list", "Index", "KeyRiskIndicators", new { ReferenceId = Model.ReferenceId }, null )</div>
+
     </form>
  </div>
 
