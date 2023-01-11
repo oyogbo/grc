@@ -7,7 +7,7 @@ namespace CCPDemo.KeyRiskIndicators.Dtos
         public KeyRiskIndicatorDto KeyRiskIndicator { get; set; }
 
         public List<KeyRiskIndicatorDto> KeyRiskIndicators { get; set; } = new List<KeyRiskIndicatorDto>();
-
-        public string Role { get; set; }
+        public bool IsAdmin { get; set; }
+        public bool IsERM { get; set; }
     }
 }

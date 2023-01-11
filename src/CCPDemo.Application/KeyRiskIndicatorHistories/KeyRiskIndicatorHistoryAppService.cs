@@ -89,9 +89,6 @@ namespace CCPDemo.KeyRiskIndicatorHistories
 
         }
 
-
-       
-
         public async Task<List<KeyRiskIndicatorHistory>> GetAll()
         {
             return  _IKeyRiskIndicatorHistoryRepo.GetAllList();
@@ -100,6 +97,12 @@ namespace CCPDemo.KeyRiskIndicatorHistories
         public async Task<KeyRiskIndicatorHistory> GetKRIById(int Id)
         {
             return _IKeyRiskIndicatorHistoryRepo.Get(Id);
+        }
+
+        public Task<IList<string>> GetCurrentUserRoles()
+        {
+           var roles =  GetCurrentUserRole();
+            return roles;
         }
     }
 }

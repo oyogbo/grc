@@ -1,0 +1,92 @@
+﻿@using CCPDemo.Authorization
+@using CCPDemo.KeyRiskIndicators;
+@using CCPDemo.Web.Areas.App.Models.KeyRiskIndicators
+@using CCPDemo.Web.Areas.App.Startup
+@model KeyRiskIndicator
+@{
+   // ViewBag.CurrentPageName = AppPageNames.Common.KeyRiskIndicators;
+   
+}
+<div style="width:95%; height:700px; overflow:auto;  margin: 0 auto; margin-bottom:100px; background-color:#fff; padding:20px;">
+
+    <form class="row g-3" method="post" asp-controller="KeyRiskIndicators" asp-action="EditKRI" enctype="multipart/form-data" method="post">
+        <div class="col-md-6">
+            <label for="inputEmail4" class="form-label">ReferenceId</label>
+            <input type="text" class="form-control" name="ReferenceId" value="@Model.ReferenceId" disabled id="inputEmail4">
+        </div>
+        <div class="col-md-6">
+            <label for="inputPassword4" class="form-label">BusinessLines</label>
+            <input type="text" class="form-control" value="defualt @Model.BusinessLines" disabled>
+        </div>
+        <div class="col-6">
+            <label for="Activity" class="form-label">Activity</label>
+            <input type="text" class="form-control" value="defualt @Model.Activity" id="Activity" disabled>
+        </div>
+        <div class="col-6">
+            <label for="Process" class="form-label">Process</label>
+            <input type="text" class="form-control" value="defualt @Model.Process" id="Process" disabled>
+        </div>
+
+        <div class="col-6">
+            <label for="SubProcess" class="form-label">SubProcess</label>
+            <input type="text" class="form-control" value="defualt @Model.SubProcess" id="SubProcess" disabled/>
+        </div>
+        <div class="col-md-6">
+            <label for="PotentialRisk" class="form-label">Potential Risk</label>
+            <input type="text" class="form-control" value="defualt @Model.PotentialRisk" id="PotentialRisk" disabled>
+        </div>
+
+        <div class="col-6">
+            <label for="LikelihoodOfOccurrence_irr" class="form-label">LikelihoodOfOccurrence_irr</label>
+            <input type="text" class="form-control" value="defualt @Model.LikelihoodOfOccurrence_irr" id="LikelihoodOfOccurrence_irr" disabled/>
+        </div>
+        <div class="col-md-6">
+            <label for="LikelihoodOfImpact_irr" class="form-label">LikelihoodOfImpact_irr</label>
+            <input type="text" class="form-control" value="defualt @Model.LikelihoodOfImpact_irr" id="LikelihoodOfImpact_irr" disabled>
+        </div>
+
+        <div class="col-6">
+            <label for="KeyControl" class="form-label">Key Control</label>
+            <input type="text" class="form-control" value="@Model.KeyControl" id="KeyControl" disabled/>
+        </div>
+        <div class="col-md-6">
+            <label for="IsControlInUse" class="form-label">Is Control In Use</label>
+             <br />
+            <input type="radio" id="IsControlInUse" class="form-check-input" name="IsControlInUse" value="1">Yes
+            <input type="radio" id="IsControlInUse" class="form-check-input" name="IsControlInUse" value="2">No
+        </div>
+
+        <div class="col-6">
+            <label for="ControlEffectiveness" class="form-label">Control Effectiveness</label>
+            <input type="text" class="form-control" value="@Model.ControlEffectiveness" id="ControlEffectiveness" disabled/>
+        </div>
+        <div class="col-6">
+            <label for="LikelihoodOfOccurrence_rrr" class="form-label">LikelihoodOfOccurrence_rrr</label>
+            <input type="text" class="form-control" value="@Model.LikelihoodOfOccurrence_rrr" id="LikelihoodOfOccurrence_rrr" disabled/>
+        </div>
+
+        <div class="col-6">
+            <label for="LikelihoodOfImpact_rrr" class="form-label">LikelihoodOfImpact_rrr</label>
+            <input type="text" class="form-control" value="@Model.LikelihoodOfImpact_rrr" id="LikelihoodOfImpact_rrr" disabled/>
+        </div>
+        <div class="col-6">
+            <label for="MitigationPlan" class="form-label">Mitigation Plan</label>
+            <input type="text" class="form-control" value="@Model.MitigationPlan" id="MitigationPlan" disabled/>
+        </div>
+    </form>
+ </div>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+<div id="loading" style="display:none"; class="loading">Loading&#8230;</div>
+
+
+ @section scripts {
+
+<script type="text/javascript">
+
+
+</script>
+ }
+ 

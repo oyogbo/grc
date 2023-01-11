@@ -17,12 +17,15 @@
                     <div class="row align-items-center mb-4">
                         <div class="col-xl-12">
 
-                            <div class="my-3" style="display:flex; justify-content:end;  width: 1100px;">
+                          @if (Model.IsAdmin || Model.IsERM)
+                            {
+                                  <div class="my-3" style="display:flex; justify-content:end;  width: 1100px;">
                                 <div class="input-group" style=" width:fit-content;">
                                   <button id="ApproveiskIndicatorsButton" class="btn btn-primary" disabled>Approve</button>
                                 </div>
                             </div>
 
+                            }
                         </div>
                     </div>
                 </div>
@@ -37,6 +40,7 @@
                 <!--Table head-->
                 <thead>
                     <tr style="font-weight:bolder">
+                        <th style="padding:20px;" >Action</th>
                         <th></th>
                         <th>ReferenceId</th>
                         <th> Business Line</th>
@@ -55,8 +59,6 @@
                         <th>Comment</th>
                         <th>Status</th>
                         <th>OwnerComment</th>
-                        <th>Action</th>
-
                     </tr>
                 </thead>
                 <!--Table head-->
@@ -65,13 +67,37 @@
                     @foreach (var obj in Model.KeyRiskIndicators)
                     {
                         <tr scope="row" id="rowId">
+
+                             <td>
+                                @if (obj.Status == "Approved")
+                                {
+                                 <button data-bs-toggle="modal" data="@obj.Id" data-bs-target="#exampleModal" type="button" class="btn btn-outline-info commentIdSetter" onclick="setId(@obj.Id)" disabled>Comments @*<div class="id-data" hidden>@obj.Id</div>*@</button>
+                                 if (!Model.IsERM)
+                                    {
+                                                                       <button data-toggle="modal" data-target="#approveModalLabel" type="button" class="btn btn-outline-primary" disabled>Edit</button>
+  
+                                    }
+                                 <button type="button" class="btn btn-outline-primary">@Html.ActionLink("View", "ViewKRIDetails", "KeyRiskIndicators", new { KRIToViewId = obj.Id }, null )</button>
+
+                                }
+                                else
+                                {
+                                    if (!Model.IsERM)
+                                    {
+                                     <button type="button" class="btn btn-outline-primary">@Html.ActionLink("Edit", "ViewKRI", "KeyRiskIndicators", new { KRIToViewId = obj.Id }, null )</button>
+                                    }
+                                    <button data-bs-toggle="modal" data="@obj.Id" data-bs-target="#exampleModal" type="button" class="btn btn-outline-info commentIdSetter" onclick="setId(@obj.Id)">Comments @*<div class="id-data" hidden>@obj.Id</div>*@</button>
+                                    <button type="button" class="btn btn-outline-primary">@Html.ActionLink("View", "ViewKRIDetails", "KeyRiskIndicators", new { KRIToViewId = obj.Id }, null )</button>
+                                }
+                            </td>
+
                            @if(@obj.Status == "Approved"){
                                 <td> <input type="checkbox" data-id="@obj.Id" class="approve-selector" disabled/></td>
                                 }
                                 else{
                                  <td> <input type="checkbox" data-id="@obj.Id" class="approve-selector" /></td>
                                 }
-                                <td>@obj.ReferenceId</td>
+                             <td>@obj.ReferenceId</td>
                             <td>@obj.BusinessLines</td>
                             <td>@obj.Activity</td>
                             <td>@obj.Process</td>
@@ -88,19 +114,6 @@
                             <td>@obj.Comment</td>
                             <td>@obj.Status</td>
                             <td>@obj.OwnerComment</td>
-                            <th>
-                                @if (obj.Status == "Approved")
-                                {
-                                 <button data-bs-toggle="modal" data="@obj.Id" data-bs-target="#exampleModal" type="button" class="btn btn-outline-info commentIdSetter" onclick="setId(@obj.Id)" disabled>Comments @*<div class="id-data" hidden>@obj.Id</div>*@</button>
-                                    <button data-toggle="modal" data-target="#approveModalLabel" type="button" class="btn btn-outline-primary" disabled>Edit</button>
-                                }
-                                else
-                                {
-                                    <button data-bs-toggle="modal" data="@obj.Id" data-bs-target="#exampleModal" type="button" class="btn btn-outline-info commentIdSetter" onclick="setId(@obj.Id)">Comments @*<div class="id-data" hidden>@obj.Id</div>*@</button>
-                                    <button data-toggle="modal" data-target="#approveModalLabel" type="button" class="btn btn-outline-primary">Edit</button>
-                                }
-                            </th>
-
                         </tr>
                     }
                 </tbody>
@@ -151,7 +164,7 @@
                     
                 </div>
                 <div class="form-floating">
-                    <textarea class="form-control" id="kriComment" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
+                    <textarea class="form-control" id="kriComment" placeholder="Leave a comment here"  style="height: 100px"></textarea>
                     <label for="floatingTextarea2">Leave a comment here</label>
                 </div>
             </div>
