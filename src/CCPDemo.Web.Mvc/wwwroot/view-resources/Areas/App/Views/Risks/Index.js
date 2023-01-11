@@ -1,24 +1,27 @@
 ﻿(function () {
-   
+
+    $('#riskTypeId').focus();
+
   $(function () {
     var _$risksTable = $('#RisksTable');
       var _risksService = abp.services.app.risks;
 
-      $.datetimepicker.setDateFormatter({
-          parseDate: function (date, format) {
-              var d = moment(date, format);
-              return d.isValid() ? d.toDate() : false;
-          },
-          formatDate: function (date, format) {
-              return moment(date).format(format);
-          },
-          date: function (date) {
-              return moment(date);
-          }
-      });
+      //$.datetimepicker.setDateFormatter({
+      //    parseDate: function (date, format) {
+      //        var d = moment(date, format);
+      //        return d.isValid() ? d.toDate() : false;
+      //    },
+      //    formatDate: function (date, format) {
+      //        return moment(date).format(format);
+      //    },
+      //    date: function (date) {
+      //        return moment(date);
+      //    }
+      //});
 
 
-      $('.date-picker').datetimepicker({
+      $('.date-picker').flatpickr({
+      defaultDate: null,
       locale: abp.localization.currentLanguage.name,
       format: 'L',
     });
@@ -210,7 +213,7 @@
           name: 'targetDate',
           render: function (targetDate) {
             if (targetDate) {
-              return moment(targetDate).format('L');
+                return moment(targetDate).format('L').replace('01/01/0001','');
             }
             return '';
           },
@@ -221,7 +224,7 @@
           name: 'actualClosureDate',
           render: function (actualClosureDate) {
             if (actualClosureDate) {
-              return moment(actualClosureDate).format('L');
+                return moment(actualClosureDate).format('L').replace('01/01/0001', '');
             }
             return '';
           },
@@ -232,7 +235,7 @@
           name: 'acceptanceDate',
           render: function (acceptanceDate) {
             if (acceptanceDate) {
-              return moment(acceptanceDate).format('L');
+                return moment(acceptanceDate).format('L').replace('01/01/0001', '');
             }
             return '';
           },

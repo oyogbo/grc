@@ -13,6 +13,11 @@
     <div id="RiskInformationsTab">
         <form name="RiskInformationsForm" asp-action="Transfer" role="form" novalidate class="form-validation">
 
+            @if (Model.IsEditMode)
+            {
+                <input type="hidden" name="id" value="@Model.Risk.Id" />
+            }
+
             <input type="hidden" id="riskId"  value="@Model.Risk.Id" disabled/>
             <input type="hidden" id="currentOwner"  value="@Model.Risk.OrganizationUnitId" disabled/>
             <input type="hidden" id="riskTransferrer" value="@AbpSession.UserId" disabled/>
@@ -64,28 +69,28 @@
             <div class="my-3">
                 <label class="form-label" for="Risk_ActionPlan">Action Plan</label>
                 @*<input class="form-control" id="Risk_ActionPlan" value="@Model.Risk.ActionPlan" type="text" name="actionPlan" />*@
-                <textarea class="form-control form-control-solid" id="Risk_ActionPlan" name="actionPlan" rows="5" placeholder="Action Plan (Risk Owner)">@Model.Risk.ActionPlan</textarea>
+                <textarea class="form-control form-control-solid" id="Risk_ActionPlan" name="actionPlan" rows="5" placeholder="Action Plan (Risk Owner)" readonly>@Model.Risk.ActionPlan</textarea>
             </div>
 
             <div class="my-3">
                 <label class="form-label" for="Risk_RiskOwnerComment">Risk Owner's Comment</label>
                 @*<input class="form-control" id="Risk_RiskOwnerComment" value="@Model.Risk.RiskOwnerComment" type="text" name="riskOwnerComment" />*@
-                <textarea class="form-control form-control-solid" id="Risk_RiskOwnerComment" name="riskOwnerComment" rows="5" placeholder="Risk Owner's Comment'">@Model.Risk.RiskOwnerComment</textarea>
+                <textarea class="form-control form-control-solid" id="Risk_RiskOwnerComment" name="riskOwnerComment" rows="5" placeholder="Risk Owner's Comment" readonly>@Model.Risk.RiskOwnerComment</textarea>
             </div>
 
             <div class="my-3">
                 <label class="form-label" for="Risk_TargetDate">Target Date</label>
-                <input class="form-control m-input date-picker" id="Risk_TargetDate" type="text" name="targetDate" value="@Model.Risk.TargetDate" />
+                <input class="form-control m-input date-picker" id="Risk_TargetDate" type="text" name="targetDate" value="@Model.Risk.TargetDate" readonly/>
             </div>
 
             <div class="my-3">
                 <label class="form-label" for="Risk_ActualClosureDate">Actual Date</label>
-                <input class="form-control m-input date-picker" id="Risk_ActualClosureDate" type="text" name="actualClosureDate" value="@Model.Risk.ActualClosureDate" />
+                <input class="form-control m-input date-picker" id="Risk_ActualClosureDate" type="text" name="actualClosureDate" value="@Model.Risk.ActualClosureDate" readonly/>
             </div>
 
             <div class="my-3">
                 <label class="form-label" for="Risk_AcceptanceDate">Acceptance Date</label>
-                <input class="form-control m-input date-picker" id="Risk_AcceptanceDate" type="text" name="acceptanceDate" value="@Model.Risk.AcceptanceDate" />
+                <input class="form-control m-input date-picker" id="Risk_AcceptanceDate" type="text" name="acceptanceDate" value="@Model.Risk.AcceptanceDate" readonly/>
             </div>
 
             <label class="form-check form-check-custom">

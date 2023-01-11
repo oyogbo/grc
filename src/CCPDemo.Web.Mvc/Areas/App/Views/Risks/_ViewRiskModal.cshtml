@@ -29,27 +29,30 @@
                 <h6>Risk Owner's Comment' :</h6>
                 @Model.Risk.RiskOwnerComment
             </div>
-            <div class="col-6 mb-3">
-                <h6>Target Date :</h6>
-                @Model.Risk.TargetDate
-            </div>
-            <div class="col-6 mb-3">
-                <h6>Actual Closure Date :</h6>
-                @Model.Risk.ActualClosureDate
-            </div>
-            <div class="col-6 mb-3">
-                <h6>Acceptance Date :</h6>
-                @Model.Risk.AcceptanceDate
-            </div>
-            <div class="col-6 mb-3">
-                <h6>Risk Accepted? :</h6>
-                @{
-                    var riskAccepted = Model.Risk.RiskAccepted ? "<i class='far flaticon2-check-mark'></i>" : "";
-                }
-                
-                @Html.Raw(@riskAccepted)
-                
-            </div>
+            @if (!Model.isERM)
+            {
+                <div class="col-6 mb-3">
+                    <h6>Target Date :</h6>
+                    @Model.Risk.TargetDate
+                </div>
+                <div class="col-6 mb-3">
+                    <h6>Actual Closure Date :</h6>
+                    @Model.Risk.ActualClosureDate
+                </div>
+                <div class="col-6 mb-3">
+                    <h6>Acceptance Date :</h6>
+                    @Model.Risk.AcceptanceDate
+                </div>
+                <div class="col-6 mb-3">
+                    <h6>Risk Accepted? :</h6>
+                    @{
+                        var riskAccepted = Model.Risk.RiskAccepted ? "<i class='far flaticon2-check-mark'></i>" : "";
+                    }
+
+                    @Html.Raw(@riskAccepted)
+
+                </div>
+            }
 
             <div class="col-6 mb-3">
                 <h6>Risk Type :</h6>

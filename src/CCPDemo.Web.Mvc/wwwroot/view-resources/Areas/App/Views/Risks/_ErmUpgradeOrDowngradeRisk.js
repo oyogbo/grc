@@ -1,5 +1,7 @@
 ﻿(function ($) {
 
+    $('#riskTypeId').focus();
+
     $('#riskTypeId').attr("disabled", "disabled");
     $('#organizationUnitId').attr("disabled", "disabled");
     //$('#statusId').attr("disabled", "disabled");
@@ -51,7 +53,8 @@
             _modalManager = modalManager;
 
             var modal = _modalManager.getModal();
-            modal.find('.date-picker').datetimepicker({
+            modal.find('.date-picker').flatpickr({
+                defaultDate: null,
                 locale: abp.localization.currentLanguage.name,
                 format: 'L',
             });
@@ -140,23 +143,23 @@
             if (!_$riskInformationForm.valid()) {
                 return;
             }
-            if ($('#Risk_RiskTypeId').prop('required') && $('#Risk_RiskTypeId').val() == '') {
+            if ($('#riskTypeId').prop('required') && $('#riskTypeId').val() == '') {
                 abp.message.error(app.localize('{0}IsRequired', app.localize('RiskType')));
                 return;
             }
-            if ($('#Risk_OrganizationUnitId').prop('required') && $('#Risk_OrganizationUnitId').val() == '') {
+            if ($('#organizationUnitId').prop('required') && $('#organizationUnitId').val() == '') {
                 abp.message.error(app.localize('{0}IsRequired', app.localize('OrganizationUnit')));
                 return;
             }
-            if ($('#Risk_StatusId').prop('required') && $('#Risk_StatusId').val() == '') {
+            if ($('#statusId').prop('required') && $('#statusId').val() == '') {
                 abp.message.error(app.localize('{0}IsRequired', app.localize('Status')));
                 return;
             }
-            if ($('#Risk_RiskRatingId').prop('required') && $('#Risk_RiskRatingId').val() == '') {
+            if ($('#riskRatingId').prop('required') && $('#riskRatingId').val() == '') {
                 abp.message.error(app.localize('{0}IsRequired', app.localize('RiskRating')));
                 return;
             }
-            if ($('#Risk_UserId').prop('required') && $('#Risk_UserId').val() == '') {
+            if ($('#userId').prop('required') && $('#userId').val() == '') {
                 abp.message.error(app.localize('{0}IsRequired', app.localize('User')));
                 return;
             }

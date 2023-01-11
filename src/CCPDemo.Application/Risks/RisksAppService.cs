@@ -24,6 +24,12 @@ using CCPDemo.RiskTransactions.Dtos;
 using CCPDemo.RiskTransactions;
 using Microsoft.AspNetCore.Mvc;
 using Twilio.Rest.Trunking.V1;
+using Abp.Authorization.Users;
+using CCPDemo.EntityFrameworkCore;
+using Abp.EntityFrameworkCore;
+using CCPDemo.Authorization.Roles;
+using CCPDemo.Organizations.Dto;
+using Newtonsoft.Json;
 
 namespace CCPDemo.Risks
 {
@@ -38,11 +44,24 @@ namespace CCPDemo.Risks
         private readonly IRepository<Status, int> _lookup_statusRepository;
         private readonly IRepository<RiskRating, int> _lookup_riskRatingRepository;
         private readonly IRepository<User, long> _lookup_userRepository;
-        
+        private readonly IRepository<UserOrganizationUnit, long> _userOrganizationUnitRepository;
+        private readonly UserManager _userManager;
+        private readonly IRepository<Role> _roleRepository;
+        private readonly IRepository<OrganizationUnit, long> _organizationUnitRepository;
 
-        public string Name = "Wilfred";
+        //private readonly CCPDemoDbContext _ctx;
 
-        public RisksAppService(IRepository<Risk> riskRepository, IRisksExcelExporter risksExcelExporter, IRepository<RiskType, int> lookup_riskTypeRepository, IRepository<OrganizationUnit, long> lookup_organizationUnitRepository, IRepository<Status, int> lookup_statusRepository, IRepository<RiskRating, int> lookup_riskRatingRepository, IRepository<User, long> lookup_userRepository)
+        public RisksAppService(IRepository<Risk> riskRepository, 
+            IRisksExcelExporter risksExcelExporter, 
+            IRepository<RiskType, int> lookup_riskTypeRepository, 
+            IRepository<OrganizationUnit, long> lookup_organizationUnitRepository,
+            IRepository<Status, int> lookup_statusRepository, 
+            IRepository<RiskRating, int> lookup_riskRatingRepository, 
+            IRepository<User, long> lookup_userRepository, UserManager userManager,
+            IRepository<UserOrganizationUnit, long> userOrganizationUnitRepository,
+            IRepository<Role> roleRepository,
+            IRepository<OrganizationUnit, long> organizationUnitRepository
+            /*IDbContextProvider<CCPDemoDbContext> dbContextProvider*/)
         {
             _riskRepository = riskRepository;
             _risksExcelExporter = risksExcelExporter;
@@ -51,7 +70,11 @@ namespace CCPDemo.Risks
             _lookup_statusRepository = lookup_statusRepository;
             _lookup_riskRatingRepository = lookup_riskRatingRepository;
             _lookup_userRepository = lookup_userRepository;
-
+            _userManager = userManager;
+            _userOrganizationUnitRepository = userOrganizationUnitRepository;
+            //_ctx = dbContextProvider.GetDbContext();
+            _roleRepository = roleRepository;
+            _organizationUnitRepository = organizationUnitRepository;
         }
 
         public async Task<PagedResultDto<GetRiskForViewDto>> GetAll(GetAllRisksInput input)
@@ -115,6 +138,7 @@ namespace CCPDemo.Risks
                             o.AcceptanceDate,
                             o.RiskAccepted,
                             Id = o.Id,
+                            o.UserId,
                             RiskTypeName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
                             OrganizationUnitDisplayName = s2 == null || s2.DisplayName == null ? "" : s2.DisplayName.ToString(),
                             StatusName = s3 == null || s3.Name == null ? "" : s3.Name.ToString(),
@@ -127,32 +151,99 @@ namespace CCPDemo.Risks
             var dbList = await risks.ToListAsync();
             var results = new List<GetRiskForViewDto>();
 
+
+            var user = _userManager.Users.Where(u => u.Id == AbpSession.UserId).FirstOrDefault();
+            var userId = user?.Id;
+            
+            var isAdmin = _userManager.IsInRoleAsync(user, "Admin").Result;
+            var isUser = _userManager.IsInRoleAsync(user, "User").Result;
+
+
+            var rolesDump = _roleRepository.GetAll().Where(r => r.IsDeleted == false);
+
+            var roleData = from r in rolesDump
+                           select new
+                           {
+                               r.Id,
+                               r.Name,
+                               r.DisplayName
+                           };
+
+            var userRolesList = _userManager.GetRolesAsync(user).Result;
+
+
+            var userRolesNames = new List<string>();
+            foreach (var role in roleData)
+            {
+                if (userRolesList.Contains(role.Name))
+                {
+                    userRolesNames.Add(role.DisplayName.ToUpper());
+                }
+            }
+
+            var isERM = userRolesNames.Contains("ERM");
+
+
             foreach (var o in dbList)
             {
-                var res = new GetRiskForViewDto()
+                if (isAdmin || isERM)
                 {
-                    Risk = new RiskDto
+                    var res = new GetRiskForViewDto()
                     {
+                        Risk = new RiskDto
+                        {
 
-                        Summary = o.Summary,
-                        ExistingControl = o.ExistingControl,
-                        ERMRecommendation = o.ERMRecommendation,
-                        ActionPlan = o.ActionPlan,
-                        RiskOwnerComment = o.RiskOwnerComment,
-                        TargetDate = o.TargetDate,
-                        ActualClosureDate = o.ActualClosureDate,
-                        AcceptanceDate = o.AcceptanceDate,
-                        RiskAccepted = o.RiskAccepted,
-                        Id = o.Id,
-                    },
-                    RiskTypeName = o.RiskTypeName,
-                    OrganizationUnitDisplayName = o.OrganizationUnitDisplayName,
-                    StatusName = o.StatusName,
-                    RiskRatingName = o.RiskRatingName,
-                    UserName = o.UserName
-                };
+                            Summary = o.Summary,
+                            ExistingControl = o.ExistingControl,
+                            ERMRecommendation = o.ERMRecommendation,
+                            ActionPlan = o.ActionPlan,
+                            RiskOwnerComment = o.RiskOwnerComment,
+                            TargetDate = o.TargetDate,
+                            ActualClosureDate = o.ActualClosureDate,
+                            AcceptanceDate = o.AcceptanceDate,
+                            RiskAccepted = o.RiskAccepted,
+                            Id = o.Id,
+                        },
+                        RiskTypeName = o.RiskTypeName,
+                        OrganizationUnitDisplayName = o.OrganizationUnitDisplayName,
+                        StatusName = o.StatusName,
+                        RiskRatingName = o.RiskRatingName,
+                        UserName = o.UserName
+                    };
 
-                results.Add(res);
+                    results.Add(res);
+                }
+                else
+                {
+                    if(o.UserId == userId)
+                    {
+                        var res = new GetRiskForViewDto()
+                        {
+                            Risk = new RiskDto
+                            {
+
+                                Summary = o.Summary,
+                                ExistingControl = o.ExistingControl,
+                                ERMRecommendation = o.ERMRecommendation,
+                                ActionPlan = o.ActionPlan,
+                                RiskOwnerComment = o.RiskOwnerComment,
+                                TargetDate = o.TargetDate,
+                                ActualClosureDate = o.ActualClosureDate,
+                                AcceptanceDate = o.AcceptanceDate,
+                                RiskAccepted = o.RiskAccepted,
+                                Id = o.Id,
+                            },
+                            RiskTypeName = o.RiskTypeName,
+                            OrganizationUnitDisplayName = o.OrganizationUnitDisplayName,
+                            StatusName = o.StatusName,
+                            RiskRatingName = o.RiskRatingName,
+                            UserName = o.UserName
+                        };
+
+                        results.Add(res);
+                    }
+                }
+
             }
 
             return new PagedResultDto<GetRiskForViewDto>(
@@ -256,6 +347,7 @@ namespace CCPDemo.Risks
         [AbpAuthorize(AppPermissions.Pages_Risks_Create)]
         protected virtual async Task Create(CreateOrEditRiskDto input)
         {
+
             var risk = ObjectMapper.Map<Risk>(input);
 
             await _riskRepository.InsertAsync(risk);
@@ -516,6 +608,84 @@ namespace CCPDemo.Risks
             {
                 //return ex.Message;
             }
+        }
+
+        public async Task<PagedResultDto<OrganizationUnitUserListDto>> UsersInOrganizationalUnit(int id)
+        {
+            //var userIdsInOrganizationUnit = _userOrganizationUnitRepository.GetAll()
+            //    .Where(uou => uou.OrganizationUnitId == id);
+
+            //var query = UserManager.Users
+            //    .Where(u => !userIdsInOrganizationUnit.Contains(id));
+
+            //////var query = UserManager.Users
+            //////    .Where(u => u.OrganizationUnits.Contains((UserOrganizationUnit)userIdsInOrganizationUnit));
+
+            //var userCount = await query.CountAsync();
+            //var users = await query
+            //    .OrderBy(u => u.Name)
+            //    .ThenBy(u => u.Surname)
+            //    .ToListAsync();
+
+            //return new PagedResultDto<NameValueDto>(
+            //    userCount,
+            //    users.Select(u =>
+            //        new NameValueDto(
+            //            u.Name + " (" + u.EmailAddress + ")",
+            //            u.Id.ToString()
+            //        )
+            //    ).ToList()
+            //);
+
+            var query = from ouUser in _userOrganizationUnitRepository.GetAll()
+                        join ou in _organizationUnitRepository.GetAll() on ouUser.OrganizationUnitId equals ou.Id
+                        join user in UserManager.Users on ouUser.UserId equals user.Id
+                        where ouUser.OrganizationUnitId == id
+                        select new
+                        {
+                            ouUser,
+                            user
+                        };
+            var totalCount = await query.CountAsync();
+            var items = await query.ToListAsync();
+           
+
+            return new PagedResultDto<OrganizationUnitUserListDto>(
+                totalCount,
+                items.Select(item =>
+                {
+                    var organizationUnitUserDto = ObjectMapper.Map<OrganizationUnitUserListDto>(item.user);
+                    organizationUnitUserDto.AddedTime = item.ouUser.CreationTime;
+                    //organizationUnitUserDto.AddedTime = item.ouUser.CreationTime;
+                    return organizationUnitUserDto;
+                }).ToList());
+
+        }
+
+        public int GetUserId()
+        {
+            return (int)AbpSession.UserId;
+        }
+
+        public ActionResult<string> UsersEmailsIdsDict()
+        {
+            var users = _userManager.Users.Where(u => u.IsDeleted == false).ToList();
+
+            var usersQuery = from u in users
+                             select new
+                             {
+                                 u.EmailAddress,
+                                 u.Id
+                             };
+
+            var usersEmailIdsDict = new Dictionary<string, int>();
+            foreach (var ueIds in usersQuery)
+            {
+                usersEmailIdsDict.Add(ueIds.EmailAddress, (int)ueIds.Id);
+            }
+
+            return JsonConvert.SerializeObject(usersEmailIdsDict);
+
         }
     }
 }

@@ -25,5 +25,7 @@ namespace CCPDemo.Web.Areas.App.Models.Risks
         public Array DepartmentsCounts { get; set; }
         public List<RiskTableForDisplayDto> dbList { get; set; }
 
+        public bool isERM { get; set; }
+
     }
 }

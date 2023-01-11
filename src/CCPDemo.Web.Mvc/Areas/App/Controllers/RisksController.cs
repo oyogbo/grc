@@ -12,6 +12,20 @@ using Abp.Extensions;
 using CCPDemo.RiskTransactions.Dtos;
 using CCPDemo.RiskTransactions;
 using Abp.Domain.Repositories;
+using CCPDemo.Authorization.Users;
+using System.Linq;
+using Abp.Zero.Configuration;
+using CCPDemo.Authorization.Roles;
+using CCPDemo.Authorization.Roles.Dto;
+using System.Collections.Generic;
+using Abp.Authorization.Users;
+using Abp.Collections.Extensions;
+using AutoMapper;
+using CCPDemo.Dto;
+using CCPDemo.EntityFrameworkCore;
+using Abp.EntityFrameworkCore;
+using Abp.Domain.Uow;
+using Microsoft.EntityFrameworkCore;
 
 namespace CCPDemo.Web.Areas.App.Controllers
 {
@@ -22,12 +36,33 @@ namespace CCPDemo.Web.Areas.App.Controllers
         private readonly IRisksAppService _risksAppService;
         private readonly IRepository<RiskTransaction> _riskTransactionRepository;
         private readonly IRepository<Risk> _riskRepository;
+        private readonly UserManager _userManager;
+        private readonly RoleManager _roleManager;
+        private readonly IRoleManagementConfig _roleManagementConfig;
+        private readonly IRoleAppService _roleAppService;
+        private readonly IRepository<Role> _roleRepository;
+        //private readonly CCPDemoDbContext _ctx;
 
-        public RisksController(IRisksAppService risksAppService, IRepository<Risk> riskRepository, IRepository<RiskTransaction> riskTransactionRepository)
+
+        public RisksController(IRisksAppService risksAppService, 
+            IRepository<Risk> riskRepository, 
+            IRepository<RiskTransaction> riskTransactionRepository,
+            UserManager userManager,
+            RoleManager roleManager,
+            IRoleManagementConfig roleManagementConfig,
+            IRoleAppService roleAppService,
+            IRepository<Role> roleRepository
+            /*IDbContextProvider<CCPDemoDbContext> dbContextProvider*/)
         {
             _risksAppService = risksAppService;
             _riskRepository = riskRepository;
             _riskTransactionRepository = riskTransactionRepository;
+            _userManager = userManager;
+            _roleManager = roleManager;
+            _roleManagementConfig = roleManagementConfig;
+            _roleAppService = roleAppService;
+            _roleRepository = roleRepository;
+            //_ctx = dbContextProvider.GetDbContext();
         }
 
         public ActionResult Index()
@@ -43,6 +78,68 @@ namespace CCPDemo.Web.Areas.App.Controllers
         [AbpMvcAuthorize(AppPermissions.Pages_Risks_Create, AppPermissions.Pages_Risks_Edit)]
         public async Task<PartialViewResult> CreateOrEditModal(int? id)
         {
+            var user = _userManager.Users.Where(u=>u.Id == AbpSession.UserId).FirstOrDefault();
+
+            var users = _userManager.Users.Where(u => u.IsDeleted == false).ToList();
+            //var query = _userManager.Users.AsNoTracking();
+            //query = from u in query where u.Id == AbpSession.UserId select u;
+            //IEnumerable<UserRole> rr = from r in query.FirstOrDefault().Roles select r;
+
+            var rolesDump = _roleRepository.GetAll().Where(r => r.IsDeleted == false);
+
+            var roleData = from r in rolesDump
+                           select new
+                           {
+                               r.Id,
+                               r.Name,
+                               r.DisplayName
+                           };
+
+            Dictionary<int, string> roleValues = new Dictionary<int, string>();
+            foreach (var role in roleData)
+            {
+                roleValues.Add(role.Id, role.Name + "=" + role.DisplayName);
+            }
+
+            var usersQuery = from u in users
+                             select new
+                             {
+                                 u.EmailAddress,
+                                 u.Id
+                             };
+
+            var UsersEmailsIdsDict = new Dictionary<string, int>();
+            foreach (var ueIds in usersQuery)
+            {
+                UsersEmailsIdsDict.Add(ueIds.EmailAddress, (int)ueIds.Id);
+            }
+
+
+
+
+            var isAdmin = _userManager.IsInRoleAsync(user, "Admin").Result;
+            var isUser = _userManager.IsInRoleAsync(user, "User").Result ? "User" : "Admin";
+            
+
+            var userRolesList = _userManager.GetRolesAsync(user).Result;
+
+
+            var userRolesNames = new List<string>();
+            foreach (var role in roleData)
+            {
+                if (userRolesList.Contains(role.Name))
+                {
+                    userRolesNames.Add(role.DisplayName.ToUpper());
+                }
+            }
+
+            var isERM = userRolesNames.Contains("ERM");
+
+
+
+
+
+
             GetRiskForEditOutput getRiskForEditOutput;
 
             if (id.HasValue)
@@ -60,6 +157,8 @@ namespace CCPDemo.Web.Areas.App.Controllers
                 getRiskForEditOutput.Risk.AcceptanceDate = DateTime.Now;
             }
 
+            var staticRoleNames = _roleManagementConfig.StaticRoles.Select(r => r.RoleName).ToList();
+           
             var viewModel = new CreateOrEditRiskModalViewModel()
             {
                 Risk = getRiskForEditOutput.Risk,
@@ -73,7 +172,15 @@ namespace CCPDemo.Web.Areas.App.Controllers
                 RiskStatusList = await _risksAppService.GetAllStatusForTableDropdown(),
                 RiskRiskRatingList = await _risksAppService.GetAllRiskRatingForTableDropdown(),
                 RiskUserList = await _risksAppService.GetAllUserForTableDropdown(),
-
+                isAdmin = isAdmin,
+                isERM = isERM,
+                userText = isUser,
+                //ERMText = isERMText,
+                //RoleNames = myRoles,
+                RoleList = roleValues,
+                //UserRolesInfo = userRoleValues,
+                UserRoles = userRolesList,
+                UsersEmailsIdsDict = UsersEmailsIdsDict
             };
 
             return PartialView("_CreateOrEditModal", viewModel);
@@ -198,6 +305,36 @@ namespace CCPDemo.Web.Areas.App.Controllers
 
         public async Task<PartialViewResult> ViewRiskModal(int id)
         {
+            var user = _userManager.Users.Where(u => u.Id == AbpSession.UserId).FirstOrDefault();
+
+            var users = _userManager.Users.Where(u => u.IsDeleted == false).ToList();
+
+            var rolesDump = _roleRepository.GetAll().Where(r => r.IsDeleted == false);
+
+            var roleData = from r in rolesDump
+                           select new
+                           {
+                               r.Id,
+                               r.Name,
+                               r.DisplayName
+                           };
+
+
+            var userRolesList = _userManager.GetRolesAsync(user).Result;
+
+
+            var userRolesNames = new List<string>();
+            foreach (var role in roleData)
+            {
+                if (userRolesList.Contains(role.Name))
+                {
+                    userRolesNames.Add(role.DisplayName.ToUpper());
+                }
+            }
+
+            var isERM = userRolesNames.Contains("ERM");
+
+
             var getRiskForViewDto = await _risksAppService.GetRiskForView(id);
 
             var model = new RiskViewModel()
@@ -216,7 +353,8 @@ namespace CCPDemo.Web.Areas.App.Controllers
                 RiskRatingName = getRiskForViewDto.RiskRatingName
 
                 ,
-                UserName = getRiskForViewDto.UserName
+                UserName = getRiskForViewDto.UserName,
+                isERM = isERM
 
             };
 
@@ -271,6 +409,46 @@ namespace CCPDemo.Web.Areas.App.Controllers
             return Json("Success");
 
             //return View();
+        }
+
+        [Serializable]
+        public class RolesModel
+        {
+
+            public string Value { get; set; }
+            public string DisplayText { get; set; }
+            public bool IsSelected { get; set; }
+
+            public RolesModel()
+            {
+            }
+
+            public RolesModel(string value, string displayText)
+            {
+                Value = value;
+                DisplayText = displayText;
+            }
+        }
+
+        public class NewRoles
+        {
+            public string Name { get; set; }
+        }
+
+        private IEnumerable<Role> GetRolesOfUsers(List<User> users)
+        {
+            var roleIds = new List<int>();
+            foreach (var user in users)
+            {
+                foreach (var roleId in user.Roles.Select(x => x.RoleId))
+                {
+                    roleIds.AddIfNotContains(roleId);
+                }
+            }
+
+            var roles = _roleManager.Roles.Where(x => roleIds.Contains(x.Id));
+            //return Mapper.Map<List<UserDto.RoleDto>>(roles);
+            return roles;
         }
 
     }

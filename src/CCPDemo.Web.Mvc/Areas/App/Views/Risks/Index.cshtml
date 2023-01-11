@@ -3,12 +3,12 @@
 @using CCPDemo.Web.Areas.App.Startup
 @model RisksViewModel
 @{
-ViewBag.CurrentPageName = AppPageNames.Common.Risks;
+    ViewBag.CurrentPageName = AppPageNames.Common.Risks;
 }
 @section Scripts
 {
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.js" integrity="sha512-L7jgg7T9UbYc7hXogUKssqe1B5MsgrcviNxsRbO53dDSiw/JxuA/4kVQvEORmZJ6Re3fVF3byN5TT7czo9Rdug==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.js" integrity="sha512-L7jgg7T9UbYc7hXogUKssqe1B5MsgrcviNxsRbO53dDSiw/JxuA/4kVQvEORmZJ6Re3fVF3byN5TT7czo9Rdug==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>*@
     
 <!-- Tempus Dominus JavaScript -->
 <script src="~/Common/Scripts/Dominus/tempus-dominus.min.js"></script>
@@ -178,7 +178,7 @@ ViewBag.CurrentPageName = AppPageNames.Common.Risks;
                                 <th>Existing Control</th>
                                 <th>ERM Recomendation</th>
                                 <th>Action Plan</th>
-                                <th>Risk Owner's Comment'</th>
+                                <th>Risk Owner's Comment</th>
                                 <th>Target Date</th>
                                 <th>Actual Closure Date</th>
                                 <th>Acceptance Date</th>

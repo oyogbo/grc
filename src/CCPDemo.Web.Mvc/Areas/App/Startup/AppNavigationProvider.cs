@@ -113,14 +113,7 @@ namespace CCPDemo.Web.Areas.App.Startup
                         permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Administration_Status)
                     )
                 )
-                .AddItem(new MenuItemDefinition(
-                        AppPageNames.Common.RiskStatus,
-                        L("RiskStatus"),
-                        url: "App/RiskStatus",
-                        icon: "flaticon-more",
-                        permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Administration_RiskStatus)
-                    )
-                )
+                
                 .AddItem(new MenuItemDefinition(
                         AppPageNames.Common.RiskRatings,
                         L("RiskRatings"),

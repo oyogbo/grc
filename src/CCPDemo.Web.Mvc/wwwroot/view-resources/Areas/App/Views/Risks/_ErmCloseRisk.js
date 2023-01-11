@@ -1,6 +1,8 @@
 ﻿(function ($) {
 
 
+    $('#riskTypeId').focus();
+
     $('#riskTypeId').attr("disabled", "disabled");
     $('#organizationUnitId').attr("disabled", "disabled");
     //$('#statusId').attr("disabled", "disabled");
@@ -26,7 +28,8 @@
       _modalManager = modalManager;
 
       var modal = _modalManager.getModal();
-        modal.find('.date-picker').datetimepicker({
+        modal.find('.date-picker').flatpickr({
+        defaultDate: null,
         locale: abp.localization.currentLanguage.name,
         format: 'L',
       });

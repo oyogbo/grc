@@ -404,6 +404,7 @@ namespace CCPDemo.Authorization.Users
             }
 
             var roleNames = new Dictionary<int, string>();
+
             foreach (var roleId in distinctRoleIds)
             {
                 var role = await _roleManager.FindByIdAsync(roleId.ToString());

@@ -7,6 +7,21 @@
 
       $('#statusId').val(1);
 
+      $('#riskTypeId').focus();
+
+      $('#Risk_TargetDate').blur();
+
+      console.log('Raise New Risk');
+
+
+      //_risksService
+      //    .getUserId()
+      //    .done(function (data) {
+      //        $('#get_id').val(data);
+      //        console.log(data)
+      //    });
+
+
     var _RiskriskTypeLookupTableModal = new app.ModalManager({
       viewUrl: abp.appPath + 'App/Risks/RiskTypeLookupTableModal',
       scriptUrl: abp.appPath + 'view-resources/Areas/App/Views/Risks/_RiskRiskTypeLookupTableModal.js',
@@ -37,14 +52,77 @@
       _modalManager = modalManager;
 
       var modal = _modalManager.getModal();
-        modal.find('.date-picker').datetimepicker({
+        modal.find('.date-picker').flatpickr({
+         defaultDate: null,
         locale: abp.localization.currentLanguage.name,
         format: 'L',
       });
 
       _$riskInformationForm = _modalManager.getModal().find('form[name=RiskInformationsForm]');
       _$riskInformationForm.validate();
-    };
+      };
+
+
+      $('#organizationUnitId').change(function () {
+          var ouId = $(this).val();
+
+          console.log("OU Id: " + ouId);
+
+          var usersEmailIdsData = null;
+
+          _risksService
+              .usersInOrganizationalUnit(ouId)
+              .done(function (data) {
+
+                  console.log(data);
+
+                  var users = data.items;
+
+                  //console.log(users)
+
+                  var usersSelect = $('#userId');
+                  usersSelect.html('');
+
+                  var usersOptions = '';
+
+                  _risksService
+                      .usersEmailsIdsDict()
+                      .done(function (data) {
+
+                          var arr = data.split(',');
+
+                          if (users.length > 0) {
+                              var userId;
+                              users.forEach(row => {
+                                  arr.forEach((r, i) => {
+                                      //console.log(i)
+                                      var innerArr = r.split(':');
+                                      var email = innerArr[0].replace('{', '').replace('"', '');
+                                      //console.log("SPLIT====")
+                                      console.log(email)
+                                      email = email.replace(/.$/, "");
+                                      console.log("THE EMAIL")
+                                      console.log(row.emailAddress)
+
+                                      if (row.emailAddress.toString() === email.toString()) {
+                                          console.log("EQUALS")
+                                          userId = innerArr[1].toString().replace('}', '');
+                                          userId = parseInt(userId);
+                                          console.log("USER ID: " + userId);
+                                      }
+                                  });
+
+                                  usersOptions += `<option value="${userId}">${row.name} &nbsp; ${row.surname}(${row.emailAddress})</option>`;
+                              });
+                          usersSelect.append(usersOptions);
+                          }
+                      });
+
+              });
+
+          console.log(ouId);
+      });
+
 
     $('#OpenRiskTypeLookupTableButton').click(function () {
       var risk = _$riskInformationForm.serializeFormToObject();
@@ -126,26 +204,27 @@
       if (!_$riskInformationForm.valid()) {
         return;
       }
-      if ($('#Risk_RiskTypeId').prop('required') && $('#Risk_RiskTypeId').val() == '') {
+        if ($('#riskTypeId').prop('required') && $('#riskTypeId').val() == '') {
         abp.message.error(app.localize('{0}IsRequired', app.localize('RiskType')));
         return;
       }
-      if ($('#Risk_OrganizationUnitId').prop('required') && $('#Risk_OrganizationUnitId').val() == '') {
+        if ($('#organizationUnitId').prop('required') && $('#organizationUnitId').val() == '') {
         abp.message.error(app.localize('{0}IsRequired', app.localize('OrganizationUnit')));
         return;
       }
-      if ($('#Risk_StatusId').prop('required') && $('#Risk_StatusId').val() == '') {
+        if ($('#statusId').prop('required') && $('#statusId').val() == '') {
         abp.message.error(app.localize('{0}IsRequired', app.localize('Status')));
         return;
       }
-      if ($('#Risk_RiskRatingId').prop('required') && $('#Risk_RiskRatingId').val() == '') {
+        if ($('#riskRatingId').prop('required') && $('#riskRatingId').val() == '') {
         abp.message.error(app.localize('{0}IsRequired', app.localize('RiskRating')));
         return;
       }
-      if ($('#Risk_UserId').prop('required') && $('#Risk_UserId').val() == '') {
+        if ($('#userId').prop('required') && $('#userId').val() == '') {
         abp.message.error(app.localize('{0}IsRequired', app.localize('User')));
         return;
       }
+
 
         var risk = _$riskInformationForm.serializeFormToObject();
 
