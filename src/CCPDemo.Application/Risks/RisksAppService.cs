@@ -106,7 +106,7 @@ namespace CCPDemo.Risks
                         .WhereIf(!string.IsNullOrWhiteSpace(input.UserNameFilter), e => e.UserFk != null && e.UserFk.Name == input.UserNameFilter);
 
             var pagedAndFilteredRisks = filteredRisks
-                .OrderBy(input.Sorting ?? "id asc")
+                .OrderBy(input.Sorting ?? "id desc")
                 .PageBy(input);
 
             var risks = from o in pagedAndFilteredRisks
@@ -336,6 +336,7 @@ namespace CCPDemo.Risks
         {
             if (input.Id == null)
             {
+                input.AcceptanceDate = null;
                 await Create(input);
             }
             else
@@ -357,6 +358,11 @@ namespace CCPDemo.Risks
         [AbpAuthorize(AppPermissions.Pages_Risks_Edit)]
         protected virtual async Task Update(CreateOrEditRiskDto input)
         {
+            var isErm = IsERM();
+            if (!isErm)
+            {
+                input.AcceptanceDate = DateTime.Now;
+            }
             var risk = await _riskRepository.FirstOrDefaultAsync((int)input.Id);
             ObjectMapper.Map(input, risk);
 
@@ -686,6 +692,52 @@ namespace CCPDemo.Risks
 
             return JsonConvert.SerializeObject(usersEmailIdsDict);
 
+        }
+
+        public bool IsERM()
+        {
+            var user = _userManager.Users.Where(u => u.Id == AbpSession.UserId).FirstOrDefault();
+            var userId = user?.Id;
+
+            var isAdmin = _userManager.IsInRoleAsync(user, "Admin").Result;
+            var isUser = _userManager.IsInRoleAsync(user, "User").Result;
+
+
+            var rolesDump = _roleRepository.GetAll().Where(r => r.IsDeleted == false);
+
+            var roleData = from r in rolesDump
+                           select new
+                           {
+                               r.Id,
+                               r.Name,
+                               r.DisplayName
+                           };
+
+            var userRolesList = _userManager.GetRolesAsync(user).Result;
+
+
+            var userRolesNames = new List<string>();
+            foreach (var role in roleData)
+            {
+                if (userRolesList.Contains(role.Name))
+                {
+                    userRolesNames.Add(role.DisplayName.ToUpper());
+                }
+            }
+
+            return userRolesNames.Contains("ERM");
+        }
+
+        public bool IsRiskAccepted(int id)
+        {
+            var query = _riskRepository.GetAll().Where(r=>r.Id == id).Where(r=>r.UserId == AbpSession.UserId).Where(r => r.AcceptanceDate != null);
+            var isRiskAccepted = (from r in query
+                                        select new
+                                        {
+                                            r.RiskAccepted
+                                        }).Any();
+
+            return isRiskAccepted;
         }
     }
 }

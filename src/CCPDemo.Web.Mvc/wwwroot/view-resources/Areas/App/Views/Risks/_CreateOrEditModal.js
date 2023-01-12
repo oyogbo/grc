@@ -12,6 +12,33 @@
       $('#Risk_TargetDate').blur();
 
       console.log('Raise New Risk');
+      var loggedInUserIsErm;
+
+      _risksService
+          .isERM()
+          .done(function (data) {
+              var isERM = data;
+              loggedInUserIsErm = isERM;
+              if (!isERM) {
+                  $('#statusId').attr("disabled", true);
+                  $('#riskTypeId').attr("disabled", true);
+                  $('#riskRatingId').attr("disabled", true);
+                  $('#userId').attr("disabled", true);
+                  $('#organizationUnitId').attr("disabled", true);
+              }
+          });
+
+      var riskId = $('#riskId').val();
+
+      _risksService
+          .isRiskAccepted(riskId)
+          .done(function (data) {
+              var isRiskAccepted = data;
+              
+              if (isRiskAccepted) {
+                  $('#riskAccepted').attr('readonly', true);
+              }
+          });
 
 
       //_risksService

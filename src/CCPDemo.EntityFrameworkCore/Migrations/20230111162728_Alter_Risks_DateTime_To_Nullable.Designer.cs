@@ -4,6 +4,7 @@ using CCPDemo.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CCPDemo.Migrations
 {
     [DbContext(typeof(CCPDemoDbContext))]
-    partial class CCPDemoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230111162728_Alter_Risks_DateTime_To_Nullable")]
+    partial class Alter_Risks_DateTime_To_Nullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

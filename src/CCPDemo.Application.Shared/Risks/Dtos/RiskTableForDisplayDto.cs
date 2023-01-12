@@ -8,6 +8,6 @@ namespace CCPDemo.Risks.Dtos
 	{
 		public string Summary { get; set; }
 		public string OrganizationUnitDisplayName { get; set; }
-		public DateTime TargetDate { get; set; }
+		public DateTime? TargetDate { get; set; }
 	}
 }

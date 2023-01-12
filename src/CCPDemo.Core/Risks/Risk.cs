@@ -26,11 +26,11 @@ namespace CCPDemo.Risks
 
         public virtual string RiskOwnerComment { get; set; }
 
-        public virtual DateTime TargetDate { get; set; }
+        public virtual DateTime? TargetDate { get; set; }
 
-        public virtual DateTime ActualClosureDate { get; set; }
+        public virtual DateTime? ActualClosureDate { get; set; }
 
-        public virtual DateTime AcceptanceDate { get; set; }
+        public virtual DateTime? AcceptanceDate { get; set; }
 
         public virtual bool RiskAccepted { get; set; }
 

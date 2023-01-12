@@ -78,6 +78,7 @@ namespace CCPDemo.Web.Areas.App.Controllers
         [AbpMvcAuthorize(AppPermissions.Pages_Risks_Create, AppPermissions.Pages_Risks_Edit)]
         public async Task<PartialViewResult> CreateOrEditModal(int? id)
         {
+            
             var user = _userManager.Users.Where(u=>u.Id == AbpSession.UserId).FirstOrDefault();
 
             var users = _userManager.Users.Where(u => u.IsDeleted == false).ToList();
@@ -135,7 +136,7 @@ namespace CCPDemo.Web.Areas.App.Controllers
 
             var isERM = userRolesNames.Contains("ERM");
 
-
+            
 
 
 
@@ -258,6 +259,7 @@ namespace CCPDemo.Web.Areas.App.Controllers
                 RiskStatusList = await _risksAppService.GetAllStatusForTableDropdown(),
                 RiskRiskRatingList = await _risksAppService.GetAllRiskRatingForTableDropdown(),
                 RiskUserList = await _risksAppService.GetAllUserForTableDropdown(),
+                isERM = IsERM()
 
             };
 
@@ -297,6 +299,7 @@ namespace CCPDemo.Web.Areas.App.Controllers
                 RiskStatusList = await _risksAppService.GetAllStatusForTableDropdown(),
                 RiskRiskRatingList = await _risksAppService.GetAllRiskRatingForTableDropdown(),
                 RiskUserList = await _risksAppService.GetAllUserForTableDropdown(),
+                isERM = IsERM()
 
             };
 
@@ -449,6 +452,40 @@ namespace CCPDemo.Web.Areas.App.Controllers
             var roles = _roleManager.Roles.Where(x => roleIds.Contains(x.Id));
             //return Mapper.Map<List<UserDto.RoleDto>>(roles);
             return roles;
+        }
+
+        public bool IsERM()
+        {
+            var user = _userManager.Users.Where(u => u.Id == AbpSession.UserId).FirstOrDefault();
+            var userId = user?.Id;
+
+            var isAdmin = _userManager.IsInRoleAsync(user, "Admin").Result;
+            var isUser = _userManager.IsInRoleAsync(user, "User").Result;
+
+
+            var rolesDump = _roleRepository.GetAll().Where(r => r.IsDeleted == false);
+
+            var roleData = from r in rolesDump
+                           select new
+                           {
+                               r.Id,
+                               r.Name,
+                               r.DisplayName
+                           };
+
+            var userRolesList = _userManager.GetRolesAsync(user).Result;
+
+
+            var userRolesNames = new List<string>();
+            foreach (var role in roleData)
+            {
+                if (userRolesList.Contains(role.Name))
+                {
+                    userRolesNames.Add(role.DisplayName.ToUpper());
+                }
+            }
+
+            return userRolesNames.Contains("ERM");
         }
 
     }

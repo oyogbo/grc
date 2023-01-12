@@ -51,6 +51,70 @@
             _$riskInformationForm.validate();
         };
 
+
+
+
+        $('#organizationUnitId').change(function () {
+            var ouId = $(this).val();
+
+            console.log("OU Id: " + ouId);
+
+            var usersEmailIdsData = null;
+
+            _risksService
+                .usersInOrganizationalUnit(ouId)
+                .done(function (data) {
+
+                    console.log(data);
+
+                    var users = data.items;
+
+                    //console.log(users)
+
+                    var usersSelect = $('#userId');
+                    usersSelect.html('');
+
+                    var usersOptions = '';
+
+                    _risksService
+                        .usersEmailsIdsDict()
+                        .done(function (data) {
+
+                            var arr = data.split(',');
+
+                            if (users.length > 0) {
+                                var userId;
+                                users.forEach(row => {
+                                    arr.forEach((r, i) => {
+                                        //console.log(i)
+                                        var innerArr = r.split(':');
+                                        var email = innerArr[0].replace('{', '').replace('"', '');
+                                        //console.log("SPLIT====")
+                                        console.log(email)
+                                        email = email.replace(/.$/, "");
+                                        console.log("THE EMAIL")
+                                        console.log(row.emailAddress)
+
+                                        if (row.emailAddress.toString() === email.toString()) {
+                                            console.log("EQUALS")
+                                            userId = innerArr[1].toString().replace('}', '');
+                                            userId = parseInt(userId);
+                                            console.log("USER ID: " + userId);
+                                        }
+                                    });
+
+                                    usersOptions += `<option value="${userId}">${row.name} &nbsp; ${row.surname}(${row.emailAddress})</option>`;
+                                });
+                                usersSelect.append(usersOptions);
+                            }
+                        });
+
+                });
+
+            console.log(ouId);
+        });
+
+
         $('#OpenRiskTypeLookupTableButton').click(function () {
             var risk = _$riskInformationForm.serializeFormToObject();
 
