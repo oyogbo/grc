@@ -34,11 +34,11 @@
                     <table id="KeyRiskIndicatorsTable" class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer">
                         <thead>
                             <tr>
+                                    <th class="">Actions</th>
                                     <th>Reference Id</th>
                                     <th>Bussiness Line</th>
                                     <th>Department</th>
                                     <th>TotalRecord</th>
-                                    <th class="text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -47,15 +47,14 @@
                              {
                                     
                                          <tr>
+                                            <td>
+                                                <button type="button" class="info-btn btn btn-outline-info">@Html.ActionLink("Review", "Index", "KeyRiskIndicators", new { ReferenceId = @history.ReferenceId }, null )</button
+                                            </td>
                                              <td>@history.ReferenceId</td>
                                              <td>@history.BussinessLine</td>
                                              <td>@history.Department</td>
                                              <td>@history.TotalRecord</td>
-                                        <td>
-                                                <button  type="button" class="info-btn btn btn-outline-info">@Html.ActionLink("Review", "Index", "KeyRiskIndicators", new { ReferenceId = @history.ReferenceId }, null )</button>
-                                           
-                                        </td>
-                                     </tr>
+                                        </tr>
                             }
 
                         </tbody>

@@ -1,7 +1,8 @@
 ﻿@using CCPDemo.Authorization
 @using CCPDemo.Web.Areas.App.Models.KeyRiskIndicators
+@using CCPDemo.Web.Areas.App.Models.UploadKeyRiskIndicators;
 @using CCPDemo.Web.Areas.App.Startup
-@model KeyRiskIndicatorsViewModel
+@model UploadKeyRiskIndicator
 @{
    // ViewBag.CurrentPageName = AppPageNames.Common.KeyRiskIndicators;
 }
@@ -10,14 +11,6 @@
     {
     <link rel="stylesheet" abp-href="/view-resources/Areas/App/Views/Common/_KeyValueListManager.css" asp-append-version="true" />
     }
-
-@section Scripts
-    {
-    <script>
-
-
-    </script>
-}
 
 <div class="content d-flex flex-column flex-column-fluid">
 
@@ -31,14 +24,22 @@
 
                             <div class="input-group mb-3">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="KeyRiskIndicator">
-                                    <label class="custom-file-label form-label" id="KeyRiskIndicator"
-                                           for="KeyRiskIndicator">@L("ChooseAFile")</label>
+                                    <input type="file" class="custom-file-input" name="KeyRiskIndicator" required>
+                                    <label class="custom-file-label form-label" id="KeyRiskIndicator" for="KeyRiskIndicator">@L("ChooseAFile")</label><br />
+                                    <span class="form-text text-muted col-lg-12">@L("UploadCSV_Info")</span>
+
+                                    <select class="form-select mt-5" name="OrganizationUnit" aria-label="Default select example" required>
+                                     @foreach (var obj in Model.OrganizationUnits)
+                                        {
+                                          <option selected disabled>-- Select Depaartment --</option>
+                                          <option value="@obj.Id">@obj.DisplayName</option>
+                                        }
+                                    </select>
                                 </div>
-                                <span class="form-text text-muted col-lg-12">@L("UploadCSV_Info")</span>
+                                
                             </div>
 
-                            <button class="btn btn-primary" type="submit">@L("Upload")</button>
+                            <button class="btn btn-primary" type="submit">@L("Upload")</button>&nbsp;
                             <button class="btn btn-secondary" type="reset">@L("Clear")</button>
                         </form>
 
@@ -48,3 +49,37 @@
         </div>
     </div>
 </div>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+@*@section scripts {
+
+<script type="text/javascript">
+
+    document.addEventListener("DOMContentLoaded", function(event) {
+
+        $.ajax({
+                type: "Get",
+                url: `UploadKeyRiskIndicator/GetAllOrganisationUnit`,
+                //traditional: true,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (recData) {
+                    console.log(recData);
+
+                    if (recData.result.length > 0)
+                    {
+                      recData.result.forEach((item, index) => {
+                            
+                        })
+                    }
+
+
+                },
+                error: function () {console.log(recData); }
+            });
+  });
+
+      
+</script>
+ }*@
+ 

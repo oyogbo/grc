@@ -13,7 +13,7 @@ namespace CCPDemo.KeyRiskIndicatorHistories
         public Task<KeyRiskIndicatorHistory> AddKeyIndicatorHistory(KRIHistoryAddDTO key);
 
         public Task<List<KeyRiskIndicatorHistory>> GetAll();
-
+        public Task<long> GetUserOrganisationDepartmentId();
         public Task<KeyRiskIndicatorHistory> GetKRIById( int Id);
         public Task<string> GetKRIUploaderEmail(string Id);
 
