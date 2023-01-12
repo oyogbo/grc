@@ -24,14 +24,14 @@
 
                             <div class="input-group mb-3">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="KeyRiskIndicator">
+                                    <input type="file" class="custom-file-input" name="KeyRiskIndicator" required>
                                     <label class="custom-file-label form-label" id="KeyRiskIndicator" for="KeyRiskIndicator">@L("ChooseAFile")</label><br />
                                     <span class="form-text text-muted col-lg-12">@L("UploadCSV_Info")</span>
 
-                                    <select class="form-select mt-5" name="OrganizationUnit" aria-label="Default select example">
+                                    <select class="form-select mt-5" name="OrganizationUnit" aria-label="Default select example" required>
                                      @foreach (var obj in Model.OrganizationUnits)
                                         {
-                                          <option selected>-- Select Depaartment --</option>
+                                          <option selected disabled>-- Select Depaartment --</option>
                                           <option value="@obj.Id">@obj.DisplayName</option>
                                         }
                                     </select>
