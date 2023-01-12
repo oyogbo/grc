@@ -98,13 +98,16 @@
                 <input class="form-control m-input date-picker" id="Risk_AcceptanceDate" type="text" name="acceptanceDate" value="@Model.Risk.AcceptanceDate" readonly/>
             </div>
 
+            @if (!Model.isERM)
+            {
             <label class="form-check form-check-custom">
-                
+
                 <input id="Risk_RiskAccepted" name="riskAccepted" type="checkbox" class="form-check-input" value="@accepted" readonly/>
                 <span class="form-check-label">
                     Risk Accepted
                 </span>
-            </label>
+             </label>
+            }
 
         </form>
     </div>
