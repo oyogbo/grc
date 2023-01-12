@@ -42,6 +42,7 @@ namespace CCPDemo
         {
             User user = GetCurrentUser();
             var roles = await UserManager.GetRolesAsync(user);
+
             return roles;
         }
 

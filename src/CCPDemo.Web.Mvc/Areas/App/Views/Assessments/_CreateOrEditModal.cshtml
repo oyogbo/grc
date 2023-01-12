@@ -24,4 +24,4 @@
     </div>
 </div>
 
-@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml", new RiskModalViewModel{isSaveButtonEnabled = true})
