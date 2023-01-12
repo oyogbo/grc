@@ -45,6 +45,13 @@ namespace CCPDemo
             return roles;
         }
 
+        public virtual async Task<IList<string>> GetCurrentUserOrgUnit()
+        {
+            User user = GetCurrentUser();
+            var roles = await UserManager.GetRolesAsync(user);
+            return roles;
+        }
+
         protected virtual User GetCurrentUser()
         {
             return AsyncHelper.RunSync(GetCurrentUserAsync);

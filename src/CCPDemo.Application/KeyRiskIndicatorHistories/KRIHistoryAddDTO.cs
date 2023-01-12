@@ -14,6 +14,7 @@ namespace CCPDemo.KeyRiskIndicatorHistories
         public virtual string Department { get; set; }
         public virtual string BussinessLine { get; set; }
         public virtual string Status { get; set; }
+        public long OrganizationUnit { get; set; }
 
     }
 }

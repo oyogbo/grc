@@ -1,4 +1,7 @@
-﻿using Abp.EntityFrameworkCore;
+﻿using Abp.Authorization.Users;
+using Abp.Domain.Repositories;
+using Abp.EntityFrameworkCore;
+using Abp.Organizations;
 using CCPDemo.Authorization.Users;
 using CCPDemo.EntityFrameworkCore;
 using CCPDemo.KeyRiskIndicatorHistorys;
@@ -16,9 +19,16 @@ namespace CCPDemo.KeyRiskIndicatorHistories
     {
         private IKeyRiskIndicatorHistoryRepo _IKeyRiskIndicatorHistoryRepo;
         private readonly IKRIService _iKRIService;
-        public KeyRiskIndicatorHistoryAppService(IKeyRiskIndicatorHistoryRepo iKeyRiskIndicatorHistoryRepo, IKRIService iKRIService)
+        private readonly IRepository<UserOrganizationUnit, long> _userOrganizationUnitRepository;
+
+        public KeyRiskIndicatorHistoryAppService(IKeyRiskIndicatorHistoryRepo iKeyRiskIndicatorHistoryRepo,
+            IKRIService iKRIService,
+            IRepository<UserOrganizationUnit, long> userOrganizationUnitRepository
+
+            )
         {
             _IKeyRiskIndicatorHistoryRepo = iKeyRiskIndicatorHistoryRepo;
+            _userOrganizationUnitRepository= userOrganizationUnitRepository;
             _iKRIService= iKRIService;
         }
 
@@ -32,6 +42,7 @@ namespace CCPDemo.KeyRiskIndicatorHistories
             keyRiskIndicatorHistory.Department = model.Department;
             keyRiskIndicatorHistory.Status = model.Status;
             keyRiskIndicatorHistory.TotalRecord = model.TotalRecord;
+            keyRiskIndicatorHistory.OrganizationUnit = model.OrganizationUnit;
 
            return   _IKeyRiskIndicatorHistoryRepo.Insert(keyRiskIndicatorHistory);
         }
@@ -103,6 +114,18 @@ namespace CCPDemo.KeyRiskIndicatorHistories
         {
            var roles =  GetCurrentUserRole();
             return roles;
+        }
+
+        public async Task<long> GetUserOrganisationDepartmentId()
+        {
+            User user = GetCurrentUser();
+
+            var ogrunit = _userOrganizationUnitRepository.FirstOrDefault(x => x.UserId == user.Id);
+            if (ogrunit != null)
+            {
+                return ogrunit.OrganizationUnitId;
+            }
+            return 0;
         }
     }
 }

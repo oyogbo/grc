@@ -11,6 +11,7 @@ using CCPDemo.KeyRiskIndicators.Dtos;
 using CCPDemo.KeyRiskIndicators.Service.Interface;
 using CCPDemo.Web.Areas.App.Models.Error;
 using CCPDemo.Web.Areas.App.Models.KeyRiskIndicators;
+using CCPDemo.Web.Areas.App.Models.UploadKeyRiskIndicators;
 using CCPDemo.Web.Controllers;
 using CsvHelper;
 using GraphQL.NewtonsoftJson;
@@ -18,6 +19,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Org.BouncyCastle.Crypto.Digests;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -186,8 +188,18 @@ namespace CCPDemo.Web.Areas.App.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ReadCSV()
+        public async Task<IActionResult> ReadCSV(AddUploadKRIDto addUploadKRI)
         {
+
+           long orgIg = await _keyRiskIndicatorHistoryService.GetUserOrganisationDepartmentId();
+            if (orgIg == 0)
+            {
+                ErrorView errorView = new ErrorView();
+                errorView.Message = "You have to belong to a department to uppload a Key risk indicator";
+                errorView.BackController = "UploadKeyRiskIndicator";
+                errorView.BackAction = "Index";
+                return RedirectToAction("Index", "Error", errorView, fragment: null);
+            }
 
             IFormFile fileToRead = Request.Form.Files[0];
             string  nameForCheck = fileToRead.FileName;
@@ -253,6 +265,7 @@ namespace CCPDemo.Web.Areas.App.Controllers
             historyToAdd.TotalRecord = response.Count().ToString();
             historyToAdd.Department = ReferenceId.Substring(0, 7);
             historyToAdd.ReferenceId = ReferenceId;
+            historyToAdd.OrganizationUnit = addUploadKRI.OrganizationUnit;
 
             var resx = _keyRiskIndicatorHistoryService.AddKeyIndicatorHistory(historyToAdd);
 

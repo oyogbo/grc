@@ -3,6 +3,7 @@ using CCPDemo.Authorization;
 using CCPDemo.KeyRiskIndicatorHistories;
 using CCPDemo.Web.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CCPDemo.Web.Areas.App.Controllers
@@ -21,6 +22,20 @@ namespace CCPDemo.Web.Areas.App.Controllers
         public async Task<IActionResult> Index()
         {
          var response =  await _keyRiskIndicatorHistoryService.GetAll();
+            response = response.OrderByDescending(x => x.Id).ToList();
+           var roles = await _keyRiskIndicatorHistoryService.GetCurrentUserRoles();
+
+            if (!roles.Contains("Admin") || !roles.Contains("ERM"))
+            {
+                long userOrgId = await _keyRiskIndicatorHistoryService.GetUserOrganisationDepartmentId();
+                if (userOrgId > 0)
+                {
+                    var filteredList = response.Where(x => x.OrganizationUnit == userOrgId);
+                    ViewData["KeyRiskIndicatorHistory"] = response;
+                    return View();
+                }
+            }
+
             ViewData["KeyRiskIndicatorHistory"] = response;
             return View();
         }
