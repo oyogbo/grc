@@ -739,5 +739,12 @@ namespace CCPDemo.Risks
 
             return isRiskAccepted;
         }
+
+        public async Task ResetAcceptance(CreateOrEditRiskDto input)
+        {
+            input.RiskAccepted = false;
+            input.AcceptanceDate = null;
+            await Update(input);
+        }
     }
 }

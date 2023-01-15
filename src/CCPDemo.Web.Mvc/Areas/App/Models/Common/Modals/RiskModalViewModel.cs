@@ -3,5 +3,6 @@
     public class RiskModalViewModel
     {
         public bool isSaveButtonEnabled { get; set; }
+        public bool isERM { get; set; }
     }
 }

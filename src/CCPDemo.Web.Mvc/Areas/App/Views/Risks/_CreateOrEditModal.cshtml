@@ -4,7 +4,7 @@
 @model CreateOrEditRiskModalViewModel
 @using Abp.Extensions
 
-@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? "Edit Risk" : "Raise New Risk"))
+@await Html.PartialAsync("~/Areas/App/Views/Risks/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? "Edit Risk" : "Raise New Risk"))
 
 @{
     var chectIt = "";
@@ -26,7 +26,8 @@
     <style>
         input:focus, textarea:focus, select:focus{
         outline: none;
-    }
+        }
+
     </style>
 }
 <div class="modal-body">
@@ -248,7 +249,7 @@
                 <label class="form-check form-check-custom">
                     @*<input class="form-check-input" id="riskAccepted" type="checkbox" @chectIt/>
                 <input name="riskAccepted" type="hidden" value="@Model.Risk.RiskAccepted" />*@
-                    <input type=checkbox name="riskAccepted" checked="@Model?.Risk.RiskAccepted" value="true" class="form-check-input" id="riskAccepted" @ckeckBoxStateReadOnly @ckeckBoxStateDisabled />
+                    <input type=checkbox name="riskAccepted" checked="@Model?.Risk.RiskAccepted" value="true" class="form-check-input" id="riskAccepted" @ckeckBoxStateDisabled />
                     <span class="form-check-label">
                         Risk Accepted
                     </span>
@@ -261,6 +262,7 @@
 </div>
 
 
-@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml", new RiskModalViewModel{
-    isSaveButtonEnabled = isRiskAccepted ? false : true
+@await Html.PartialAsync("~/Areas/App/Views/Risks/Modals/_ModalFooterWithSaveAndCancel.cshtml", new RiskModalViewModel{
+    isSaveButtonEnabled = isRiskAccepted ? false : true,
+    isERM = Model.isERM
 })
