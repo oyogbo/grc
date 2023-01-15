@@ -12,6 +12,33 @@
       $('#Risk_TargetDate').blur();
 
       console.log('Raise New Risk');
+      var loggedInUserIsErm;
+
+      _risksService
+          .isERM()
+          .done(function (data) {
+              var isERM = data;
+              loggedInUserIsErm = isERM;
+              if (!isERM) {
+                  $('#statusId').attr("disabled", true);
+                  $('#riskTypeId').attr("disabled", true);
+                  $('#riskRatingId').attr("disabled", true);
+                  $('#userId').attr("disabled", true);
+                  $('#organizationUnitId').attr("disabled", true);
+              }
+          });
+
+      var riskId = $('#riskId').val();
+
+      _risksService
+          .isRiskAccepted(riskId)
+          .done(function (data) {
+              var isRiskAccepted = data;
+              
+              if (isRiskAccepted) {
+                  $('#riskAccepted').attr('readonly', true);
+              }
+          });
 
 
       //_risksService
@@ -200,6 +227,70 @@
       _$riskInformationForm.find('input[name=userId]').val('');
     });
 
+      $('.reset-acceptance').click(function () {
+
+          var risk = _$riskInformationForm.serializeFormToObject();
+
+          _modalManager.setBusy(true);
+          _risksService
+              .resetAcceptance(risk)
+              .done(function () {
+                  abp.notify.info(app.localize('Acceptance Reset Was Successful!'));
+                  _modalManager.close();
+                  abp.event.trigger('app.createOrEditRiskModalSaved');
+              })
+              .always(function () {
+                  _modalManager.setBusy(false);
+              });
+      });
+
+      if (!loggedInUserIsErm) {
+          $(".save-button").prop("disabled", true);
+          //if ($('#Risk_ActionPlan').val() == '') {
+          //    abp.message.error(app.localize('{0}IsRequired', app.localize('ActionPlan')));
+          //    return;
+          //}
+          //if ($('#Risk_RiskOwnerComment').val() == '') {
+          //    abp.message.error(app.localize('{0}IsRequired', app.localize('RiskOwnerComment')));
+          //    return;
+          //}
+
+          $("#Risk_ActionPlan, #Risk_RiskOwnerComment").keyup(function (e) {
+
+              var alltxt = $("#Risk_ActionPlan, #Risk_RiskOwnerComment").length;
+              var empty = true;
+              $("#Risk_ActionPlan, #Risk_RiskOwnerComment").each(function (i) {
+                  if ($(this).val() == '' || $(this).val().length < 3) {
+                      empty = true;
+                      //$('#checkout').prop('disabled', true);
+                      $(".save-button").prop("disabled", true);
+                      return false;
+                  }
+                  else {
+                      empty = false;
+                  }
+              });
+              if (!empty) $(".save-button").prop("disabled", false);
+          });
+
+      }
+
+      // Enable/Disable Save Button based on Risk Owner's Input
+      
+
+
+      //if (!loggedInUserIsErm) {
+      //    $(".save-button").prop("disabled", true);
+      //    if ($('#Risk_ActionPlan').val() == '') {
+      //        abp.message.error(app.localize('{0}IsRequired', app.localize('ActionPlan')));
+      //        return;
+      //    }
+      //    if ($('#Risk_RiskOwnerComment').val() == '') {
+      //        abp.message.error(app.localize('{0}IsRequired', app.localize('RiskOwnerComment')));
+      //        return;
+      //    }
+      //}
+
     this.save = function () {
       if (!_$riskInformationForm.valid()) {
         return;
@@ -225,6 +316,16 @@
         return;
       }
 
+        if (!loggedInUserIsErm) {
+            if ($('#Risk_ActionPlan').val() == '') {
+                abp.message.error(app.localize('{0}IsRequired', app.localize('ActionPlan')));
+                return;
+            }
+            if ($('#Risk_RiskOwnerComment').val() == '') {
+                abp.message.error(app.localize('{0}IsRequired', app.localize('RiskOwnerComment')));
+                return;
+            }
+        }
 
         var risk = _$riskInformationForm.serializeFormToObject();
 

@@ -1,4 +1,5 @@
 ﻿@using CCPDemo.Authorization
+@using CCPDemo.Web.Areas.App.Models.Common.Modals;
 @model CCPDemo.Web.Areas.App.Models.DynamicEntityPropertyValues.DynamicEntityPropertyValueManageAllViewModel
 
 
@@ -36,4 +37,4 @@
         </div>
     </div>
 </div>
-@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml", new RiskModalViewModel{isSaveButtonEnabled = true})

@@ -29,9 +29,9 @@
                                     <span class="form-text text-muted col-lg-12">@L("UploadCSV_Info")</span>
 
                                     <select class="form-select mt-5" name="OrganizationUnit" aria-label="Default select example" required>
+                                     <option selected disabled>-- Select Depaartment --</option>
                                      @foreach (var obj in Model.OrganizationUnits)
                                         {
-                                          <option selected disabled>-- Select Depaartment --</option>
                                           <option value="@obj.Id">@obj.DisplayName</option>
                                         }
                                     </select>

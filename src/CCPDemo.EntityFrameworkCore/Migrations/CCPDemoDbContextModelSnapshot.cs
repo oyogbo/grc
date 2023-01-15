@@ -2061,6 +2061,9 @@ namespace CCPDemo.Migrations
                     b.Property<string>("Department")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("OrganizationUnit")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("ReferenceId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -2934,13 +2937,13 @@ namespace CCPDemo.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime>("AcceptanceDate")
+                    b.Property<DateTime?>("AcceptanceDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ActionPlan")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("ActualClosureDate")
+                    b.Property<DateTime?>("ActualClosureDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("CreationTime")
@@ -2992,7 +2995,7 @@ namespace CCPDemo.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("TargetDate")
+                    b.Property<DateTime?>("TargetDate")
                         .HasColumnType("datetime2");
 
                     b.Property<long?>("UserId")

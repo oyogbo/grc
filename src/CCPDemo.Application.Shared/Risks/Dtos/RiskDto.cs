@@ -15,11 +15,11 @@ namespace CCPDemo.Risks.Dtos
 
         public string RiskOwnerComment { get; set; }
 
-        public DateTime TargetDate { get; set; }
+        public DateTime? TargetDate { get; set; }
 
-        public DateTime ActualClosureDate { get; set; }
+        public DateTime? ActualClosureDate { get; set; }
 
-        public DateTime AcceptanceDate { get; set; }
+        public DateTime? AcceptanceDate { get; set; }
 
         public bool RiskAccepted { get; set; }
 

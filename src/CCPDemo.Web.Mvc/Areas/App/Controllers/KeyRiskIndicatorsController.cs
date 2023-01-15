@@ -5,6 +5,7 @@ using Abp.UI;
 using Abp.Web.Models;
 using AutoMapper;
 using CCPDemo.Authorization;
+using CCPDemo.Authorization.Roles;
 using CCPDemo.KeyRiskIndicatorHistories;
 using CCPDemo.KeyRiskIndicators;
 using CCPDemo.KeyRiskIndicators.Dtos;
@@ -41,6 +42,8 @@ namespace CCPDemo.Web.Areas.App.Controllers
         private readonly ISerialiserService _serialiserService;
         private IHostEnvironment Environment;
         private IConfiguration Configuration;
+        private readonly IRepository<Role> _roleRepository;
+
         private IMapper _mapper;
 
         private readonly IRepository<KeyRiskIndicator> _keyRiskIndicatorRepository;
@@ -53,6 +56,7 @@ namespace CCPDemo.Web.Areas.App.Controllers
                                            IHostEnvironment _environment,
                                            IKeyRiskIndicatorService keyRiskIndicatorHistoryService,
                                            IKRIService kRIService,
+                                            IRepository<Role> roleRepository,
                                            IRepository<KeyRiskIndicator> keyRiskIndicatorRepository,
                                            IConfiguration _configuration)
         {
@@ -64,6 +68,7 @@ namespace CCPDemo.Web.Areas.App.Controllers
             _mapper = mapper;
             _keyRiskIndicatorHistoryService = keyRiskIndicatorHistoryService;
             _keyRiskIndicatorRepository = keyRiskIndicatorRepository;
+            _roleRepository= roleRepository;    
         }
 
         public async Task<ActionResult> Index(string ReferenceId)
@@ -71,9 +76,18 @@ namespace CCPDemo.Web.Areas.App.Controllers
 
             var riskIndicators = await _keyRiskIndicatorsAppService.GetAllByRefId(ReferenceId);
             KeyRiskIndicatorViewModel model = new KeyRiskIndicatorViewModel();
-            var roles =  await _keyRiskIndicatorHistoryService.GetCurrentUserRoles();
+            var userRoles =  await _keyRiskIndicatorHistoryService.GetCurrentUserRoles();
 
-            if (roles.Contains("b1215e54b25f48b3955509ec698961af"))
+            List<string> roles = new List<string>();
+
+            var rolesfromdb = _roleRepository.GetAll();
+            foreach (var item in userRoles)
+            {
+                roles.Add(rolesfromdb.FirstOrDefault(x => x.ConcurrencyStamp == item || x.Name == item).DisplayName);
+
+            }
+
+            if (roles.Contains("ERM"))
             {
                 model.IsERM = true;
             }
