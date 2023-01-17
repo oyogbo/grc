@@ -60,7 +60,6 @@
     <PackageReference Include="AspNetCore.HealthChecks.UI" Version="6.0.4" />
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.4" />
     <PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="6.0.4" />
-    <PackageReference Include="DevExpress.AspNetCore.Reporting" Version="22.2.3" />
     <PackageReference Include="DevExtreme.Web" Version="22.2.3" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="6.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.9" />
