@@ -9,5 +9,6 @@ namespace CCPDemo.KeyRiskIndicators.Service.Interface
     public interface IEmailService
     {
         Task <bool> SendEmailAsync(SendEmailNotificationDTO email);
+        void SendEmailAUsingGamil(SendEmailNotificationDTO email);
     }
 }

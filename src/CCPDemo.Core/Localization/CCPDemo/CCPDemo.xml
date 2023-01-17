@@ -1,11 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <localizationDictionary culture="en">
-  <texts>    <text name="Summary">Summary</text>
+  <texts>
+    <text name="Summary">Summary</text>
     <text name="ERMRecommendation">E r m recommendation</text>
-    <text name="StatusName">Status name</text>
+	<text name="RequestDepartmentRCSA">Request Department RCSA</text>
+	  <text name="StatusName">Status name</text>
     <text name="PickStatus">Pick status</text>
-	 <text name="KeyRiskIndicatorManagement"> Key Risk Indicator Management</text>
-	 <text name="KeyRiskIndicatorHistory"> Key Risk Indicator History</text>
+	 <text name="KeyRiskIndicatorManagement">  Risk control self assessment</text>
+	 <text name="KeyRiskIndicatorHistory">  Risk control self assessment History</text>
 	 <text name="SelectAStatus">Select a status</text>
     <text name="RiskStatuses">Risk statuses</text>
     <text name="CCPDemo.RiskStatuses.RiskStatus">RiskStatus</text>
@@ -118,7 +120,7 @@
     <text name="AcceptanceDateRange">Acceptance date range</text>
     <text name="KeyRiskIndicators">Key Risk Indicators</text>
     <text name="KeyRiskIndicator">Key Risk Indicator</text>
-    <text name="UploadKeyRiskIndicator">Upload KRI</text>
+    <text name="UploadKeyRiskIndicator">Upload Risk control self assessment</text>
     <text name="CCPDemo.KeyRiskIndicators.KeyRiskIndicator">KeyRiskIndicator</text>
     <text name="BusinessLines">Business lines</text>
     <text name="Activity">Activity</text>

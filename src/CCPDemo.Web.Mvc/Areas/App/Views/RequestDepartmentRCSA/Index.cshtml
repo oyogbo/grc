@@ -1,0 +1,49 @@
+﻿@using CCPDemo.Authorization
+@using CCPDemo.Web.Areas.App.Models.KeyRiskIndicators
+@using CCPDemo.Web.Areas.App.Models.UploadKeyRiskIndicators;
+@using CCPDemo.Web.Areas.App.Models;
+@using CCPDemo.Web.Areas.App.Startup
+@model RequestDepartmentRCSAModel
+@{
+   // ViewBag.CurrentPageName = AppPageNames.Common.KeyRiskIndicators;
+}
+
+@section Styles
+    {
+    <link rel="stylesheet" abp-href="/view-resources/Areas/App/Views/Common/_KeyValueListManager.css" asp-append-version="true" />
+    }
+
+<div class="content d-flex flex-column flex-column-fluid">
+
+    <div class="@(await GetContainerClass())">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <form id="SettingsLogoUploadFormKRI" asp-controller="RequestDepartmentRCSA" asp-action="RequestDepartmentRCSA" enctype="multipart/form-data" method="post">
+                            <div class="input-group mb-3">
+                                <div class="custom-file">
+                                   <select class="form-select mt-5" name="OrganizationUnitId" aria-label="Default select example" required>
+                                     <option selected disabled>-- Select Depaartment --</option>
+                                     @foreach (var obj in Model.OrganizationUnit)
+                                        {
+                                          <option value="@obj.Id">@obj.DisplayName</option>
+                                        }
+                                    </select> 
+                                    <div class="form-group mt-4">
+                                      <textarea class="form-control" name="message" id="exampleFormControlTextarea3" placeholder="type in a message" rows="3" cols="7" required></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" type="submit">Send Request</button>&nbsp;
+                            <button class="btn btn-secondary" type="reset">@L("Clear")</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>

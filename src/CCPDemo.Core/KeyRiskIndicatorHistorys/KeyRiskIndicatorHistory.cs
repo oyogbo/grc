@@ -22,5 +22,8 @@ namespace CCPDemo.KeyRiskIndicatorHistorys
         public virtual string Status { get; set; }
         public long UserId { get; set; }
         public long OrganizationUnit { get; set; }
+        public string DateCreated { get; set; }
+        public bool IsReviewed { get; set; }
+        public string ReviewStatus { get; set; }
     }
 }

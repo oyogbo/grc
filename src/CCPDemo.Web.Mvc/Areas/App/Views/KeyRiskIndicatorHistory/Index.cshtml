@@ -9,11 +9,10 @@
     <body>
 @{
     ViewBag.CurrentPageName = AppPageNames.Common.KeyRiskIndicatorHistory;
-    <div class="content d-flex flex-column flex-column-fluid">
-
-    <div class="@(await GetContainerClass()) border"  style="width:1900px; overflow:scroll; ">
+    <div class="content d-flex flex-column flex-column-fluid ">
+    <div class="@(await GetContainerClass()) "  style="width:1900px; overflow:scroll; ">
         <div  class="card card-custom gutter-b"  style="width:fit-content; width:1200px; overflow:scroll;">
-            <div class="card-body">
+            <div class="card-body" style="height:650px;  overflow:auto;">
                 <div class="form">
                     <div class="row align-items-center mb-4">
                         <div class="col-xl-12">
@@ -39,13 +38,15 @@
                                     <th>Bussiness Line</th>
                                     <th>Department</th>
                                     <th>TotalRecord</th>
+                                    <th>DateCreated</th>
+                                     <th>Review Status</th>
                             </tr>
                         </thead>
+                      
                         <tbody>
 
                             @foreach (var history in (IEnumerable<CCPDemo.KeyRiskIndicatorHistorys.KeyRiskIndicatorHistory>)ViewData["KeyRiskIndicatorHistory"])
                              {
-                                    
                                          <tr>
                                             <td>
                                                 <button type="button" class="info-btn btn btn-outline-info">@Html.ActionLink("Review", "Index", "KeyRiskIndicators", new { ReferenceId = @history.ReferenceId }, null )</button
@@ -54,7 +55,17 @@
                                              <td>@history.BussinessLine</td>
                                              <td>@history.Department</td>
                                              <td>@history.TotalRecord</td>
-                                        </tr>
+                                            @if(history.DateCreated == null)
+                                            {
+                                             <td> @history.DateCreated</td>
+                                            }else{
+                                               <td> @history.DateCreated.Split(" ")[0]</td>
+                                            }
+
+                                            <td  style="@(history.ReviewStatus == "Edited" ? "color:#ff0000;" : history.ReviewStatus == "Not reviewed" ? "color:skyblue;" : "color:green;");"> @history.ReviewStatus</td>
+                                            
+
+                                     </tr>
                             }
 
                         </tbody>

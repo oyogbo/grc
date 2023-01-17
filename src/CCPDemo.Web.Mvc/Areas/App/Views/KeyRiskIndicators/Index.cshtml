@@ -71,12 +71,12 @@
                              <td>
                                 @if (obj.Status == "Approved")
                                 {
-                                 <button data-bs-toggle="modal" data="@obj.Id" data-bs-target="#exampleModal" type="button" class="btn btn-outline-info commentIdSetter" onclick="setId(@obj.Id)" disabled>Comments @*<div class="id-data" hidden>@obj.Id</div>*@</button>
                                  if (!Model.IsERM)
                                     {
-                                                                       <button data-toggle="modal" data-target="#approveModalLabel" type="button" class="btn btn-outline-primary" disabled>Edit</button>
+                                    <button data-toggle="modal" data-target="#approveModalLabel" type="button" class="btn btn-outline-primary" disabled>Edit</button>
   
                                     }
+                                 <button data-bs-toggle="modal" data="@obj.Id" data-bs-target="#exampleModal" type="button" class="btn btn-outline-info commentIdSetter" onclick="setId(@obj.Id)" disabled>Comments @*<div class="id-data" hidden>@obj.Id</div>*@</button>
                                  <button type="button" class="btn btn-outline-primary">@Html.ActionLink("View", "ViewKRIDetails", "KeyRiskIndicators", new { KRIToViewId = obj.Id }, null )</button>
 
                                 }

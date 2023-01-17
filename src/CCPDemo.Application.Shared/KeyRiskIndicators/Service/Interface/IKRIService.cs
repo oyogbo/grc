@@ -8,6 +8,8 @@ namespace CCPDemo.KeyRiskIndicators.Service.Interface
     public interface IKRIService
     {
         Task<bool> SendAddKRIEmailNotification();
-         Task<bool> ChangeKRIStatusEmailNotificationAsync(List<string> userEmail, string RefereceId, string status);
+        Task<bool> ChangeKRIStatusEmailNotificationAsync(List<string> userEmail, string RefereceId, string status);
+        Task<bool> RequestDepartmentRCSAEmailNotificationAsync(List<string> userEmail, string message);
+
     }
 }

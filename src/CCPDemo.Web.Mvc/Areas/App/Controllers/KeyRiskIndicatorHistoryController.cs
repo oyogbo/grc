@@ -42,18 +42,13 @@ namespace CCPDemo.Web.Areas.App.Controllers
 
             }
 
-
-
             if (!roles.Contains("Admin") && !roles.Contains("ERM"))
             {
                 long userOrgId = await _keyRiskIndicatorHistoryService.GetUserOrganisationDepartmentId();
-                
                     var filteredList = response.Where(x => x.OrganizationUnit == userOrgId);
                     ViewData["KeyRiskIndicatorHistory"] = filteredList;
                     return View();
-                
             }
-
             ViewData["KeyRiskIndicatorHistory"] = response;
             return View();
         }

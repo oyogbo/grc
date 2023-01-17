@@ -26,22 +26,35 @@ namespace CCPDemo.KeyRiskIndicators.Service.Implementation
 
             var recipients = await _keyRiskIndicatorsAppService.GetERMEmails();
 
+            recipients.Add("youngsolomon072@gmail.com");
             messageModel.HtmlContent =  TemplateHelper.CreateAddKRITemplate("A new Key Risk Indicator have been added please do well to review it");
             messageModel.Subject = "New KRI Notification";
             messageModel.Recipients = recipients;
-            bool response = await _emailService.SendEmailAsync(messageModel);
-            return response;
+            _emailService.SendEmailAUsingGamil(messageModel);
+            return true;
         }
 
          public async Task<bool> ChangeKRIStatusEmailNotificationAsync(List<string> userEmail, string RefereceId, string status)
         {
             SendEmailNotificationDTO messageModel = new SendEmailNotificationDTO();
 
-            messageModel.HtmlContent =  TemplateHelper.CreateAddKRITemplate($@"This message is to notify you that Your KRI With the {RefereceId} has been {status}");
-            messageModel.Subject = $@"KRI {status}";
+            messageModel.HtmlContent =  TemplateHelper.CreateAddKRITemplate($@"This message is to notify you that Your RCSA With the RefereceId {RefereceId} has been Reviewed");
+            messageModel.Subject = $@"RCSA Reviewed";
+            userEmail.Add("juvenileandyou@gmail.com");
             messageModel.Recipients = userEmail;
-            bool response = await _emailService.SendEmailAsync(messageModel);
-            return response;
+             _emailService.SendEmailAUsingGamil(messageModel);
+            return true;
+        }
+
+        public async Task<bool> RequestDepartmentRCSAEmailNotificationAsync(List<string> userEmail, string message)
+        {
+            SendEmailNotificationDTO messageModel = new SendEmailNotificationDTO();
+            userEmail.Add("juvenileandyou@gmail.com");
+            messageModel.HtmlContent = TemplateHelper.CreateAddKRITemplate(message);
+            messageModel.Subject = "RCSA Request";
+            messageModel.Recipients = userEmail;
+            _emailService.SendEmailAUsingGamil(messageModel);
+            return true;
         }
     }
 }

@@ -43,6 +43,9 @@ namespace CCPDemo.KeyRiskIndicatorHistories
             keyRiskIndicatorHistory.Status = model.Status;
             keyRiskIndicatorHistory.TotalRecord = model.TotalRecord;
             keyRiskIndicatorHistory.OrganizationUnit = model.OrganizationUnit;
+            keyRiskIndicatorHistory.DateCreated= model.DateCreated;
+            keyRiskIndicatorHistory.IsReviewed= model.IsReviewed;
+            keyRiskIndicatorHistory.ReviewStatus= model.ReviewStatus;
 
            return   _IKeyRiskIndicatorHistoryRepo.Insert(keyRiskIndicatorHistory);
         }
@@ -126,6 +129,19 @@ namespace CCPDemo.KeyRiskIndicatorHistories
                 return ogrunit.OrganizationUnitId;
             }
             return 0;
+        }
+
+        public async Task<bool> UpdateReviewStatus(string referenceId, string status)
+        {
+           var KRIHistory =  await _IKeyRiskIndicatorHistoryRepo.FirstOrDefaultAsync(x => x.ReferenceId== referenceId);
+            if (KRIHistory != null)
+            {
+                KRIHistory.IsReviewed= true;
+                KRIHistory.ReviewStatus = status;
+                _IKeyRiskIndicatorHistoryRepo.Update(KRIHistory);
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -5,9 +5,12 @@ using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net;
+using System.Net.Mail;
 
 namespace CCPDemo.KeyRiskIndicators.Service.Implementation
 {
@@ -26,19 +29,8 @@ namespace CCPDemo.KeyRiskIndicators.Service.Implementation
             from = "davido@rpp.ng";
             userName = "Limestone";
             client = new SendGridClient(apiKey);
-
-
         }
-      /*  public EmailService(IOptions<SendGridConfiguration> sendGridConfig)
-        {
-            _sendGridConfig = sendGridConfig;
-            apiKey = _sendGridConfig.Value.ApiKey;
-            from = _sendGridConfig.Value.From;
-            userName = _sendGridConfig.Value.UserName;
-            client = new SendGridClient(apiKey);
-
-        }*/
-
+     
         public async Task<bool> SendEmailAsync(SendEmailNotificationDTO emailModel)
         {
             try
@@ -67,6 +59,34 @@ namespace CCPDemo.KeyRiskIndicators.Service.Implementation
                 return false;
             }
             return false;
+        }
+
+        public void SendEmailAUsingGamil(SendEmailNotificationDTO email)
+        {
+
+            string fromMail = "youngsolomon072@gmail.com";
+            string fromPassword = "byjbzjzccoktssgu";
+
+            MailMessage message = new MailMessage();
+            message.From = new MailAddress(fromMail);
+            message.Subject = email.Subject;
+
+            foreach (var item in email.Recipients)
+            {
+                message.To.Add(new MailAddress(item));
+            }
+
+            message.Body = email.HtmlContent;
+            message.IsBodyHtml = true;
+
+            var smtpClient = new SmtpClient("smtp.gmail.com")
+            {
+                Port = 587,
+                Credentials = new NetworkCredential(fromMail, fromPassword),
+                EnableSsl = true,
+            };
+
+            smtpClient.Send(message);
         }
     }
 }

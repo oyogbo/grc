@@ -6,7 +6,7 @@
 @{
    // ViewBag.CurrentPageName = AppPageNames.Common.KeyRiskIndicators;
    
-}
+
 <div style="width:95%; height:700px; overflow:auto;  margin: 0 auto; margin-bottom:100px; background-color:#fff; padding:20px;">
 
     <form class="row g-3" method="post" asp-controller="KeyRiskIndicators" asp-action="EditKRI" enctype="multipart/form-data" method="post">
@@ -52,8 +52,21 @@
         <div class="col-md-6">
             <label for="IsControlInUse" class="form-label">Is Control In Use</label>
              <br />
-            <input type="radio" id="IsControlInUse" class="form-check-input" name="IsControlInUse" value="1">Yes
-            <input type="radio" id="IsControlInUse" class="form-check-input" name="IsControlInUse" value="2">No
+
+             @if (Model.IsControlInUse)
+                {
+                    <div >
+                        <input type="radio" id="IsControlInUse" class="form-check-input" name="IsControlInUse" checked value="1">Yes
+                        <input type="radio" id="IsControlInUse" class="form-check-input" name="IsControlInUse" value="2">No
+                    </div>
+                }
+                else
+                {
+                    <div>
+                        <input type="radio" id="IsControlInUse" class="form-check-input" name="IsControlInUse" value="1">Yes
+                        <input type="radio" id="IsControlInUse" class="form-check-input" name="IsControlInUse" checked value="2">No
+                    </div>
+                }
         </div>
 
         <div class="col-6">
@@ -83,7 +96,7 @@
 <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
 <div id="loading" style="display:none"; class="loading">Loading&#8230;</div>
-
+}
 
  @section scripts {
 

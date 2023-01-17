@@ -4,11 +4,27 @@
 @using CCPDemo.Web.Areas.App.Models.KeyRiskIndicators
 @using CCPDemo.Web.Areas.App.Startup
 @model ErrorView 
-@{
-   
 
-}
-<div style="width:95%; height:700px; overflow:auto;  margin: 0 auto; margin-bottom:100px; background-color:#fff; padding:20px;">
-     <div>@Model.Message</div>
-    @Html.ActionLink("Go Back", Model.BackAction, Model.BackController)
- </div>
+
+
+<div class="content d-flex flex-column flex-column-fluid">
+
+    <div class="@(await GetContainerClass())">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                  <div style="width:95%; height:300px; overflow:auto;  margin: 0 auto; margin-bottom:100px; background-color:#fff; padding:20px;">
+                   <div style="width:fit-content; margin: 0 auto;">
+                        <div>
+                            <div style="margin: 0 auto; width:fit-content;"> <span class="flaticon2-warning" style="color:#E8A84C; font-size:110px;"></span></div>
+                        </div>
+                        <div style="font-size:xx-large;">@Model.Message</div>
+                        <div class="mt-4" style="text-align:center; font-size:larger;">
+                            @Html.ActionLink("Go Back", Model.BackAction, Model.BackController)
+                        </div>
+                   </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+

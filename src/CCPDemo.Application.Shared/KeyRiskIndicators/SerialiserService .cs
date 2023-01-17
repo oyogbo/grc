@@ -47,7 +47,7 @@ namespace CCPDemo.KeyRiskIndicators
                     rCSAModel.LikelihoodOfOccurance_irr = rowToList[5];
                     rCSAModel.LikelihoodOfImpact_irr = rowToList[6];
                     rCSAModel.KeyControl = rowToList[7];
-                    rCSAModel.IsControlInUse = rowToList[8] == "Yes" ? true : false;
+                    rCSAModel.IsControlInUse = rowToList[8] == "Yes" ? true : false; 
                     rCSAModel.ControlOfEffectiveness = rowToList[9];
                     rCSAModel.LikelihoodOfOccurance_rrr = rowToList[10];
                     rCSAModel.LikelihoodOfImpact_rrr = rowToList[11];

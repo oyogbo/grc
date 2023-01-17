@@ -10,6 +10,8 @@ using CCPDemo.Authorization.Users;
 using CCPDemo.MultiTenancy;
 using System.Collections.Generic;
 using System.Linq;
+using Abp.Organizations;
+using System.Linq.Dynamic.Core;
 
 namespace CCPDemo
 {

@@ -1,6 +1,7 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.AspNetCore.Mvc.Authorization;
 using Abp.Domain.Repositories;
+using Abp.Organizations;
 using Abp.UI;
 using Abp.Web.Models;
 using AutoMapper;
@@ -16,17 +17,20 @@ using CCPDemo.Web.Areas.App.Models.UploadKeyRiskIndicators;
 using CCPDemo.Web.Controllers;
 using CsvHelper;
 using GraphQL.NewtonsoftJson;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Org.BouncyCastle.Crypto.Digests;
+using PayPalCheckoutSdk.Orders;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 
@@ -43,6 +47,8 @@ namespace CCPDemo.Web.Areas.App.Controllers
         private IHostEnvironment Environment;
         private IConfiguration Configuration;
         private readonly IRepository<Role> _roleRepository;
+        private readonly IRepository<OrganizationUnit, long> _organizationUnitRepository;
+
 
         private IMapper _mapper;
 
@@ -58,6 +64,7 @@ namespace CCPDemo.Web.Areas.App.Controllers
                                            IKRIService kRIService,
                                             IRepository<Role> roleRepository,
                                            IRepository<KeyRiskIndicator> keyRiskIndicatorRepository,
+                                           IRepository<OrganizationUnit, long> organizationUnitRepository,
                                            IConfiguration _configuration)
         {
             _keyRiskIndicatorsAppService = keyRiskIndicatorsAppService;
@@ -68,7 +75,8 @@ namespace CCPDemo.Web.Areas.App.Controllers
             _mapper = mapper;
             _keyRiskIndicatorHistoryService = keyRiskIndicatorHistoryService;
             _keyRiskIndicatorRepository = keyRiskIndicatorRepository;
-            _roleRepository= roleRepository;    
+            _roleRepository= roleRepository;   
+            _organizationUnitRepository= organizationUnitRepository;    
         }
 
         public async Task<ActionResult> Index(string ReferenceId)
@@ -245,11 +253,22 @@ namespace CCPDemo.Web.Areas.App.Controllers
             }
             var response = await _serialiserService.ReadFileAsync(filePath);
 
-            string ReferenceId = "COR/HRM/" + DateTime.Now.Year.ToString() + Guid.NewGuid().ToString().Substring(0, 4);
 
+            string ReferenceId = "COR/HRM/" + DateTime.Now.Year.ToString() + Guid.NewGuid().ToString().Substring(0, 4);
             foreach (var item in response)
             {
                 CreateOrEditKeyRiskIndicatorDto dataToAdd = new CreateOrEditKeyRiskIndicatorDto();
+
+                bool isValid = validateKRI(item);
+                if (!isValid)
+                {
+                    ErrorView errorView = new ErrorView();
+                    errorView.Message = "upload failed because some required feilds are null or empty";
+                    errorView.BackController = "UploadKeyRiskIndicator";
+                    errorView.BackAction = "Index";
+                    return RedirectToAction("Index", "Error", errorView, fragment: null);
+                }
+
 
                 dataToAdd.ReferenceId = ReferenceId;
                 dataToAdd.Status = "Not Approved";
@@ -279,12 +298,23 @@ namespace CCPDemo.Web.Areas.App.Controllers
             historyToAdd.TotalRecord = response.Count().ToString();
             historyToAdd.Department = ReferenceId.Substring(0, 7);
             historyToAdd.ReferenceId = ReferenceId;
-            historyToAdd.OrganizationUnit = addUploadKRI.OrganizationUnit;
+            historyToAdd.OrganizationUnit = orgIg;
+            historyToAdd.IsReviewed = false;
+            historyToAdd.ReviewStatus = "Not reviewed";
+            historyToAdd.DateCreated = DateTime.Today.ToString();
+
+            
 
             var resx = _keyRiskIndicatorHistoryService.AddKeyIndicatorHistory(historyToAdd);
 
             return RedirectToAction("Index", "KeyRiskIndicatorHistory");
         }
+
+
+
+
+
+
 
         public class CsvUploadModel
         {
@@ -333,9 +363,10 @@ namespace CCPDemo.Web.Areas.App.Controllers
             {
                 var KRI = _keyRiskIndicatorRepository.Get(newId[0]);
                 var uploaderEmail = await _keyRiskIndicatorHistoryService.GetKRIUploaderEmail(KRI.ReferenceId);
-                List<string> listToReturn = new List<string>();
-                listToReturn.Add(uploaderEmail);
-                _kRIService.ChangeKRIStatusEmailNotificationAsync(listToReturn, KRI.ReferenceId, KRI.Status);
+                var updateResponse = await _keyRiskIndicatorHistoryService.UpdateReviewStatus(KRI.ReferenceId, "reviewed");
+                List<string> emailList = new List<string>();
+                emailList.Add(uploaderEmail);
+                _kRIService.ChangeKRIStatusEmailNotificationAsync(emailList, KRI.ReferenceId, KRI.Status);
             }
             return false;
         }
@@ -344,31 +375,41 @@ namespace CCPDemo.Web.Areas.App.Controllers
         [HttpPost()]
         public IActionResult EditKRI(EditKRI model)
         {
-            KeyRiskIndicator dataToInsert = _keyRiskIndicatorRepository.Get(model.Id);
 
-            if (dataToInsert != null)
+            try
             {
-                dataToInsert.Activity = model.Activity;
-                dataToInsert.MitigationPlan = model.MitigationPlan;
-                dataToInsert.PotentialRisk = model.PotentialRisk;
-                dataToInsert.LikelihoodOfOccurrence_rrr = model.LikelihoodOfOccurrence_rrr;
-                dataToInsert.LikelihoodOfOccurrence_irr = model.LikelihoodOfOccurrence_irr;
-                dataToInsert.LikelihoodOfImpact_irr = model.LikelihoodOfImpact_irr;
-                dataToInsert.LikelihoodOfImpact_rrr =   model.LikelihoodOfImpact_rrr;
-                dataToInsert.ControlEffectiveness = model.ControlEffectiveness;
-                dataToInsert.KeyControl = model.KeyControl;
-                dataToInsert.SubProcess = model.SubProcess;
-                dataToInsert.Process = model.Process;
-                dataToInsert.IsControlInUse = model.IsControlInUse; 
+                KeyRiskIndicator dataToInsert = _keyRiskIndicatorRepository.Get(model.Id);
+
+                if (dataToInsert != null)
+                {
+                    dataToInsert.Activity = model.Activity;
+                    dataToInsert.MitigationPlan = model.MitigationPlan;
+                    dataToInsert.PotentialRisk = model.PotentialRisk;
+                    dataToInsert.LikelihoodOfOccurrence_rrr = model.LikelihoodOfOccurrence_rrr;
+                    dataToInsert.LikelihoodOfOccurrence_irr = model.LikelihoodOfOccurrence_irr;
+                    dataToInsert.LikelihoodOfImpact_irr = model.LikelihoodOfImpact_irr;
+                    dataToInsert.LikelihoodOfImpact_rrr = model.LikelihoodOfImpact_rrr;
+                    dataToInsert.ControlEffectiveness = model.ControlEffectiveness;
+                    dataToInsert.KeyControl = model.KeyControl;
+                    dataToInsert.SubProcess = model.SubProcess;
+                    dataToInsert.Process = model.Process;
+                    dataToInsert.IsControlInUse = model.IsControlInUse;
+                }
+                var updateResponse =  _keyRiskIndicatorHistoryService.UpdateReviewStatus(dataToInsert.ReferenceId, "Edited").Result;
+                _keyRiskIndicatorRepository.Update(dataToInsert);
             }
-            _keyRiskIndicatorRepository.Update(dataToInsert);
+            catch (Exception ex)
+            {
+
+                throw;
+            }
             return RedirectToAction("ViewKRIDetails", "KeyRiskIndicators", new { KRIToViewId = model.Id }, fragment: null);
         }
 
         public IActionResult ViewKRI(int KRIToViewId)
         {
            var kriToView =  _keyRiskIndicatorRepository.Get(KRIToViewId);
-
+            ViewBag.ContollerInUse = kriToView.IsControlInUse == true ? true: false;
             return View(kriToView);
         }
 
@@ -388,11 +429,31 @@ namespace CCPDemo.Web.Areas.App.Controllers
 
         }
 
-        public async Task<IActionResult> EditKRI(int Id)
+      /*  public async Task<IActionResult> EditKRI(int Id)
         {
             bool response = await _keyRiskIndicatorsAppService.DeclineKRI(Id);
             return RedirectToAction("Index", "Comment");
 
+        }*/
+
+        private bool validateKRI(RCSAModel dataToCheck)
+        {
+            if (string.IsNullOrEmpty(dataToCheck.Activity)||
+                string.IsNullOrEmpty(dataToCheck.BussinessLines) ||
+                string.IsNullOrEmpty(dataToCheck.ControlOfEffectiveness) || 
+                string.IsNullOrEmpty(dataToCheck.LikelihoodOfOccurance_irr) ||
+                string.IsNullOrEmpty(dataToCheck.LikelihoodOfOccurance_rrr) ||
+                string.IsNullOrEmpty(dataToCheck.LikelihoodOfImpact_irr) ||
+                string.IsNullOrEmpty(dataToCheck.LikelihoodOfImpact_rrr) ||
+                string.IsNullOrEmpty(dataToCheck.PotentailRisk) ||
+                string.IsNullOrEmpty (dataToCheck.SubProcess) ||
+                string.IsNullOrEmpty(dataToCheck.KeyControl) ||
+                string.IsNullOrEmpty(dataToCheck.Proccess))
+            {
+                return false;
+            }
+
+            return true;
         }
 
     }

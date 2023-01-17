@@ -8,6 +8,7 @@
             public const string RiskStatus = "Administration.RiskStatuses.RiskStatus";
             public const string RiskRatings = "Administration.RiskRatings.RiskRatings";
             public const string UploadKeyRiskIndicator = "UploadKeyRiskIndicator";
+            public const string RequestDepartmentRCSA = "RequestDepartmentRCSA";
             public const string KeyRiskIndicatorHistory = "KeyRiskIndicatorHistory";
             public const string KeyRiskIndicatorManagement = "KeyRiskIndicatorManagement";
             public const string UsersLookups = "UsersLookups.UsersLookups";
