@@ -55,6 +55,39 @@ namespace CCPDemo.Web.Areas.App.Startup
                         icon: "flaticon2-indent-dots",
                         permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Risks)
                     )
+                ).AddItem(new MenuItemDefinition(
+                        AppPageNames.Common.Reports,
+                        L("Reports"),
+                        icon: "flaticon-diagram"
+                    ).AddItem(new MenuItemDefinition(
+                        AppPageNames.Common.OverdueRisks,
+                        L("OverdueRisks"),
+                        url: "App/Reports/OverdueRisks",
+                        icon: "flaticon2-delivery-package",
+                        permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Risks)
+                    )
+                ).AddItem(new MenuItemDefinition(
+                        AppPageNames.Common.OnGoingRisks,
+                        L("OnGoingRisks"),
+                        url: "App/Reports/OnGoingRisks",
+                        icon: "flaticon2-layers",
+                        permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Risks)
+                    )
+                ).AddItem(new MenuItemDefinition(
+                        AppPageNames.Common.ClosedRisks,
+                        L("ClosedRisks"),
+                        url: "App/Reports/ClosedRisks",
+                        icon: "flaticon2-shrink",
+                        permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Risks)
+                    )
+                ).AddItem(new MenuItemDefinition(
+                        AppPageNames.Common.FilteredRisks,
+                        L("FilteredRisks"),
+                        url: "App/Reports/FilteredRisks",
+                        icon: "flaticon2-magnifier-tool",
+                        permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Risks)
+                    )
+                )
                 )
 
                  ).AddItem(new MenuItemDefinition(

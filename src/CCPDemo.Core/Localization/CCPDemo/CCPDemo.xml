@@ -1,6 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <localizationDictionary culture="en">
   <texts>    <text name="Summary">Summary</text>
+    <text name="Reports">Reports</text>
+    <text name="OverdueRisks">Overdue Risks</text>
+    <text name="OnGoingRisks">Ongoing Risks</text>
+    <text name="ClosedRisks">Closed Risks</text>
+    <text name="FilteredRisks">Risk Rating/Department</text>
     <text name="ERMRecommendation">E r m recommendation</text>
     <text name="StatusName">Status name</text>
     <text name="PickStatus">Pick status</text>
@@ -499,12 +504,12 @@
     <text name="Send">Send</text>
     <text name="PasswordReset">Password reset</text>
     <text name="InvalidUserNameOrEmailAddress">Invalid user name or email address</text>
-    <text name="PasswordResetEmail_Subject">CCPDemo password reset</text>
-    <text name="PasswordResetEmail_Title">CCPDemo password reset.</text>
+    <text name="PasswordResetEmail_Subject">CSCS | GRC password reset</text>
+    <text name="PasswordResetEmail_Title">CSCS | GRC password reset.</text>
     <text name="PasswordResetEmail_SubTitle">This email is sent you to reset and re-create your password.</text>
     <text name="PasswordResetEmail_ClickTheLinkBelowToResetYourPassword">Please click the link below to reset your password:</text>
-    <text name="EmailActivation_Subject">CCPDemo account email activation</text>
-    <text name="EmailActivation_Title">Welcome to CCPDemo.</text>
+    <text name="EmailActivation_Subject">CSCS | GRC account email activation</text>
+    <text name="EmailActivation_Title">Welcome to CSCS | GRC.</text>
     <text name="EmailActivation_SubTitle">This email is sent you to verify your email.</text>
     <text name="EmailActivation_ClickTheLinkBelowToVerifyYourEmail">Please click the link below to verify your email address:</text>
     <text name="InvalidEmailAddress">Invalid email address</text>
@@ -723,7 +728,7 @@
     <text name="SuccessfullyUnlinked">Successfully unlinked</text>
     <text name="LinkedUserDeleteWarningMessage">Link to user {0} will be deleted.</text>
     <text name="SwitchToLinkedAccountTokenErrorMessage">Impersonation token is invalid or expired!</text>
-    <text name="WelcomeToTheApplicationNotificationMessage">Welcome to CCPDemo! Notification system is used to inform you for intended events. You can select which type of notifications you want to receive from the notification settings.</text>
+    <text name="WelcomeToTheApplicationNotificationMessage">Welcome to CSCS | GRC! Notification system is used to inform you for intended events. You can select which type of notifications you want to receive from the notification settings.</text>
     <text name="NewUserRegisteredNotificationDefinition">On a new user registered to the application.</text>
     <text name="NewUserRegisteredNotificationMessage">A new user registered to the application. User name: {userName}, Email address: {emailAddress}.</text>
     <text name="SeeAllNotifications">See all notifications</text>
@@ -749,7 +754,7 @@
     <text name="CachesHeaderInfo">You can clear caches in application on this page.</text>
     <text name="TestEmailSettingsHeader">Test Email Settings</text>
     <text name="SendTestEmail">Send Test Email</text>
-    <text name="TestEmail_Subject">CCPDemo test email</text>
+    <text name="TestEmail_Subject">CSCS | GRC test email</text>
     <text name="TestEmail_Body">This is a test email.</text>
     <text name="TestEmailSentSuccessfully">Test e-mail sent successfully.</text>
     <text name="WebSiteLogs">Website Logs</text>
@@ -992,8 +997,8 @@
     <text name="IsInTrialPeriod">Is in trial period?</text>
     <text name="FailedSubscriptionTerminations_Email_Subject">Failed Subscription Terminations</text>
     <text name="FailedSubscriptionTerminations_Email_Body">Subscription termination is failed for following tenants {0} at {1}. You can find detailed error messages in system logs.</text>
-    <text name="SubscriptionExpire_Email_Subject">Your CCPDemo subscription is expired</text>
-    <text name="SubscriptionExpire_Email_Body">Your CCPDemo subscription is expired at {0}.</text>
+    <text name="SubscriptionExpire_Email_Subject">Your CSCS | GRC subscription is expired</text>
+    <text name="SubscriptionExpire_Email_Body">Your CSCS | GRC subscription is expired at {0}.</text>
     <text name="UnlimitedTimeSubscription">Unlimited time subscription</text>
     <text name="SubscriptionEndDateUtc">Subscription end date (Utc)</text>
     <text name="ExpiringEditionMustBeAFreeEdition">Expiring edition must be a free edition</text>

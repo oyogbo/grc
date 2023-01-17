@@ -12,6 +12,7 @@ using CCPDemo.Configuration;
 using CCPDemo.EntityFrameworkCore;
 using CCPDemo.MultiTenancy;
 using CCPDemo.Web.Areas.App.Startup;
+using CCPDemo.Web.Areas.App;
 
 namespace CCPDemo.Web.Startup
 {
@@ -34,6 +35,7 @@ namespace CCPDemo.Web.Startup
             Configuration.Navigation.Providers.Add<AppNavigationProvider>();
             
             IocManager.Register<DashboardViewConfiguration>();
+            //IocManager.Register(typeof(CustomWebDocumentViewerController), DependencyLifeStyle.Transient);
         }
 
         public override void Initialize()

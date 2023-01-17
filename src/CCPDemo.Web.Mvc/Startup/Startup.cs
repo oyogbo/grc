@@ -25,7 +25,6 @@ using CCPDemo.Schemas;
 using CCPDemo.Web.Chat.SignalR;
 using CCPDemo.Web.Common;
 using CCPDemo.Web.Resources;
-using Swashbuckle.AspNetCore.Swagger;
 using CCPDemo.Web.IdentityServer;
 using CCPDemo.Web.Swagger;
 using Stripe;
@@ -34,16 +33,9 @@ using Abp.AspNetCore.Configuration;
 using Abp.AspNetCore.Mvc.Antiforgery;
 using Abp.AspNetCore.Mvc.Caching;
 using Abp.AspNetCore.Mvc.Extensions;
-using Abp.IdentityServer4vNext;
-using HealthChecks.UI;
 using HealthChecks.UI.Client;
-using IdentityServer4.AspNetIdentity;
 using IdentityServer4.Configuration;
-using IdentityServer4.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
@@ -51,15 +43,14 @@ using CCPDemo.Web.HealthCheck;
 using Owl.reCAPTCHA;
 using HealthChecksUISettings = HealthChecks.UI.Configuration.Settings;
 using Microsoft.AspNetCore.Server.Kestrel.Https;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using CCPDemo.Web.Extensions;
 using SecurityStampValidatorCallback = CCPDemo.Identity.SecurityStampValidatorCallback;
-using AutoMapper;
 using CCPDemo.KeyRiskIndicators.Service.Interface;
 using CCPDemo.KeyRiskIndicatorHistories;
 using CCPDemo.KeyRiskIndicators;
 using CCPDemo.KeyRiskIndicators.Service.Implementation;
 using CCPDemo.KRIComents;
+//using DevExpress.AspNetCore;
 
 namespace CCPDemo.Web.Startup
 {
@@ -147,7 +138,10 @@ namespace CCPDemo.Web.Startup
             services.AddScoped<IKeyRiskIndicatorHistoryRepo, KeyRiskIndicatorHistoryRepo>();
             services.AddScoped<IKeyRiskIndicatorService, KeyRiskIndicatorHistoryAppService>();
             services.AddScoped<IKRICommentRepo, KRICommentRepo>();
-           
+
+            //Devexpress Report
+            //services.AddDevExpressControls();
+
 
 
             if (WebConsts.GraphQL.Enabled)
@@ -228,6 +222,9 @@ namespace CCPDemo.Web.Startup
             app.UseRouting();
 
             app.UseAuthentication();
+
+            // DevExpress Report
+            //app.UseDevExpressControls();
 
             if (bool.Parse(_appConfiguration["Authentication:JwtBearer:IsEnabled"]))
             {
