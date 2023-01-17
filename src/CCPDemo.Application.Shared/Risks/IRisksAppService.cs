@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Collections.Generic;
 using System.Collections.Generic;
 using CCPDemo.RiskTransactions.Dtos;
+using CCPDemo.RiskRatings.Dtos;
 
 namespace CCPDemo.Risks
 {
@@ -38,6 +39,10 @@ namespace CCPDemo.Risks
         Task<List<RiskRiskRatingLookupTableDto>> GetAllRiskRatingForTableDropdown();
 
         Task<List<RiskUserLookupTableDto>> GetAllUserForTableDropdown();
+        Task<PagedResultDto<GetRiskForViewDto>> ClosedRisks(GetAllRisksInput input);
+        Task<PagedResultDto<GetRiskForViewDto>> OnGoingRisks(GetAllRisksInput input);
+        Task<PagedResultDto<GetRiskForViewDto>> FilteredRisks(GetAllRisksInput input);
+        Task<PagedResultDto<GetRiskForViewDto>> OverDueRisks(GetAllRisksInput input);
 
     }
 }

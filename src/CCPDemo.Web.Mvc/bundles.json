@@ -495,9 +495,28 @@
         "node_modules/easy-pie-chart/dist/jquery.easypiechart.js",
         "node_modules/chartist/dist/chartist.js"
       ]
+    },
+    {
+      "output": "view-resources/Areas/App/Views/_Bundles/sample-report-min.js",
+      "input": [
+        "node_modules/knockout/build/output/knockout-latest.js",
+        "node_modules/devextreme/dist/js/dx.all.js",
+        "node_modules/@devexpress/analytics-core/dist/js/dx-analytics-core.js",
+        "node_modules/devexpress-reporting/dist/js/dx-webdocumentviewer.js"
+      ]
     }
   ],
   "styles": [
+    {
+      "output": "/view-resources/Areas/App/Views/_Bundles/sample-report.min.css",
+      "input": [
+        "node_modules/devextreme/dist/css/dx.common.css",
+        "node_modules/devextreme/dist/css/dx.light.css",
+        "node_modules/@devexpress/analytics-core/dist/css/dx-analytics.common.css",
+        "node_modules/@devexpress/analytics-core/dist/css/dx-analytics.light.css",
+        "node_modules/devexpress-reporting/dist/css/dx-webdocumentviewer.css"
+      ]
+    },
     {
       "output": "view-resources/Areas/App/Views/_Bundles/customizable-dashboard-libs.min.css",
       "input": [

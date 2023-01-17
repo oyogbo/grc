@@ -12,7 +12,7 @@
       $('#Risk_TargetDate').blur();
 
       console.log('Raise New Risk');
-      var loggedInUserIsErm;
+      var loggedInUserIsErm = false;
 
       _risksService
           .isERM()
@@ -25,6 +25,25 @@
                   $('#riskRatingId').attr("disabled", true);
                   $('#userId').attr("disabled", true);
                   $('#organizationUnitId').attr("disabled", true);
+
+                  $(".save-button").prop("disabled", true);
+
+                  $("#Risk_ActionPlan, #Risk_RiskOwnerComment").keyup(function (e) {
+
+                      var alltxt = $("#Risk_ActionPlan, #Risk_RiskOwnerComment").length;
+                      var empty = true;
+                      $("#Risk_ActionPlan, #Risk_RiskOwnerComment").each(function (i) {
+                          if ($(this).val() == '' || $(this).val().length < 3) {
+                              empty = true;
+                              $(".save-button").prop("disabled", true);
+                              return false;
+                          }
+                          else {
+                              empty = false;
+                          }
+                      });
+                      if (!empty) $(".save-button").prop("disabled", false);
+                  });
               }
           });
 
@@ -244,36 +263,6 @@
               });
       });
 
-      if (!loggedInUserIsErm) {
-          $(".save-button").prop("disabled", true);
-          //if ($('#Risk_ActionPlan').val() == '') {
-          //    abp.message.error(app.localize('{0}IsRequired', app.localize('ActionPlan')));
-          //    return;
-          //}
-          //if ($('#Risk_RiskOwnerComment').val() == '') {
-          //    abp.message.error(app.localize('{0}IsRequired', app.localize('RiskOwnerComment')));
-          //    return;
-          //}
-
-          $("#Risk_ActionPlan, #Risk_RiskOwnerComment").keyup(function (e) {
-
-              var alltxt = $("#Risk_ActionPlan, #Risk_RiskOwnerComment").length;
-              var empty = true;
-              $("#Risk_ActionPlan, #Risk_RiskOwnerComment").each(function (i) {
-                  if ($(this).val() == '' || $(this).val().length < 3) {
-                      empty = true;
-                      //$('#checkout').prop('disabled', true);
-                      $(".save-button").prop("disabled", true);
-                      return false;
-                  }
-                  else {
-                      empty = false;
-                  }
-              });
-              if (!empty) $(".save-button").prop("disabled", false);
-          });
-
-      }
 
       // Enable/Disable Save Button based on Risk Owner's Input
       
@@ -331,11 +320,65 @@
 
         console.log(risk)
 
+        var userInfo;
+
+        $('#userId').change(function () {
+            userInfo = $(this).text();
+        });
+
       _modalManager.setBusy(true);
       _risksService
         .createOrEdit(risk)
         .done(function () {
-          abp.notify.info(app.localize('SavedSuccessfully'));
+            abp.notify.info(app.localize('SavedSuccessfully'));
+            
+
+            _risksService
+                .isERM()
+                .done(function (data) {
+                    var isERM = data;
+                    if (isERM) {
+
+                        var userInfo = $("#userId option:selected").text();
+                        console.log('UserInfo')
+                        console.log(userInfo)
+                        const regExp = /\(([^)]+)\)/g;
+                        const matches = userInfo.match(regExp).toString();
+                        const userEmail = matches.replace('(', '').replace(')', '');
+                        console.log('Email To');
+                        console.log(userEmail);
+
+                        _risksService
+                            .sendRiskEmail({
+                                emailAddress: userEmail,
+                                subject: "A New Risk From ERM | GRC Portal",
+                                body: "A new Risk has been raised your behalf. Please, login to the GRC portal for details!"
+                            })
+                            .done(function () {
+                                abp.notify.info("Email Sent Successfully!");
+                            });
+                    } else {
+
+                        var id = $('#riskId').val();
+
+                        _risksService
+                            .getERMEmail(id)
+                            .done(function (data) {
+                                var erMEmail = data;
+                                console.log('Email From Server');
+                                console.log(erMEmail)
+                                _risksService
+                                    .sendRiskEmail({
+                                        emailAddress: erMEmail,
+                                        subject: "Email from Risk Ownr",
+                                        body: "A Risk Owner has responded to a risk. Please, login to the portal to confirm!"
+                                    })
+                                    .done(function () {
+                                        abp.notify.info("Email Sent Successfully!");
+                                    });
+                            });
+                    }
+                });
           _modalManager.close();
           abp.event.trigger('app.createOrEditRiskModalSaved');
         })

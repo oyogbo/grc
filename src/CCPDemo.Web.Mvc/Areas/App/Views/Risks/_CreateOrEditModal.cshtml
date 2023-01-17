@@ -226,6 +226,10 @@
             }
             else
             {
+                <input id="Risk_TargetDate" type="hidden" name="targetDate" value="@strDate" />
+                <input id="Risk_ActionPlan" type="hidden" name="actionPlan" value="@Model.Risk.ActionPlan" />
+                <input id="Risk_RiskOwnerComment" type="hidden" name="riskOwnerComment" value="@Model.Risk.RiskOwnerComment" />
+
                 if (Model.IsEditMode && Model.isERM && Model.Risk.AcceptanceDate != null)
                 {
                     <div class="my-3">
