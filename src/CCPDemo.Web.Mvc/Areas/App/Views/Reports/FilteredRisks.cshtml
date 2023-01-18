@@ -66,7 +66,12 @@
                     <div id="AdvacedAuditFiltersArea" style="display: none" class="row mb-4">
                         <div class="col-xl-6">
                             <div class="mb-5">                                  
-                                @Html.DropDownList("RiskTypeNameFilterId", new SelectList(Model.RiskTypeList,"Id","DisplayName", ""),"Filter By Risk Type", new { @class = "form-control"})
+                                @Html.DropDownList("riskTypeNameFilter", new SelectList(Model.RiskTypeList,"Id","DisplayName", ""),"Filter By Risk Type", new { @class = "form-control", id = "RiskTypeNameFilterId"})
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="mb-5">                                  
+                                @Html.DropDownList("organizationUnitDisplayNameFilter", new SelectList(Model.RiskOrganizationUnitList,"Id","DisplayName", ""),"Filter By Organizational Unit", new { @class = "form-control", id = "OrganizationUnitDisplayNameFilterId"})
                             </div>
                         </div>
                         

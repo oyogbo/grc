@@ -102,7 +102,7 @@
                         //maxAcceptanceDateFilter: getMaxDateFilter($('#MaxAcceptanceDateFilterId')),
                         //riskAcceptedFilter: $('#RiskAcceptedFilterId').val(),
                         riskTypeNameFilter: $('#RiskTypeNameFilterId option:selected').val(),
-                        //organizationUnitDisplayNameFilter: $('#OrganizationUnitDisplayNameFilterId').val(),
+                        organizationUnitDisplayNameFilter: $('#OrganizationUnitDisplayNameFilterId option:selected').val(),
                         //statusNameFilter: $('#StatusNameFilterId').val(),
                         //riskRatingNameFilter: $('#RiskRatingNameFilterId').val(),
                         //userNameFilter: $('#UserNameFilterId').val(),
