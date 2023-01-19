@@ -38,6 +38,7 @@ using CCPDemo.Configuration.Host.Dto;
 using System.Text;
 using CCPDemo.Net.Emailing;
 using CCPDemo.RiskRatings.Dtos;
+using CCPDemo.RiskStatuses.Dtos;
 
 namespace CCPDemo.Risks
 {
@@ -271,6 +272,93 @@ namespace CCPDemo.Risks
                 results
             );
 
+        }
+
+        public async Task<List<GetRiskForViewDto>> GetRisks()
+        {
+            var risks1 = _riskRepository.GetAll()
+                        .Include(e => e.RiskTypeFk)
+                        .Include(e => e.OrganizationUnitFk)
+                        .Include(e => e.StatusFk)
+                        .Include(e => e.RiskRatingFk)
+                        .Include(e => e.UserFk);
+
+
+            var risks = from o in risks1
+                        join o1 in _lookup_riskTypeRepository.GetAll() on o.RiskTypeId equals o1.Id into j1
+                        from s1 in j1.DefaultIfEmpty()
+
+                        join o2 in _lookup_organizationUnitRepository.GetAll() on o.OrganizationUnitId equals o2.Id into j2
+                        from s2 in j2.DefaultIfEmpty()
+
+                        join o3 in _lookup_statusRepository.GetAll() on o.StatusId equals o3.Id into j3
+                        from s3 in j3.DefaultIfEmpty()
+
+                        join o4 in _lookup_riskRatingRepository.GetAll() on o.RiskRatingId equals o4.Id into j4
+                        from s4 in j4.DefaultIfEmpty()
+
+                        join o5 in _lookup_userRepository.GetAll() on o.UserId equals o5.Id into j5
+                        from s5 in j5.DefaultIfEmpty()
+
+                        select new
+                        {
+
+                            o.Summary,
+                            o.ExistingControl,
+                            o.ERMRecommendation,
+                            o.ActionPlan,
+                            o.RiskOwnerComment,
+                            o.TargetDate,
+                            o.ActualClosureDate,
+                            o.AcceptanceDate,
+                            o.RiskAccepted,
+                            Id = o.Id,
+                            o.UserId,
+                            RiskTypeName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
+                            OrganizationUnitDisplayName = s2 == null || s2.DisplayName == null ? "" : s2.DisplayName.ToString(),
+                            StatusName = s3 == null || s3.Name == null ? "" : s3.Name.ToString(),
+                            RiskRatingName = s4 == null || s4.Name == null ? "" : s4.Name.ToString(),
+                            UserName = s5 == null || s5.Name == null ? "" : s5.Name.ToString()
+                        };
+
+            var dbList = await risks.ToListAsync();
+            var results = new List<GetRiskForViewDto>();
+
+
+
+
+            foreach (var o in dbList)
+            {
+                var res = new GetRiskForViewDto()
+                {
+                    Risk = new RiskDto
+                    {
+
+                        Summary = o.Summary,
+                        ExistingControl = o.ExistingControl,
+                        ERMRecommendation = o.ERMRecommendation,
+                        ActionPlan = o.ActionPlan,
+                        RiskOwnerComment = o.RiskOwnerComment,
+                        TargetDate = o.TargetDate,
+                        ActualClosureDate = o.ActualClosureDate,
+                        AcceptanceDate = o.AcceptanceDate,
+                        RiskAccepted = o.RiskAccepted,
+                        Id = o.Id,
+                    },
+                    RiskTypeName = o.RiskTypeName,
+                    OrganizationUnitDisplayName = o.OrganizationUnitDisplayName,
+                    StatusName = o.StatusName,
+                    RiskRatingName = o.RiskRatingName,
+                    UserName = o.UserName
+                };
+
+                results.Add(res);
+
+            }
+
+            return new List<GetRiskForViewDto>(
+                results
+            );
         }
 
         public async Task<GetRiskForViewDto> GetRiskForView(int id)

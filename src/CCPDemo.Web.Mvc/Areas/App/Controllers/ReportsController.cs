@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using CCPDemo.Risks;
 using CCPDemo.Risks.Dtos;
 using CCPDemo.RiskRatings.Dtos;
+using Abp.Domain.Repositories;
+using System.Linq.Dynamic.Core;
 
 namespace CCPDemo.Web.Areas.App.Controllers
 {
@@ -20,10 +22,13 @@ namespace CCPDemo.Web.Areas.App.Controllers
     public class ReportsController : CCPDemoControllerBase
     {
         private readonly IRisksAppService _risksAppService;
+        private readonly IRepository<Risk> _riskRepository;
 
-        public ReportsController(IRisksAppService risksAppService)
+        public ReportsController(IRisksAppService risksAppService,
+            IRepository<Risk> riskRepository)
         {
             _risksAppService = risksAppService;
+            _riskRepository = riskRepository;
         }
 
         public IActionResult Index()
@@ -69,7 +74,8 @@ namespace CCPDemo.Web.Areas.App.Controllers
         public async Task<IActionResult> FilteredRisks()
         {
 
-            GetRiskForEditOutput getRiskForEditOutput;
+
+            var riskList = await _risksAppService.GetRisks();
 
             var model = new RisksViewModel
             {
@@ -77,35 +83,13 @@ namespace CCPDemo.Web.Areas.App.Controllers
                 RiskTypeList = await _risksAppService.GetAllRiskTypeForTableDropdown(),
                 RiskOrganizationUnitList = await _risksAppService.GetAllOrganizationUnitForTableDropdown(),
                 RiskStatusList = await _risksAppService.GetAllStatusForTableDropdown(),
-                RiskRiskRatingList = await _risksAppService.GetAllRiskRatingForTableDropdown()
+                RiskRatingList = await _risksAppService.GetAllRiskRatingForTableDropdown(),
+                RisksList= riskList
             };
 
 
             return View(model);
         }
 
-        public IActionResult SendMail()
-        {
-            string fromEmail = "wilf.funsho@gmail.com";
-            MailMessage mailMessage = new MailMessage(fromEmail, "teddywilf91@gmail.com", "Risk Managment", "Body");
-            SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
-            smtpClient.EnableSsl = true;
-            smtpClient.UseDefaultCredentials = false;
-            smtpClient.Credentials = new NetworkCredential(fromEmail, "password");
-            try
-            {
-                smtpClient.Send(mailMessage);
-            }
-            catch (Exception ex)
-            {
-                //Error
-                //Console.WriteLine(ex.Message);
-                return Json(ex.Message);
-            }
-
-            return Json("Mail Sent");
-
-
-        }
     }
 }

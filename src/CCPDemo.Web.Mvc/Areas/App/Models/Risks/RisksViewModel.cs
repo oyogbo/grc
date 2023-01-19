@@ -1,4 +1,5 @@
-﻿using CCPDemo.Risks.Dtos;
+﻿using CCPDemo.Risks;
+using CCPDemo.Risks.Dtos;
 using System.Collections.Generic;
 
 namespace CCPDemo.Web.Areas.App.Models.Risks
@@ -13,7 +14,10 @@ namespace CCPDemo.Web.Areas.App.Models.Risks
 
         public List<RiskStatusLookupTableDto> RiskStatusList { get; set; }
 
-        public List<RiskRiskRatingLookupTableDto> RiskRiskRatingList { get; set; }
+        public List<RiskRiskRatingLookupTableDto> RiskRatingList { get; set; }
+
+        public List<GetRiskForReports> Risks { get; set; }
+        public List<GetRiskForViewDto> RisksList { get; set; }
 
     }
 }

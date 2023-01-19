@@ -17,6 +17,7 @@ namespace CCPDemo.Risks
     public interface IRisksAppService : IApplicationService
     {
         Task<PagedResultDto<GetRiskForViewDto>> GetAll(GetAllRisksInput input);
+        Task<List<GetRiskForViewDto>> GetRisks();
 
         Task<GetRiskForViewDto> GetRiskForView(int id);
 
