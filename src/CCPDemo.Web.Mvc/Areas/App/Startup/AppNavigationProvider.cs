@@ -81,9 +81,16 @@ namespace CCPDemo.Web.Areas.App.Startup
                         permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Risks)
                     )
                 ).AddItem(new MenuItemDefinition(
-                        AppPageNames.Common.FilteredRisks,
-                        L("FilteredRisks"),
-                        url: "App/Reports/FilteredRisks",
+                        AppPageNames.Common.RiskTypeByDepartment,
+                        L("RiskTypeByDepartment"),
+                        url: "App/Reports/RiskTypeByDepartment",
+                        icon: "flaticon2-magnifier-tool",
+                        permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Risks)
+                    )
+                ).AddItem(new MenuItemDefinition(
+                        AppPageNames.Common.RiskTypeByDepartment,
+                        L("RiskRatingByDepartment"),
+                        url: "App/Reports/RiskRatingByDepartment",
                         icon: "flaticon2-magnifier-tool",
                         permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Risks)
                     )

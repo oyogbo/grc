@@ -1,0 +1,186 @@
+﻿@using CCPDemo.Authorization
+@using CCPDemo.Web.Areas.App.Models.Risks
+@using CCPDemo.Web.Areas.App.Startup
+@model RisksViewModel
+@{
+    ViewBag.CurrentPageName = AppPageNames.Common.Risks;
+    
+}
+
+
+@section Scripts
+{
+    <script src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.print.min.js"></script>
+@*
+    <script src="/view-resources/Areas/App/Views/Reports/RiskTypeByDepartment.js"></script>
+*@
+
+    <script>
+        $(document).ready(function () {
+            var _risksService = abp.services.app.risks;
+
+
+            _risksService.getRiskTypeByDepartment()
+                .done(function (data1) {
+                    var items = data1.items;
+
+                    console.log('items')
+                    console.log(items)
+
+                    _risksService.getOrgUnit().
+                        done(function (data2) {
+                            
+                            var orgUnit = JSON.parse(data2);
+
+                            console.log('org Units')
+                            console.log(orgUnit)
+
+                            _risksService.getRiskTypes().
+                                done(function (data3) {
+                                    var riskTypes = JSON.parse(data3);
+
+                                    console.log('Risk Types');
+                                    console.log(riskTypes)
+                                    var tableBody = '';
+
+                                    var tableHtml = '';
+                                    var count = 0;
+                                    for (var key in orgUnit) {
+
+                                        if (orgUnit.hasOwnProperty(key)) {
+                                            var tRow = `<tr>`;
+                                            var tdData = `<td>${orgUnit[key]}</td>`;
+
+                                            for (var key2 in riskTypes) {
+                                                if (riskTypes.hasOwnProperty(key2)) {
+                                                    var cellValue = '';
+
+                                                    items.forEach((r, i) => {
+                                                        if (r['organizationUnit'] === orgUnit[key] && r['riskType'] === riskTypes[key2]) {
+                                                            cellValue = r['riskCount'];
+                                                            
+                                                        }
+                                                        
+                                                    });
+                                                    
+                                                    tdData += `<td>${cellValue}</td>`;
+                                                }
+
+                                            }
+                                            tRow += (tdData + `</tr>`);
+                                            tableHtml += tRow;
+                                        }
+                                    }
+
+                                    $('#riskTypeTableBody').append(tableHtml);
+
+
+                                });
+
+                        });
+
+
+                });
+
+            var riskTypesTable = $('#RisksTypeTable_t');
+            var dataTable = riskTypesTable.DataTable({
+                paging: true,
+                processing: false,
+                searching: true,
+                dom: 'Bfrtip',
+                buttons: [
+                    'excel', 'pdf', 'print'
+                ],
+            });
+        });
+    </script>
+
+}
+
+@section Styles {
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" />
+    <link href="https://cdn.datatables.net/buttons/2.3.2/css/buttons.dataTables.min.css" />
+
+
+    <style>
+        #RisksTypeTable_t td, #RisksTypeTable_t th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #RisksTypeTable_t tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #RisksTypeTable_t tr:hover {
+            background-color: #ddd;
+        }
+
+        #RisksTypeTable_t th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #04AA6D;
+            color: white;
+        }
+    </style>
+    
+}
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <abp-page-subheader title='Risk Category / Department Report' description='@L("RisksHeaderInfo")'>
+        
+    </abp-page-subheader>
+
+    <div class="@(await GetContainerClass())">
+        <div class="card">
+            <div class="card-body">
+                
+                <div class="align-items-center">
+                    @*
+                        <div class="table-responsive">
+                        <table id="RisksTypeTable" class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer" cellspacing="0" cellpadding="0">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Organisation Unit</th>
+                                    <th>Risk Type</th>
+                                    <th>Risk Count</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    *@
+
+
+
+                    <div class="table-responsive">
+                        <table id="RisksTypeTable_t" class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer" cellspacing="0" cellpadding="0">
+                            <thead>
+                                <tr>
+                                    <th>Organization Unit/Risk Type</th>
+
+                                    @foreach (var riskType in Model.RiskTypeList)
+                                    {
+                                        <th>@riskType.DisplayName</th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody id="riskTypeTableBody">
+
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

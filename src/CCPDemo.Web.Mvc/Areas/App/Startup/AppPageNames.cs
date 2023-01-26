@@ -10,6 +10,8 @@
             public const string OnGoingRisks = "Risks.Reports.OnGoingRisks";
             public const string ClosedRisks = "Risks.Reports.ClosedRisks";
             public const string FilteredRisks = "Risks.Reports.FilteredRisks";
+            public const string RiskTypeByDepartment = "Risks.Reports.RiskTypeByDepartment";
+            public const string RiskRatingByDepartment = "Risks.Reports.RiskRatingByDepartment";
             public const string RiskStatus = "Administration.RiskStatuses.RiskStatus";
             public const string RiskRatings = "Administration.RiskRatings.RiskRatings";
             public const string UploadKeyRiskIndicator = "UploadKeyRiskIndicator";

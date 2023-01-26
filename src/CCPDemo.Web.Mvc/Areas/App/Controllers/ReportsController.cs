@@ -91,5 +91,40 @@ namespace CCPDemo.Web.Areas.App.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> RiskTypeByDepartment()
+        {
+			//var riskTypeByDepartment = _risksAppService.GetRiskTypeByDepartment();
+
+			//var model = new RisksViewModel
+			//{
+			//    RiskTypesByDepartment = riskTypeByDepartment
+			//};
+
+			var model = new RisksViewModel
+			{
+				FilterText = Request.Query["filterText"],
+				RiskTypeList = await _risksAppService.GetAllRiskTypeForTableDropdown(),
+				RiskOrganizationUnitList = await _risksAppService.GetAllOrganizationUnitForTableDropdown(),
+				RiskStatusList = await _risksAppService.GetAllStatusForTableDropdown(),
+				RiskRatingList = await _risksAppService.GetAllRiskRatingForTableDropdown(),
+			};
+
+			return View(model);
+        }
+
+        public async Task<IActionResult> RiskRatingByDepartment()
+        {
+			var model = new RisksViewModel
+			{
+				FilterText = Request.Query["filterText"],
+				RiskTypeList = await _risksAppService.GetAllRiskTypeForTableDropdown(),
+				RiskOrganizationUnitList = await _risksAppService.GetAllOrganizationUnitForTableDropdown(),
+				RiskStatusList = await _risksAppService.GetAllStatusForTableDropdown(),
+				RiskRatingList = await _risksAppService.GetAllRiskRatingForTableDropdown(),
+			};
+
+			return View(model);
+        }
+
     }
 }

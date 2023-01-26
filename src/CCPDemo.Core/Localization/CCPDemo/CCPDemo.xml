@@ -7,6 +7,8 @@
 		<text name="OnGoingRisks">Ongoing Risks</text>
 		<text name="ClosedRisks">Closed Risks</text>
 		<text name="FilteredRisks">Risk Rating/Department</text>
+		<text name="RiskTypeByDepartment">Risk Category/Department</text>
+		<text name="RiskRatingByDepartment">Risk Rating/Department</text>
 		<text name="ERMRecommendation">E r m recommendation</text>
 		<text name="StatusName">Status name</text>
 		<text name="PickStatus">Pick status</text>

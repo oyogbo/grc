@@ -1,6 +1,9 @@
-﻿using CCPDemo.Risks;
+﻿using Abp.Application.Services.Dto;
+using CCPDemo.Risks;
 using CCPDemo.Risks.Dtos;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CCPDemo.Web.Areas.App.Models.Risks
 {
@@ -18,6 +21,7 @@ namespace CCPDemo.Web.Areas.App.Models.Risks
 
         public List<GetRiskForReports> Risks { get; set; }
         public List<GetRiskForViewDto> RisksList { get; set; }
+        public List<RiskTypeByDepartment> RiskTypesByDepartment { get; set; }
 
     }
 }

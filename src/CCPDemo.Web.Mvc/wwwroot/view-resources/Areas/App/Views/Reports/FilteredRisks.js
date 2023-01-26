@@ -11,9 +11,6 @@
             dom: 'Bfrtip',
             buttons: [
                 'excel', 'pdf', 'print'
-            ],
-            columnDefs: [
-                { "width": "1%", "targets": 0 }
             ]
         });
 

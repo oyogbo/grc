@@ -1,0 +1,180 @@
+﻿@using CCPDemo.Authorization
+@using CCPDemo.Web.Areas.App.Models.Risks
+@using CCPDemo.Web.Areas.App.Startup
+@model RisksViewModel
+@{
+    ViewBag.CurrentPageName = AppPageNames.Common.Risks;
+}
+
+
+     @section Scripts
+    {
+    <script src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.print.min.js"></script>
+    @*<script src="/view-resources/Areas/App/Views/Reports/RiskRatingByDepartment.js"></script>*@
+
+
+    <script>
+        $(document).ready(function () {
+            var _risksService = abp.services.app.risks;
+
+
+            _risksService.getRiskRatingByDepartment()
+                .done(function (data1) {
+                    var items = data1.items;
+
+                    console.log('items')
+                    console.log(items)
+
+                    _risksService.getOrgUnit().
+                        done(function (data2) {
+                            
+                            var orgUnit = JSON.parse(data2);
+
+                            console.log('org Units')
+                            console.log(orgUnit)
+
+                            _risksService.getRatingsV2().
+                                done(function (data3) {
+                                    var ratings = JSON.parse(data3);
+
+                                    console.log('Ratings');
+                                    console.log(ratings)
+                                    var tableBody = '';
+
+                                    var tableHtml = '';
+                                    var count = 0;
+                                    for (var key in orgUnit) {
+
+                                        if (orgUnit.hasOwnProperty(key)) {
+                                            var tRow = `<tr>`;
+                                            var tdData = `<td>${orgUnit[key]}</td>`;
+
+                                            for (var key2 in ratings) {
+                                                if (ratings.hasOwnProperty(key2)) {
+                                                    var cellValue = '';
+
+                                                    items.forEach((r, i) => {
+                                                        if (r['organizationUnit'] === orgUnit[key] && r['riskRating'] === ratings[key2]) {
+                                                            cellValue = r['ratingCount'];
+                                                            
+                                                        }
+                                                        
+                                                    });
+                                                    
+                                                    tdData += `<td>${cellValue}</td>`;
+                                                }
+
+                                            }
+                                            tRow += (tdData + `</tr>`);
+                                            tableHtml += tRow;
+                                        }
+                                    }
+
+                                    $('#ratingsTableBody').append(tableHtml);
+
+
+                                });
+
+                        });
+
+
+                });
+
+                var ratingTable = $('#RisksRatingTable');
+            var dataTable = ratingTable.DataTable({
+                 paging: true,
+                processing: false,
+                searching: true,
+                dom: 'Bfrtip',
+                buttons: [
+                    'excel', 'pdf', 'print'
+                ],
+            });
+        });
+    </script>
+
+
+}
+
+@section Styles {
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" />
+    <link href="https://cdn.datatables.net/buttons/2.3.2/css/buttons.dataTables.min.css" />
+    
+
+    <style>
+        #RisksRatingTable td, #RisksRatingTable th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #RisksRatingTable tr:nth-child(even){background-color: #f2f2f2;}
+
+        #RisksRatingTable tr:hover {background-color: #ddd;}
+
+        #RisksRatingTable th {
+          padding-top: 12px;
+          padding-bottom: 12px;
+          text-align: left;
+          background-color: #04AA6D;
+          color: white;
+        }
+        
+    </style>
+}
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <abp-page-subheader title='Risk Rating / Department Report' description='@L("RisksHeaderInfo")'>
+        
+    </abp-page-subheader>
+
+    <div class="@(await GetContainerClass())">
+        <div class="card">
+            <div class="card-body">
+                
+                <div class="align-items-center">
+                    @*
+                        <div class="table-responsive">
+                        <table id="RisksRatingTable" class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer" cellspacing="0" cellpadding="0">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Organisation Unit</th>
+                                    <th>Risk Rating</th>
+                                    <th>Rating Count</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    *@
+
+
+
+
+
+                    <div class="table-responsive">
+                        <table id="RisksRatingTable" class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer" cellspacing="0" cellpadding="0">
+                            <thead>
+                                <tr>
+                                    <th>Organization Unit/Rating</th>
+                                    @foreach (var rating in Model.RiskRatingList)
+                                    {
+                                        <th>@rating.DisplayName</th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody id="ratingsTableBody">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

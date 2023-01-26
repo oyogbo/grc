@@ -39,6 +39,10 @@ using System.Text;
 using CCPDemo.Net.Emailing;
 using CCPDemo.RiskRatings.Dtos;
 using CCPDemo.RiskStatuses.Dtos;
+using System.Collections;
+using NUglify.Html;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Z.EntityFramework.Plus;
 
 namespace CCPDemo.Risks
 {
@@ -987,6 +991,101 @@ namespace CCPDemo.Risks
 
         }
 
+        public async Task<PagedResultDto<GetRiskForViewDto>> OverDueRisksV2()
+        {
+            var dateNow = DateTime.Now;
+
+            var filteredRisks = _riskRepository.GetAll()
+                        .Include(e => e.RiskTypeFk)
+                        .Include(e => e.OrganizationUnitFk)
+                        .Include(e => e.StatusFk)
+                        .Include(e => e.RiskRatingFk)
+                        .Include(e => e.UserFk);
+            
+
+            var risks = from o in filteredRisks
+                        join o1 in _lookup_riskTypeRepository.GetAll() on o.RiskTypeId equals o1.Id into j1
+                        from s1 in j1.DefaultIfEmpty()
+
+                        join o2 in _lookup_organizationUnitRepository.GetAll() on o.OrganizationUnitId equals o2.Id into j2
+                        from s2 in j2.DefaultIfEmpty()
+
+                        join o3 in _lookup_statusRepository.GetAll() on o.StatusId equals o3.Id into j3
+                        from s3 in j3.DefaultIfEmpty()
+
+                        join o4 in _lookup_riskRatingRepository.GetAll() on o.RiskRatingId equals o4.Id into j4
+                        from s4 in j4.DefaultIfEmpty()
+
+                        join o5 in _lookup_userRepository.GetAll() on o.UserId equals o5.Id into j5
+                        from s5 in j5.DefaultIfEmpty()
+
+                        select new
+                        {
+
+                            o.Summary,
+                            o.ExistingControl,
+                            o.ERMRecommendation,
+                            o.ActionPlan,
+                            o.RiskOwnerComment,
+                            o.TargetDate,
+                            o.ActualClosureDate,
+                            o.AcceptanceDate,
+                            o.RiskAccepted,
+                            Id = o.Id,
+                            o.UserId,
+                            RiskTypeName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
+                            OrganizationUnitDisplayName = s2 == null || s2.DisplayName == null ? "" : s2.DisplayName.ToString(),
+                            StatusName = s3 == null || s3.Name == null ? "" : s3.Name.ToString(),
+                            RiskRatingName = s4 == null || s4.Name == null ? "" : s4.Name.ToString(),
+                            UserName = s5 == null || s5.Name == null ? "" : s5.Name.ToString()
+                        };
+
+            var totalCount = await filteredRisks.CountAsync();
+
+            var dbList = await risks.ToListAsync();
+            var results = new List<GetRiskForViewDto>();
+
+            foreach (var o in dbList)
+            {
+                if (o.TargetDate < dateNow && o.StatusName.ToString().ToUpper() != "CLOSE")
+                {
+                    var res = new GetRiskForViewDto()
+                    {
+                        Risk = new RiskDto
+                        {
+
+                            Summary = o.Summary,
+                            ExistingControl = o.ExistingControl,
+                            ERMRecommendation = o.ERMRecommendation,
+                            ActionPlan = o.ActionPlan,
+                            RiskOwnerComment = o.RiskOwnerComment,
+                            TargetDate = o.TargetDate,
+                            ActualClosureDate = o.ActualClosureDate,
+                            AcceptanceDate = o.AcceptanceDate,
+                            RiskAccepted = o.RiskAccepted,
+                            Id = o.Id,
+                        },
+                        RiskTypeName = o.RiskTypeName,
+                        OrganizationUnitDisplayName = o.OrganizationUnitDisplayName,
+                        StatusName = o.StatusName,
+                        RiskRatingName = o.RiskRatingName,
+                        UserName = o.UserName
+                    };
+
+                    results.Add(res);
+                }
+
+
+            }
+
+            return new PagedResultDto<GetRiskForViewDto>(
+                totalCount,
+                results
+            );
+
+        }
+
+
         public async Task<PagedResultDto<GetRiskForViewDto>> OnGoingRisks(GetAllRisksInput input)
         {
             var dateNow = DateTime.Now;
@@ -1432,6 +1531,148 @@ namespace CCPDemo.Risks
             var email = _userManager.Users.Where(u=>u.Id == ermUserId).FirstOrDefault().EmailAddress;
 
             return email;
+        }
+
+        public async Task<PagedResultDto<RiskTypeByDepartment>> GetRiskTypeByDepartment()
+        {
+            var filteredRisks = _riskRepository.GetAll()
+                .Where(u=>u.IsDeleted == false)
+                .Include(e => e.RiskTypeFk)
+                .Include(e => e.OrganizationUnitFk);
+
+
+            List<RiskTypeByDepartment> riskTypeByDept = new();
+
+            var query = (from o in filteredRisks
+                         join o1 in _lookup_riskTypeRepository.GetAll() on o.RiskTypeId equals o1.Id into j1
+                         from s1 in j1.DefaultIfEmpty()
+
+                         join o2 in _lookup_organizationUnitRepository.GetAll() on o.OrganizationUnitId equals o2.Id into j2
+                         from s2 in j2.DefaultIfEmpty()
+
+                         select new
+                         {
+                             o.OrganizationUnitId,
+                             OrganizationUnit = s2 == null || s2.DisplayName == null ? "" : s2.DisplayName.ToString(),
+                             RiskType = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
+                             o.RiskTypeId
+                         }).GroupBy(x => new { x.OrganizationUnitId, x.RiskTypeId }).Select(x => new RiskTypeByDepartment
+                         {
+                             OrganizationUnit = x.First().OrganizationUnit,
+                             RiskType = x.First().RiskType,
+                             RiskCount = x.Count().ToString(),
+                         });
+
+            var results = await query.ToListAsync();
+            var totalCount = results.Count();
+
+            foreach (var r in results)
+            {
+                var rt = new RiskTypeByDepartment
+                {
+                    OrganizationUnit = r.OrganizationUnit,
+                    RiskType= r.RiskType,
+                    RiskCount = r.RiskCount
+                };
+                riskTypeByDept.Add(rt);
+            }
+
+            return new PagedResultDto<RiskTypeByDepartment>(
+                totalCount,
+                results
+            );
+        }
+
+        public async Task<PagedResultDto<RiskRatingByDepartmentDto>> GetRiskRatingByDepartment()
+        {
+            var filteredRisks = _riskRepository.GetAll()
+                .Where(u => u.IsDeleted == false)
+                .Include(e => e.RiskRatingFk)
+                .Include(e => e.OrganizationUnitFk);
+
+
+            List<RiskRatingByDepartmentDto> riskTypeByDept = new();
+
+            var query = (from o in filteredRisks
+                         join o1 in _lookup_riskRatingRepository.GetAll() on o.RiskRatingId equals o1.Id into j1
+                         from s1 in j1.DefaultIfEmpty()
+
+                         join o2 in _lookup_organizationUnitRepository.GetAll() on o.OrganizationUnitId equals o2.Id into j2
+                         from s2 in j2.DefaultIfEmpty()
+
+                         select new
+                         {
+                             o.OrganizationUnitId,
+                             OrganizationUnit = s2 == null || s2.DisplayName == null ? "" : s2.DisplayName.ToString(),
+                             RiskRating = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
+                             o.RiskRatingId
+                         }).GroupBy(x => new { x.OrganizationUnitId, x.RiskRatingId }).Select(x => new RiskRatingByDepartmentDto
+                         {
+                             OrganizationUnit = x.First().OrganizationUnit,
+                             RiskRating = x.First().RiskRating,
+                             RatingCount = x.Count().ToString(),
+                         });
+
+            var results = await query.ToListAsync();
+            var totalCount = results.Count();
+
+            foreach (var r in results)
+            {
+                var rt = new RiskRatingByDepartmentDto
+                {
+                    OrganizationUnit = r.OrganizationUnit,
+                    RiskRating = r.RiskRating,
+                    RatingCount = r.RatingCount
+                };
+                riskTypeByDept.Add(rt);
+            }
+
+            return new PagedResultDto<RiskRatingByDepartmentDto>(
+                totalCount,
+                results
+            );
+        }
+
+        public string GetOrgUnit()
+        {
+            var organisationUnitList = _lookup_organizationUnitRepository.GetAll().Where(ou=>ou.IsDeleted == false);
+            Dictionary<long, string> orgUnitDict = new Dictionary<long, string>();
+            foreach (var ou in organisationUnitList)
+            {
+                orgUnitDict.Add(ou.Id, ou.DisplayName);
+            }
+
+            string orgUnitStr = JsonConvert.SerializeObject(orgUnitDict);
+
+            return orgUnitStr;
+        }
+
+        public string GetRiskTypes()
+        {
+            var riskTypeList = _lookup_riskTypeRepository.GetAll().Where(r=>r.IsDeleted == false);
+            Dictionary<long, string> riskTypeDict = new Dictionary<long, string>();
+            foreach (var rt in riskTypeList)
+            {
+                riskTypeDict.Add(rt.Id, rt.Name);
+            }
+
+            string riskTypeStr = JsonConvert.SerializeObject(riskTypeDict);
+
+            return riskTypeStr;
+
+        }
+
+        public string GetRatingsV2()
+        {
+            var ratingsList = _lookup_riskRatingRepository.GetAll();
+            Dictionary<long, string> ratingsDict = new Dictionary<long, string>();
+            foreach (var r in ratingsList)
+            {
+                ratingsDict.Add(r.Id, r.Name);
+            }
+            string ratingsStr = JsonConvert.SerializeObject(ratingsDict);
+
+            return ratingsStr;
         }
     }
 

@@ -6,6 +6,11 @@
 	var dbList = ViewBag.dbList;
 }
 
+@section Styles {
+
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" />
+}
+
 @section Scripts {
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 	<script>
@@ -38,6 +43,210 @@
 
 
 		
+	</script>
+	<script>
+		$(document).ready(function(){
+			var _$riskRatingTable = $('#RisksRatingTable');
+			var _risksService = abp.services.app.risks;
+
+
+			var dataTable1 = _$riskRatingTable.DataTable({
+				paging: true,
+				serverSide: true,
+				processing: true,
+				searching: true,
+				scrollX: true,
+				listAction: {
+					ajaxFunction: _risksService.getRiskRatingByDepartment
+				},
+				columnDefs: [
+					{
+						targets: 0,
+						"data": null, "render": function (data, type, full, meta) {
+							return meta.row + 1;
+						}
+					},
+					{
+						targets: 1,
+						data: 'organizationUnit'
+					},
+					{
+						targets: 2,
+						data: 'riskRating'
+					},
+					{
+						targets: 3,
+						data: 'ratingCount'
+					}
+
+				],
+			});
+
+			dataTable1.on('order.dt search.dt', function () {
+				dataTable1.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+					cell.innerHTML = i + 1;
+				});
+			}).draw();
+
+
+
+		var _$risksTable = $('#RisksTypeTable');
+        var _risksService1 = abp.services.app.risks;
+
+
+
+        var dataTable = _$risksTable.DataTable({
+            paging: true,
+            serverSide: true,
+            processing: true,
+				scrollX: true,
+            listAction: {
+                ajaxFunction: _risksService1.getRiskTypeByDepartment
+            },
+            columnDefs: [
+                {
+                    targets: 0,
+                    "data": null, "render": function (data, type, full, meta) {
+                        return meta.row + 1;
+                    }
+                }, 
+                {
+                    targets: 1,
+                    data: 'organizationUnit'
+                },
+                {
+                    targets: 2,
+                    data: 'riskType'
+                },
+                {
+                    targets: 3,
+                    data: 'riskCount'
+                }
+                
+            ],
+        });
+
+        dataTable.on('order.dt search.dt', function () {
+            dataTable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        }).draw();
+
+
+
+			
+
+
+			//var dataTable2 = _$overdueRisksTable.DataTable({
+			//	paging: true,
+			//	serverSide: true,
+			//	processing: true,
+			//	scrollX: true,
+			//	listAction: {
+			//		ajaxFunction: _risksService2.overDueRisksV2
+			//	},
+			//	columnDefs: [
+			//		{
+			//			targets: 0,
+			//			"data": null, "render": function (data, type, full, meta) {
+			//				return meta.row + 1;
+			//			}
+			//		},
+			//		{
+			//			targets: 1,
+			//			data: 'risk.organizationUnitDisplayName'
+			//		},
+			//		{
+			//			targets: 2,
+			//			data: 'risk.summary'
+			//		},
+			//		{
+			//			targets: 3,
+			//			data: 'risk.targetDate'
+			//		}
+
+			//	],
+			//});
+
+			//dataTable2.on('order.dt search.dt', function () {
+			//	dataTable2.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+			//		cell.innerHTML = i + 1;
+			//	});
+			//}).draw();
+
+
+			var _risksService = abp.services.app.risks;
+			_risksService.getRiskTypeByDepartment()
+			.done(function(data){
+				var items = data.items;
+
+				var orgUnits = [];
+				var datasets = [];
+				var labels;
+				var criticalCount = 0;
+				var count = 0
+				var previousRating;
+				var datasetsObj = {
+					label: [],
+					data: []
+				}
+				items.forEach((r,i) => {
+					orgUnits.push(r['organizationUnit']);
+
+
+					datasetsObj.label.push(r['riskRating']);
+						datasetsObj.data.push(r['ratingCount']);
+
+						previousRating = r['riskRating'];
+
+						count++;
+
+						console.log('datasetsObj')
+						console.log(datasetsObj)
+
+					//if(count < 1){
+					//	datasetsObj.label.push(r['riskRating']);
+					//	datasetsObj.data.push(r['ratingCount']);
+
+					//	previousRating = r['riskRating'];
+
+					//	count++;
+
+					//	console.log('datasetsObj')
+					//	console.log(datasetsObj)
+					//}else{
+					//	if(previousRating == r['riskRating']){
+					//		datasetsObj.data.push(r['ratingCount']);
+					//	}else{
+					//		datasets.push(datasetsObj);
+
+					//		 Reset datasetsObj
+					//		datasetsObj.label = [];
+					//		datasetsObj.data = [];
+
+					//		count = 0
+					//	}
+					//}
+					
+				});
+
+				console.log('datasetsObj')
+			    console.log(datasetsObj)
+
+
+				labels = orgUnits.filter(onlyUnique);
+				console.log('Org Units')
+				console.log(labels)
+
+				console.log('datasets')
+				console.log(datasets)
+			});
+
+			function onlyUnique(value, index, self) {
+				return self.indexOf(value) === index;
+			}
+
+		});
 	</script>
 }
 
@@ -95,10 +304,10 @@
 													<!--begin::Table container-->
 													<div class="table-responsive">
 														<!--begin::Table-->
-									<table class="table table-row-dashed align-middle gs-0 gy-4 table-success table-striped">
+													<table class="table table-row-dashed align-middle gs-0 gy-4 table-success table-striped">
 															<!--begin::Table head-->
 															<thead>
-																<tr class="fs-7 fw-bold border-0 text-gray-400">
+																<tr class="fw-bold border-0 text-gray-400">
 																	<th class="min-w-150px" colspan="2">S/N</th>
 																	<th class="min-w-150px text-center pe-0" colspan="2">DEPT</th>
 																	<th class="text-center min-w-150px" colspan="2">RISK</th>
@@ -115,10 +324,10 @@
 															{
 																count++;
 																<tr>
-													<td class="min-w-150px" colspan="2">@count</td>
-													<td class="min-w-150px text-center pe-0" colspan="2">@rowData.OrganizationUnitDisplayName</td>
-													<td class="text-center min-w-150px" colspan="2">@rowData.Summary</td>
-													<td class="text-center min-w-150px" colspan="2">@rowData.TargetDate</td>
+																	<td class="min-w-150px" colspan="2">@count</td>
+																	<td class="min-w-150px text-center pe-0" colspan="2">@rowData.OrganizationUnitDisplayName</td>
+																	<td class="text-center min-w-150px" colspan="2">@rowData.Summary</td>
+																	<td class="text-center min-w-150px" colspan="2">@rowData.TargetDate</td>
 																</tr>
 															}
 
@@ -179,14 +388,13 @@
 								</h3>
 
 							</div>
-							<!--end::Header-->
-							<!--begin::Body-->
+							
 							<div class="card-body py-3">
-								<!--begin::Table container-->
+								
 								<div class="table-responsive">
-									<!--begin::Table-->
+									
 									<table class="table table-row-dashed align-middle gs-0 gy-4">
-										<!--begin::Table head-->
+										
 										<thead>
 											<tr class="fs-7 fw-bold border-0 text-gray-400">
 												<th class="min-w-150px" colspan="2">S/N</th>
@@ -195,8 +403,7 @@
 												<th class="text-end min-w-150px" colspan="2">DUE DATE</th>
 											</tr>
 										</thead>
-										<!--end::Table head-->
-										<!--begin::Table body-->
+										
 										<tbody>
 											<tr>
 												<td class="" colspan="2">
@@ -257,26 +464,105 @@
 
 
 										</tbody>
-										<!--end::Table body-->
+										
 									</table>
-									<!--end::Table-->
+									
+								</div>
+								
+							</div>
+							
+						</div>
+						
+					</div>
+
+
+				</div>
+
+
+				<div class="row gx-5 gx-xl-10">
+
+
+					
+
+					<!--begin::Col-->
+					<div class="col-xl-6 mb-5 mb-xl-10">
+						<!--begin::Table widget 9-->
+						<div class="card card-flush h-xl-100">
+							<!--begin::Header-->
+							<div class="card-header pt-5">
+								<!--begin::Title-->
+								<h3 class="card-title align-items-start flex-column">
+									<span class="card-label fw-bold text-gray-800">Risk Category/Department</span>
+
+								</h3>
+
+							</div>
+							<!--end::Header-->
+							<!--begin::Body-->
+							<div class="card-body py-3">
+								<!--begin::Table container-->
+								<div class="table-responsive">
+									<!--begin::Table-->
+									<table id="RisksTypeTable" class="table table-row-dashed fs-6 gy-5 dataTable no-footer" cellspacing="0" cellpadding="0">
+										<thead>
+											<tr>
+												<th>#</th>
+												<th>Organisation Unit</th>
+												<th>Risk Type</th>
+												<th>Risk Count</th>
+											</tr>
+										</thead>
+									</table>
 								</div>
 								<!--end::Table container-->
 							</div>
 							<!--end::Body-->
 						</div>
-						<!--end::Table Widget 9-->
+						
 					</div>
 
+					<div class="col-xl-6 mb-5 mb-xl-10">
+						
+						<div class="card card-flush h-xl-100">
+							<!--begin::Header-->
+							<div class="card-header pt-5">
+								
+								<h3 class="card-title align-items-start flex-column">
+									<span class="card-label fw-bold text-gray-800">Risk Rating/Department</span>
 
+								</h3>
 
+							</div>
+							<!--end::Header-->
+							<!--begin::Body-->
+							<div class="card-body py-3">
+								<!--begin::Table container-->
+								<div class="table-responsive">
+									<!--begin::Table-->
+									<table id="RisksRatingTable" class="table table-row-dashed fs-6 gy-5 dataTable no-footer" cellspacing="0" cellpadding="0">
+										<thead>
+											<tr>
+												<th>#</th>
+												<th>Organisation Unit</th>
+												<th>Risk Rating</th>
+												<th>Rating Count</th>
+											</tr>
+										</thead>
+									</table>
+								</div>
+								
+							</div>
+							
+						</div>
+						
+					</div>
 
 				</div>
-								<!--end::Content container-->
-							</div>
-							<!--end::Content-->
-						</div>
-						<!--end::Content wrapper-->
-						</div>
 
-												</div>
+				</div>
+				
+			</div>
+			
+			</div>
+
+			</div>
