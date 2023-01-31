@@ -40,27 +40,7 @@
 
     <abp-page-subheader title='@L("Risks")' description='@L("RisksHeaderInfo")'>
 
-        <div class="btn-group">
-            <button type="button" class="btn btn-outline btn-outline-success btn-active-light-success dropdown-toggle me-1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="far fa-file-excel btn-md-icon"></i>
-                <span class="d-none d-md-inline-block mb-md-0">
-                    @L("ExcelOperations")
-                </span>
-            </button>
-            <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item" id="ExportToExcelButton" href="#"> @L("ExportToExcel")</a>
-                <a class="dropdown-item" href="#">
-                    <span class="fileinput-button">
-                        <span>@L("ImportFromExcel")</span>
-                        <input id="ImporRisksFromExcelButton" type="file" name="files" accept=".xlsx, .xls, .csv">
-                    </span>
-                </a>
-                <div class="dropdown-divider"></div>
-                <span class="dropdown-item-text text-muted pl-3" href="#">
-                    <small class="pl-2"> @Html.Raw(L("ImportToExcelSampleFileDownloadInfo", "<a href='" + (ApplicationPath) + "assets/SampleFiles/ImportRisksSampleFile.xlsx" + "'>" + L("ClickHere") + "</a>"))</small>
-                </span>
-            </div>
-        </div>
+        @*<button id="ExportToExcelButton" class="btn btn-outline btn-outline-success btn-active-light-success me-1"><i class="fa fa-file-excel"></i> @L("ExportToExcel")</button>*@
 
         @if (IsGranted(AppPermissions.Pages_Risks_Create))
         {

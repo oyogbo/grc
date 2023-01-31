@@ -173,15 +173,15 @@
                 </div>
 
                 <div class="my-3">
-                    <label class="form-label" for="Risk_ExistingControl">Existing Conrol</label>
+                    <label class="form-label" for="Risk_ExistingControl">Existing Control</label>
                     @*<input class="form-control" id="Risk_ExistingControl" value="@Model.Risk.ExistingControl" type="text" name="existingControl" />*@
                 @if (isRiskAccepted && Model.isERM)
                 {
-                    <textarea class="form-control form-control-solid" id="Risk_ExistingControl" name="existingControl" rows="5" placeholder="Existing Conrol" readonly>@Model.Risk.ExistingControl</textarea>
+                    <textarea class="form-control form-control-solid" id="Risk_ExistingControl" name="existingControl" rows="5" placeholder="Existing Control" readonly>@Model.Risk.ExistingControl</textarea>
                 }
                 else
                 {
-                    <textarea class="form-control form-control-solid" id="Risk_ExistingControl" name="existingControl" rows="5" placeholder="Existing Conrol" @userReadonly>@Model.Risk.ExistingControl</textarea>
+                    <textarea class="form-control form-control-solid" id="Risk_ExistingControl" name="existingControl" rows="5" placeholder="Existing Control" @userReadonly>@Model.Risk.ExistingControl</textarea>
                 }
             </div>
 

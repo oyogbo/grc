@@ -43,6 +43,8 @@ using System.Collections;
 using NUglify.Html;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Z.EntityFramework.Plus;
+using CCPDemo.Authorization.Users.Dto;
+using Microsoft.AspNetCore.Identity;
 
 namespace CCPDemo.Risks
 {
@@ -63,6 +65,8 @@ namespace CCPDemo.Risks
         private readonly IRepository<OrganizationUnit, long> _organizationUnitRepository;
         private readonly IEmailSender _emailSender;
         private readonly IEmailTemplateProvider _emailTemplateProvider;
+        private readonly RoleManager _roleManager;
+        private readonly IRepository<OrganizationUnitRole, long> _organizationUnitRoleRepository;
 
 
         private string _emailButtonStyle =
@@ -83,7 +87,9 @@ namespace CCPDemo.Risks
             IRepository<UserOrganizationUnit, long> userOrganizationUnitRepository,
             IRepository<Role> roleRepository,
             IRepository<OrganizationUnit, long> organizationUnitRepository,
-             IEmailSender emailSender
+             IEmailSender emailSender,
+             RoleManager roleManager,
+             IRepository<OrganizationUnitRole, long> organizationUnitRoleRepository
             /*IDbContextProvider<CCPDemoDbContext> dbContextProvider*/)
         {
             _riskRepository = riskRepository;
@@ -100,6 +106,8 @@ namespace CCPDemo.Risks
             _organizationUnitRepository = organizationUnitRepository;
             _emailSender = emailSender;
             _emailTemplateProvider = emailTemplateProvider;
+            _roleManager = roleManager;
+            _organizationUnitRoleRepository = organizationUnitRoleRepository;
         }
 
         public async Task<PagedResultDto<GetRiskForViewDto>> GetAll(GetAllRisksInput input)
@@ -783,6 +791,8 @@ namespace CCPDemo.Risks
                         };
             var totalCount = await query.CountAsync();
             var items = await query.ToListAsync();
+
+            
            
 
             return new PagedResultDto<OrganizationUnitUserListDto>(
@@ -800,6 +810,35 @@ namespace CCPDemo.Risks
         public int GetUserId()
         {
             return (int)AbpSession.UserId;
+        }
+
+        public ActionResult<string> UserInOUEmails(int id)
+        {
+            var query = from ouUser in _userOrganizationUnitRepository.GetAll()
+                        join ou in _organizationUnitRepository.GetAll() on ouUser.OrganizationUnitId equals ou.Id
+                        join user in UserManager.Users on ouUser.UserId equals user.Id
+                        where ouUser.OrganizationUnitId == id
+                        select new
+                        {
+                            ouUser,
+                            user
+                        };
+
+            List<string> ouUsersEmails = new();
+
+            if(query != null)
+            {
+                var items = query.ToList();
+                foreach (var item in items)
+                {
+                    ouUsersEmails.Add(item.user.EmailAddress);
+                }
+
+                return JsonConvert.SerializeObject(ouUsersEmails);
+            }
+
+            return null;
+
         }
 
         public ActionResult<string> UsersEmailsIdsDict()
@@ -820,7 +859,50 @@ namespace CCPDemo.Risks
             }
 
             return JsonConvert.SerializeObject(usersEmailIdsDict);
+        }
 
+        public string HodEmails(long ouId)
+        {
+
+            var query = from ouUser in _userOrganizationUnitRepository.GetAll()
+                        join ou in _organizationUnitRepository.GetAll() on ouUser.OrganizationUnitId equals ou.Id
+                        join user in UserManager.Users on ouUser.UserId equals user.Id
+                        where ouUser.OrganizationUnitId == ouId
+                        select new
+                        {
+                            ouUser,
+                            user
+                        };
+
+            if(query != null)
+            {
+                var items = query.ToList();
+                Dictionary<long, string> hodEmails = new Dictionary<long, string>();
+
+                foreach (var item in items)
+                {
+                    if (IsHOD((int)item.user.Id))
+                    {
+                        hodEmails.Add(item.user.Id, item.user.Name + " " + item.user.EmailAddress);
+                    }
+                }
+
+                return JsonConvert.SerializeObject(hodEmails);
+            }
+
+            return null;
+           
+            
+        }
+
+        private List<string> GetAllRoleNamesOfUsersOrganizationUnits(long userId)
+        {
+            return (from userOu in _userOrganizationUnitRepository.GetAll()
+                    join roleOu in _organizationUnitRoleRepository.GetAll() on userOu.OrganizationUnitId equals roleOu
+                        .OrganizationUnitId
+                    join userOuRoles in _roleRepository.GetAll() on roleOu.RoleId equals userOuRoles.Id
+                    where userOu.UserId == userId
+                    select userOuRoles.Name).ToList();
         }
 
         public bool IsERM()
@@ -855,6 +937,75 @@ namespace CCPDemo.Risks
             }
 
             return userRolesNames.Contains("ERM");
+        }
+
+        
+        public bool IsHOD(int id)
+        {
+            var user = _userManager.Users.Where(u => u.Id == id).FirstOrDefault();
+            var userId = user?.Id;
+
+            //var isAdmin = _userManager.IsInRoleAsync(user, "Admin").Result;
+            //var isUser = _userManager.IsInRoleAsync(user, "User").Result;
+
+
+            var rolesDump = _roleRepository.GetAll().Where(r => r.IsDeleted == false);
+
+            var roleData = from r in rolesDump
+                           select new
+                           {
+                               r.Id,
+                               r.Name,
+                               r.DisplayName
+                           };
+
+            var userRolesList = _userManager.GetRolesAsync(user).Result;
+
+
+            var userRolesNames = new List<string>();
+            foreach (var role in roleData)
+            {
+                if (userRolesList.Contains(role.Name))
+                {
+                    userRolesNames.Add(role.DisplayName.ToUpper());
+                }
+            }
+
+            return userRolesNames.Contains("HOD");
+        }
+
+        public bool IsLogInUserHOD()
+        {
+            var user = _userManager.Users.Where(u => u.Id == AbpSession.UserId).FirstOrDefault();
+            var userId = user?.Id;
+
+            //var isAdmin = _userManager.IsInRoleAsync(user, "Admin").Result;
+            //var isUser = _userManager.IsInRoleAsync(user, "User").Result;
+
+
+            var rolesDump = _roleRepository.GetAll().Where(r => r.IsDeleted == false);
+
+            var roleData = from r in rolesDump
+                           select new
+                           {
+                               r.Id,
+                               r.Name,
+                               r.DisplayName
+                           };
+
+            var userRolesList = _userManager.GetRolesAsync(user).Result;
+
+
+            var userRolesNames = new List<string>();
+            foreach (var role in roleData)
+            {
+                if (userRolesList.Contains(role.Name))
+                {
+                    userRolesNames.Add(role.DisplayName.ToUpper());
+                }
+            }
+
+            return userRolesNames.Contains("HOD");
         }
 
         public bool IsRiskAccepted(int id)
@@ -985,7 +1136,7 @@ namespace CCPDemo.Risks
             }
 
             return new PagedResultDto<GetRiskForViewDto>(
-                totalCount,
+                results.Count,
                 results
             );
 
@@ -1079,7 +1230,7 @@ namespace CCPDemo.Risks
             }
 
             return new PagedResultDto<GetRiskForViewDto>(
-                totalCount,
+                results.Count,
                 results
             );
 
@@ -1309,7 +1460,7 @@ namespace CCPDemo.Risks
             }
 
             return new PagedResultDto<GetRiskForViewDto>(
-                totalCount,
+                results.Count,
                 results
             );
 
@@ -1420,7 +1571,7 @@ namespace CCPDemo.Risks
             }
 
             return new PagedResultDto<GetRiskForViewDto>(
-                totalCount,
+                results.Count,
                 results
             );
 
@@ -1461,6 +1612,26 @@ namespace CCPDemo.Risks
             catch (Exception e)
             {
                 throw new UserFriendlyException("An error was encountered while sending an email. " + e.Message, e);
+            }
+        }
+
+        public async Task SendRisksEmails(SendRisksEmailsInput input)
+        {
+            var emails = input.EmailAddresses;
+            foreach(var email in emails)
+            {
+                try
+                {
+                    await _emailSender.SendAsync(
+                        email,
+                        input.Subject,
+                        input.Body
+                    );
+                }
+                catch (Exception e)
+                {
+                    throw new UserFriendlyException("An error was encountered while sending an email. " + e.Message, e);
+                }
             }
         }
 
