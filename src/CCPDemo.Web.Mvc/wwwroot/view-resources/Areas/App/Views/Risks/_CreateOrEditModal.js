@@ -5,7 +5,12 @@
     var _modalManager;
       var _$riskInformationForm = null;
 
-      $('#statusId').val(1);
+      var riskId = $('#riskId').val();
+      if (riskId == undefined || riskId == null) {
+          $('#statusId').val(1);
+      }
+
+      
 
       $('#riskTypeId').focus();
 

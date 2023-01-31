@@ -408,8 +408,14 @@ namespace CCPDemo.Web.Areas.App.Controllers
             //var riskUpdate = await _riskRepo.UpdateAsync(riskDto);
             //await _vRisksAppService.CreateOrEdit(upDateRiskDto);
 
+            
 
-            return Json("Success");
+            var emailInput = new SendRisksEmailInput();
+
+
+
+
+			return Json("Success");
 
             //return View();
         }

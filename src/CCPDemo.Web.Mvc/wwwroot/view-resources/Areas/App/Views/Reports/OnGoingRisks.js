@@ -3,7 +3,7 @@
     $('#riskTypeId').focus();
 
     $(function () {
-        var _$risksTable = $('#RisksTable');
+        var _$risksTable = $('#OnGoingRisksTable');
         var _risksService = abp.services.app.risks;
 
         //$.datetimepicker.setDateFormatter({

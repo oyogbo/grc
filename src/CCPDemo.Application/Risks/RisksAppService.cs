@@ -956,27 +956,27 @@ namespace CCPDemo.Risks
                 if (o.TargetDate < dateNow && o.StatusName.ToUpper() != "CLOSE")
                 {
                     var res = new GetRiskForViewDto()
-                {
-                    Risk = new RiskDto
                     {
+                        Risk = new RiskDto
+                        {
 
-                        Summary = o.Summary,
-                        ExistingControl = o.ExistingControl,
-                        ERMRecommendation = o.ERMRecommendation,
-                        ActionPlan = o.ActionPlan,
-                        RiskOwnerComment = o.RiskOwnerComment,
-                        TargetDate = o.TargetDate,
-                        ActualClosureDate = o.ActualClosureDate,
-                        AcceptanceDate = o.AcceptanceDate,
-                        RiskAccepted = o.RiskAccepted,
-                        Id = o.Id,
-                    },
-                    RiskTypeName = o.RiskTypeName,
-                    OrganizationUnitDisplayName = o.OrganizationUnitDisplayName,
-                    StatusName = o.StatusName,
-                    RiskRatingName = o.RiskRatingName,
-                    UserName = o.UserName
-                };
+                            Summary = o.Summary,
+                            ExistingControl = o.ExistingControl,
+                            ERMRecommendation = o.ERMRecommendation,
+                            ActionPlan = o.ActionPlan,
+                            RiskOwnerComment = o.RiskOwnerComment,
+                            TargetDate = o.TargetDate,
+                            ActualClosureDate = o.ActualClosureDate,
+                            AcceptanceDate = o.AcceptanceDate,
+                            RiskAccepted = o.RiskAccepted,
+                            Id = o.Id,
+                        },
+                        RiskTypeName = o.RiskTypeName,
+                        OrganizationUnitDisplayName = o.OrganizationUnitDisplayName,
+                        StatusName = o.StatusName,
+                        RiskRatingName = o.RiskRatingName,
+                        UserName = o.UserName
+                    };
 
                 results.Add(res);
                 }
@@ -1163,7 +1163,7 @@ namespace CCPDemo.Risks
 
             foreach (var o in dbList)
             {
-                if (o.TargetDate.ToString().IsNullOrEmpty() && o.StatusName.ToString().ToUpper() != "CLOSED")
+                if (!o.TargetDate.ToString().IsNullOrEmpty() && o.StatusName.ToString().ToUpper() != "CLOSED" && o.RiskAccepted == true)
                 {
                     var res = new GetRiskForViewDto()
                     {
@@ -1190,43 +1190,11 @@ namespace CCPDemo.Risks
 
                     results.Add(res);
                 }
-                else
-                {
-                    if (o.StatusName.ToString().ToUpper() != "CLOSED")
-                    {
-                        var res = new GetRiskForViewDto()
-                        {
-                            Risk = new RiskDto
-                            {
-
-                                Summary = o.Summary,
-                                ExistingControl = o.ExistingControl,
-                                ERMRecommendation = o.ERMRecommendation,
-                                ActionPlan = o.ActionPlan,
-                                RiskOwnerComment = o.RiskOwnerComment,
-                                TargetDate = o.TargetDate,
-                                ActualClosureDate = o.ActualClosureDate,
-                                AcceptanceDate = o.AcceptanceDate,
-                                RiskAccepted = o.RiskAccepted,
-                                Id = o.Id,
-                            },
-                            RiskTypeName = o.RiskTypeName,
-                            OrganizationUnitDisplayName = o.OrganizationUnitDisplayName,
-                            StatusName = o.StatusName,
-                            RiskRatingName = o.RiskRatingName,
-                            UserName = o.UserName
-                        };
-
-                        results.Add(res);
-                    }
-
-                }
-
 
             }
 
             return new PagedResultDto<GetRiskForViewDto>(
-                totalCount,
+                results.Count,
                 results
             );
 
@@ -1529,6 +1497,14 @@ namespace CCPDemo.Risks
         {
             var ermUserId = (int)_riskRepository.Get(id).CreatorUserId;
             var email = _userManager.Users.Where(u=>u.Id == ermUserId).FirstOrDefault().EmailAddress;
+
+            return email;
+        }
+
+        public string GetRiskOwnerEmail(int riskId)
+        {
+            var riskOwnerId = (int)_riskRepository.Get(riskId).UserId;
+            var email = _userManager.Users.Where(u=>u.Id == riskOwnerId).FirstOrDefault().EmailAddress;
 
             return email;
         }

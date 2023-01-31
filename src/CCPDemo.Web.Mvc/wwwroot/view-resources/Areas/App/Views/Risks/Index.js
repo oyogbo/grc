@@ -355,5 +355,25 @@
         getRisks();
       }
     });
+
+      $('#ImporRisksFromExcelButton')
+          .fileupload({
+              url: abp.appPath + 'Risks/ImportFromExcel',
+              dataType: 'json',
+              maxFileSize: 1048576 * 100,
+              dropZone: $('#RisksTable'),
+              done: function (e, response) {
+                  var jsonResult = response.result;
+                  if (jsonResult.success) {
+                      abp.notify.info(app.localize('ImportRisksProcessStart'));
+                  } else {
+                      abp.notify.warn(app.localize('ImportRisksUploadFailed'));
+                  }
+              },
+          })
+          .prop('disabled', !$.support.fileInput)
+          .parent()
+          .addClass($.support.fileInput ? undefined : 'disabled');
+
   });
 })();

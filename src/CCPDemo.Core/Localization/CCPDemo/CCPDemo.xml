@@ -1278,8 +1278,11 @@
 		<text name="ExportToExcel">Export to excel</text>
 		<text name="ImportToExcelSampleFileDownloadInfo">{0} to download sample import file.</text>
 		<text name="ImportUsersProcessStart">User import process has begun.</text>
+		<text name="ImportRisksProcessStart">Risk import process has begun.</text>
 		<text name="ImportUsersUploadFailed">User import process has failed.</text>
+		<text name="ImportRisksUploadFailed">Risk import process has failed.</text>
 		<text name="AllUsersSuccessfullyImportedFromExcel">User import process has been completed successfully. All users in file are imported.</text>
+		<text name="AllRisksSuccessfullyImportedFromExcel">Risk import process has been completed successfully. All users in file are imported.</text>
 		<text name="FileCantBeConvertedToUserList">User import process has failed. File is invalid.</text>
 		<text name="{0}IsInvalid">"{0}" is invalid</text>
 		<text name="Exception">Exception</text>

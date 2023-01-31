@@ -26,6 +26,16 @@ namespace CCPDemo.Web.Areas.App.Models.Risks
         public List<RiskTableForDisplayDto> dbList { get; set; }
 
         public bool isERM { get; set; }
+        public List<string> OrganizationUnitLabels { get; set; }
+        public List<string> RiskTypeLabels { get; set; }
+        public List<string[]> RiskTypeCountCountData { get; set; }
+        public List<string> RiskTypeOrgUnitsUnits { get; set; }
+        public List<string> RiskRatingOrgUnitsUnits { get; set; }
+        public List<string> RiskTypes { get; set; }
+        public List<string> RiskRating { get; set; }
+        public string RiskCountByDepartment { get; set; }
+        public List<RiskRatingByDepartmentDto> RatingCountByDepartment { get; set; }
 
-    }
+
+	}
 }

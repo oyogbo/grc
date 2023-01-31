@@ -89,6 +89,7 @@
             var dataTable = ratingTable.DataTable({
                  paging: true,
                 processing: false,
+                serverSide: true,
                 searching: true,
                 dom: 'Bfrtip',
                 buttons: [
@@ -123,6 +124,10 @@
           text-align: left;
           background-color: #04AA6D;
           color: white;
+        }
+
+        #RisksRatingTable td:not(:first-child) {
+            text-align: center;
         }
         
     </style>

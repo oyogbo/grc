@@ -14,14 +14,14 @@
 @section Scripts {
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 	<script>
-		var xValues = ["Critical", "Very High", "High", "Medium", "Low"];
-		var yValues = [@Model.Critical, @Model.VeryHigh, @Model.High, @Model.Medium, @Model.Low];
+		var xValues = ["Critical", "Very High", "High", "Medium"];
+		var yValues = [@Model.Critical, @Model.VeryHigh, @Model.High, @Model.Medium];
 		var barColors = [
 			"#b91d47",
 			"#00aba9",
 			"#2b5797",
 			"#e8c3b9",
-			"#e2c3b9"
+			"#52ffb9"
 		];
 
 		new Chart("riskProfile", {
@@ -34,14 +34,56 @@
 				}]
 			},
 			options: {
+				events: false,
 				title: {
 					display: true,
 					text: "CATEGORIZATION OF RISK"
-				}
+				},
+				legend: {
+					position: 'left'
+				},
+				animation: {
+                duration: 500,
+                easing: "easeOutQuart",
+                onComplete: function () {
+                    var ctx = this.chart.ctx;
+                    ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontFamily, 'normal', Chart.defaults.global.defaultFontFamily);
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'bottom';
+
+
+					
+
+					this.data.datasets.forEach(function (dataset) {
+
+                        for (var i = 0; i < dataset.data.length; i++) {
+                            var model = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._model,
+                                total = dataset._meta[Object.keys(dataset._meta)[0]].total,
+                                mid_radius = model.innerRadius + (model.outerRadius - model.innerRadius) / 2,
+                                start_angle = model.startAngle,
+                                end_angle = model.endAngle,
+                                mid_angle = start_angle + (end_angle - start_angle) / 2;
+
+                            var x = mid_radius * Math.cos(mid_angle);
+                            var y = mid_radius * Math.sin(mid_angle);
+
+							ctx.fillStyle = '#fff';
+                            
+
+                            var percent = String(Math.round(dataset.data[i] / total * 100)) + "%";
+                            //ctx.fillText(dataset.data[i], model.x + x, model.y + y);
+                            // Display percent in another line, line break doesn't work for fillText
+                            ctx.fillText(percent, model.x + x, model.y + y + 15);
+                        }
+                    });
+                }
+            }
 			}
 		});
 
 
+		console.log('Path')
+		console.log(abp.appPath)
 		
 	</script>
 	<script>
@@ -133,7 +175,71 @@
         }).draw();
 
 
+		//var overDueRisksTable = $('#OverDueRisksTable');
+		//var dataTable3 = overDueRisksTable.DataTable({
+		//	paging: true,
+		//		serverSide: true,
+		//		processing: true,
+		//		searching: true,
+		//		scrollX: true,
+		//		listAction: {
+		//			ajaxFunction: _risksService.overDueRisksV2
+		//		},
+		//		columnDefs: [
+  //              {
+  //                  targets: 0,
+  //                  "data": null, "render": function (data, type, full, meta) {
+  //                      return meta.row + 1;
+  //                  }
+  //              }, 
+  //              {
+  //                  targets: 1,
+  //                  data: 'organizationUnitDisplayName', 
+  //              },
+  //              {
+  //                  targets: 2,
+  //                  data: 'risk.summary'
+  //              },
+  //              {
+  //                  targets: 3,
+		//			data: 'risk.targetDate'
+  //              }
+                
+  //          ],
+		//});
 
+
+		 _risksService.overDueRisksV2()
+		 .done(function(data){
+			 console.log('Overdue Risks')
+			 console.log(data);
+
+			 var items = data.items;
+			 var tableHTML = '';
+			 items.forEach((r,i) => {
+				  var tRow = `<tr>`;
+				 console.log("row " + i)
+				 console.log(r)
+				 console.log(r['organizationUnitDisplayName'])
+				 tRow += `<td>${i+1}</td>`;
+				 tRow += `<td>${r['organizationUnitDisplayName']}</td>`;
+				 tRow += `<td>${r['risk']['summary']}</td>`;
+				 tRow += `<td>${r['risk']['targetDate'].split("T")[0]}</td>`;
+				 tRow += `</tr>`;
+
+				 tableHTML += tRow;
+			 });
+
+			 $('#overdueRiskBody').append(tableHTML);
+
+			 var overDueRisksTable = $('#OverDueRisksTable');
+			 var dataTable3 = overDueRisksTable.DataTable({
+				paging: true,
+				scrollX: true,
+				serverSide: true,
+			 })
+			 
+		});
 			
 
 
@@ -204,29 +310,7 @@
 						console.log('datasetsObj')
 						console.log(datasetsObj)
 
-					//if(count < 1){
-					//	datasetsObj.label.push(r['riskRating']);
-					//	datasetsObj.data.push(r['ratingCount']);
-
-					//	previousRating = r['riskRating'];
-
-					//	count++;
-
-					//	console.log('datasetsObj')
-					//	console.log(datasetsObj)
-					//}else{
-					//	if(previousRating == r['riskRating']){
-					//		datasetsObj.data.push(r['ratingCount']);
-					//	}else{
-					//		datasets.push(datasetsObj);
-
-					//		 Reset datasetsObj
-					//		datasetsObj.label = [];
-					//		datasetsObj.data = [];
-
-					//		count = 0
-					//	}
-					//}
+					
 					
 				});
 
@@ -248,11 +332,16 @@
 
 		});
 	</script>
+
+	
+
+	
 }
 
 
 <div class="app-main flex-column flex-row-fluid" id="kt_app_main">
-<!--begin::Content wrapper-->
+	
+	<!--begin::Content wrapper-->
 						<div class="d-flex flex-column flex-column-fluid">
 							
 							<div id="kt_app_content" class="app-content flex-column-fluid">
@@ -308,8 +397,8 @@
 															<!--begin::Table head-->
 															<thead>
 																<tr class="fw-bold border-0 text-gray-400">
-																	<th class="min-w-150px" colspan="2">S/N</th>
-																	<th class="min-w-150px text-center pe-0" colspan="2">DEPT</th>
+																	<th colspan="2">S/N</th>
+																	<th class="text-center pe-0" colspan="2">DEPT</th>
 																	<th class="text-center min-w-150px" colspan="2">RISK</th>
 																	<th class="text-center min-w-150px" colspan="2">DUE DATE</th>
 																</tr>
@@ -324,10 +413,10 @@
 															{
 																count++;
 																<tr>
-																	<td class="min-w-150px" colspan="2">@count</td>
-																	<td class="min-w-150px text-center pe-0" colspan="2">@rowData.OrganizationUnitDisplayName</td>
+																	<td colspan="2">@count</td>
+																	<td class="text-center pe-0" colspan="2">@rowData.OrganizationUnitDisplayName</td>
 																	<td class="text-center min-w-150px" colspan="2">@rowData.Summary</td>
-																	<td class="text-center min-w-150px" colspan="2">@rowData.TargetDate</td>
+																	<td class="text-center min-w-150px" colspan="2">@rowData.TargetDate.ToString().Split(" ")[0]</td>
 																</tr>
 															}
 
@@ -348,158 +437,22 @@
 
 				<div class="row gx-5 gx-xl-10">
 
-
-					<div class="col-xl-6 mb-5 mb-xl-10">
-						<!--begin::Table widget 10-->
-						<div class="card card-flush h-xl-100">
-							<!--begin::Header-->
-							<div class="card-header pt-5">
-								<!--begin::Title-->
-								<h3 class="card-title align-items-start flex-column">
-									<span class="card-label fw-bold text-gray-800">RISK BY DEPARTMENT</span>
-
-								</h3>
-							</div>
-
-							<div class="card-body py-3">
-								<h3 class="card-title align-items-start flex-column">
-									<span class="card-label fw-bold text-gray-800">Categorization of Risk</span>
-								</h3>
-
-								<canvas id="riskByDept" style="width:100%;max-width:600px"></canvas>
-
-
-							</div>
-							<!--end::Body-->
-						</div>
-						<!--end::Table Widget 10-->
-					</div>
-
-					<!--begin::Col-->
 					<div class="col-xl-6 mb-5 mb-xl-10">
 						<!--begin::Table widget 9-->
 						<div class="card card-flush h-xl-100">
-							<!--begin::Header-->
 							<div class="card-header pt-5">
 								<!--begin::Title-->
 								<h3 class="card-title align-items-start flex-column">
-									<span class="card-label fw-bold text-gray-800">OVERDUE RESOLUTION</span>
+									<span class="card-label fw-bold text-gray-800">RISK TYPE/DEPARTMENT</span>
 
 								</h3>
 
 							</div>
 							
-							<div class="card-body py-3">
-								
-								<div class="table-responsive">
-									
-									<table class="table table-row-dashed align-middle gs-0 gy-4">
-										
-										<thead>
-											<tr class="fs-7 fw-bold border-0 text-gray-400">
-												<th class="min-w-150px" colspan="2">S/N</th>
-												<th class="min-w-150px text-end pe-0" colspan="2">DEPT</th>
-												<th class="text-end min-w-150px" colspan="2">RISK</th>
-												<th class="text-end min-w-150px" colspan="2">DUE DATE</th>
-											</tr>
-										</thead>
-										
-										<tbody>
-											<tr>
-												<td class="" colspan="2">
-													1
-												</td>
-												<td class="pe-0" colspan="2">
-													Data & Digital Services
-												</td>
-												<td class="" colspan="2">
-													Data Loss
-												</td>
-												<td class="" colspan="2">
-													09/11/2022
-												</td>
-											</tr>
-											<tr>
-												<td class="" colspan="2">
-													2
-												</td>
-												<td class="pe-0" colspan="2">
-													Application Support
-												</td>
-												<td class="" colspan="2">
-													Application Time-out
-												</td>
-												<td class="" colspan="2">
-													10/11/2022
-												</td>
-											</tr>
-											<tr>
-												<td class="" colspan="2">
-													3
-												</td>
-												<td class="pe-0" colspan="2">
-													Sales
-												</td>
-												<td class="" colspan="2">
-													Marketing Metrics Unreachable
-												</td>
-												<td class="" colspan="2">
-													10/11/2022
-												</td>
-											</tr>
-											<tr>
-												<td class="" colspan="2">
-													4
-												</td>
-												<td class="pe-0" colspan="2">
-													Operations
-												</td>
-												<td class="" colspan="2">
-													Account Creation Metric Unavailable
-												</td>
-												<td class="" colspan="2">
-													11/11/2022
-												</td>
-											</tr>
-
-
-										</tbody>
-										
-									</table>
-									
-								</div>
-								
-							</div>
-							
-						</div>
-						
-					</div>
-
-
-				</div>
-
-
-				<div class="row gx-5 gx-xl-10">
-
-
-					
-
-					<!--begin::Col-->
-					<div class="col-xl-6 mb-5 mb-xl-10">
-						<!--begin::Table widget 9-->
-						<div class="card card-flush h-xl-100">
-							<!--begin::Header-->
-							<div class="card-header pt-5">
-								<!--begin::Title-->
-								<h3 class="card-title align-items-start flex-column">
-									<span class="card-label fw-bold text-gray-800">Risk Category/Department</span>
-
-								</h3>
-
-							</div>
 							<!--end::Header-->
 							<!--begin::Body-->
-							<div class="card-body py-3">
+							<a href="/App/Reports/RiskTypeByDepartment">
+								<div class="card-body py-3">
 								<!--begin::Table container-->
 								<div class="table-responsive">
 									<!--begin::Table-->
@@ -516,48 +469,61 @@
 								</div>
 								<!--end::Table container-->
 							</div>
+							</a>
+							
 							<!--end::Body-->
 						</div>
 						
 					</div>
 
+
+
+					<!--begin::Col-->
 					<div class="col-xl-6 mb-5 mb-xl-10">
-						
+						<!--begin::Table widget 9-->
 						<div class="card card-flush h-xl-100">
 							<!--begin::Header-->
 							<div class="card-header pt-5">
-								
+								<!--begin::Title-->
 								<h3 class="card-title align-items-start flex-column">
-									<span class="card-label fw-bold text-gray-800">Risk Rating/Department</span>
+									<span class="card-label fw-bold text-gray-800">OVERDUE RESOLUTION</span>
 
 								</h3>
 
 							</div>
-							<!--end::Header-->
-							<!--begin::Body-->
-							<div class="card-body py-3">
-								<!--begin::Table container-->
+							
+							<a href="/App/Reports/OverdueRisks">
+								<div class="card-body py-3">
+								
 								<div class="table-responsive">
-									<!--begin::Table-->
-									<table id="RisksRatingTable" class="table table-row-dashed fs-6 gy-5 dataTable no-footer" cellspacing="0" cellpadding="0">
+									
+									<table id="OverDueRisksTable" class="table table-row-dashed align-middle gs-0 gy-4">
+										
 										<thead>
-											<tr>
-												<th>#</th>
-												<th>Organisation Unit</th>
-												<th>Risk Rating</th>
-												<th>Rating Count</th>
+											<tr class="fs-7 fw-bold border-0 text-gray-400">
+												<th>S/N</th>
+												<th>DEPT</th>
+												<th>RISK</th>
+												<th>DUE DATE</th>
 											</tr>
 										</thead>
+										<tbody id="overdueRiskBody">
+
+										</tbody>
 									</table>
+									
 								</div>
 								
 							</div>
+							</a>
 							
 						</div>
 						
 					</div>
 
+
 				</div>
+
 
 				</div>
 				
