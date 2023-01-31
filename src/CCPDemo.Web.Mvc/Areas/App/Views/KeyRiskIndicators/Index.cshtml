@@ -17,7 +17,7 @@
                     <div class="row align-items-center mb-4">
                         <div class="">
 
-                          @if (Model.IsAdmin || Model.IsERM)
+                          @if (Model.IsAdmin || !Model.IsERM)
                             {
                                   <div class="my-3" style="display:flex; justify-content:end;">
                                 <div class="input-group" style=" width:fit-content;">
@@ -91,7 +91,7 @@
                                 }
                             </td>
 
-                           @if(@obj.Status == "Approved"){
+                           @if(@obj.Status == "Approved" && !Model.IsERM){
                                 <td> <input type="checkbox" data-id="@obj.Id" class="approve-selector" disabled/></td>
                                 }
                                 else{

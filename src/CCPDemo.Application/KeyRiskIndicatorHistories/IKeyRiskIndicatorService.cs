@@ -20,7 +20,7 @@ namespace CCPDemo.KeyRiskIndicatorHistories
         public Task<string> GetKRIUploaderEmail(string Id);
 
         public Task<bool> ApprovedKRIAsync(int Id);
-        Task<bool> DeclineKRIAsync(int Id);
+       // Task<bool> DeclineKRIAsync(int Id);
 
         Task<IList<string>> GetCurrentUserRoles( );
 

@@ -78,12 +78,12 @@ namespace CCPDemo.KeyRiskIndicatorHistories
                 Emails.Add(user.EmailAddress);
             }
 
-           bool responseFromEmail = await _iKRIService.ChangeKRIStatusEmailNotificationAsync(Emails, KRIFromDB.ReferenceId, KRIFromDB.Status);
+           bool responseFromEmail = await _iKRIService.ChangeKRIStatusEmailNotificationAsync(KRIFromDB.ReferenceId, KRIFromDB.Status);
             return responseFromEmail;
                        
         }
 
-        public async Task<bool> DeclineKRIAsync(int Id)
+    /*    public async Task<bool> DeclineKRIAsync(int Id)
         {
             var KRIFromDB = _IKeyRiskIndicatorHistoryRepo.Get(Id);
             if (KRIFromDB == null)
@@ -101,7 +101,7 @@ namespace CCPDemo.KeyRiskIndicatorHistories
             bool responseFromEmail = await _iKRIService.ChangeKRIStatusEmailNotificationAsync(Emails, KRIFromDB.ReferenceId, KRIFromDB.Status);
             return responseFromEmail;
 
-        }
+        }*/
 
         public async Task<List<KeyRiskIndicatorHistory>> GetAll()
         {

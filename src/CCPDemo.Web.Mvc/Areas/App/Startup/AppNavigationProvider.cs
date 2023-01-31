@@ -106,16 +106,16 @@ namespace CCPDemo.Web.Areas.App.Startup
                         L("UploadKeyRiskIndicator"),
                         url: "App/UploadKeyRiskIndicator",
                         icon: "flaticon-upload",
-                        permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_KeyRiskIndicators)
+                        permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_KeyRiskIndicators_Upload)
                     )
-                    ).AddItem(new MenuItemDefinition(
+                    )/*.AddItem(new MenuItemDefinition(
                         AppPageNames.Common.RequestDepartmentRCSA,
                         L("RequestDepartmentRCSA"),
                         url: "App/RequestDepartmentRCSA",
                         icon: "flaticon2-cardiogram",
                         permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_KeyRiskIndicators)
                     )
-                    )
+                    )*/
                     .AddItem(new MenuItemDefinition(
                        AppPageNames.Common.KeyRiskIndicatorHistory,
                         L("KeyRiskIndicatorHistory"),

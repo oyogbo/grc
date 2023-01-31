@@ -13,6 +13,7 @@ using CCPDemo.RiskTransactions.Dtos;
 using CCPDemo.RiskRatings.Dtos;
 using System.Collections;
 using System.Linq;
+using CCPDemo.Organizations.Dto;
 
 namespace CCPDemo.Risks
 {
@@ -47,6 +48,7 @@ namespace CCPDemo.Risks
         Task<PagedResultDto<GetRiskForViewDto>> FilteredRisks(GetAllRisksInput input);
         Task<PagedResultDto<GetRiskForViewDto>> OverDueRisks(GetAllRisksInput input);
         Task<PagedResultDto<RiskTypeByDepartment>> GetRiskTypeByDepartment();
+        Task<PagedResultDto<OrganizationUnitUserListDto>> UsersInOrganizationalUnit(int id);
 
     }
 }

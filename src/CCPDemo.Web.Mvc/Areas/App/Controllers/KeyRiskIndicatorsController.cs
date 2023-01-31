@@ -213,15 +213,15 @@ namespace CCPDemo.Web.Areas.App.Controllers
         public async Task<IActionResult> ReadCSV(AddUploadKRIDto addUploadKRI)
         {
 
-           long orgIg = await _keyRiskIndicatorHistoryService.GetUserOrganisationDepartmentId();
-            if (orgIg == 0)
+           //long orgIg = await _keyRiskIndicatorHistoryService.GetUserOrganisationDepartmentId();
+           /* if (orgIg == 0)
             {
                 ErrorView errorView = new ErrorView();
                 errorView.Message = "You have to belong to a department to uppload a Key risk indicator";
                 errorView.BackController = "UploadKeyRiskIndicator";
                 errorView.BackAction = "Index";
                 return RedirectToAction("Index", "Error", errorView, fragment: null);
-            }
+            }*/
 
             IFormFile fileToRead = Request.Form.Files[0];
             string  nameForCheck = fileToRead.FileName;
@@ -290,7 +290,6 @@ namespace CCPDemo.Web.Areas.App.Controllers
 
             }
 
-            var res = await _kRIService.SendAddKRIEmailNotification();
 
             KRIHistoryAddDTO historyToAdd = new KRIHistoryAddDTO();
             historyToAdd.Status = "Not Approved";
@@ -298,11 +297,12 @@ namespace CCPDemo.Web.Areas.App.Controllers
             historyToAdd.TotalRecord = response.Count().ToString();
             historyToAdd.Department = ReferenceId.Substring(0, 7);
             historyToAdd.ReferenceId = ReferenceId;
-            historyToAdd.OrganizationUnit = orgIg;
+            historyToAdd.OrganizationUnit = addUploadKRI.OrganizationUnit;
             historyToAdd.IsReviewed = false;
             historyToAdd.ReviewStatus = "Not reviewed";
             historyToAdd.DateCreated = DateTime.Today.ToString();
 
+            var res = await _kRIService.SendAddKRIEmailNotification(addUploadKRI.OrganizationUnit);
             
 
             var resx = _keyRiskIndicatorHistoryService.AddKeyIndicatorHistory(historyToAdd);
@@ -366,7 +366,7 @@ namespace CCPDemo.Web.Areas.App.Controllers
                 var updateResponse = await _keyRiskIndicatorHistoryService.UpdateReviewStatus(KRI.ReferenceId, "reviewed");
                 List<string> emailList = new List<string>();
                 emailList.Add(uploaderEmail);
-                _kRIService.ChangeKRIStatusEmailNotificationAsync(emailList, KRI.ReferenceId, KRI.Status);
+                _kRIService.ChangeKRIStatusEmailNotificationAsync( KRI.ReferenceId, KRI.Status);
             }
             return false;
         }

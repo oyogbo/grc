@@ -34,6 +34,8 @@ namespace CCPDemo.Authorization
             keyRiskIndicators.CreateChildPermission(AppPermissions.Pages_KeyRiskIndicators_Create, L("CreateNewKeyRiskIndicator"));
             keyRiskIndicators.CreateChildPermission(AppPermissions.Pages_KeyRiskIndicators_Edit, L("EditKeyRiskIndicator"));
             keyRiskIndicators.CreateChildPermission(AppPermissions.Pages_KeyRiskIndicators_Delete, L("DeleteKeyRiskIndicator"));
+            keyRiskIndicators.CreateChildPermission(AppPermissions.Pages_KeyRiskIndicators_Upload, L("UploadKeyRiskIndicator"));
+
 
             var risks = pages.CreateChildPermission(AppPermissions.Pages_Risks, L("Risks"));
             risks.CreateChildPermission(AppPermissions.Pages_Risks_Create, L("CreateNewRisk"));
