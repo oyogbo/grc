@@ -10,7 +10,6 @@
           $('#statusId').val(1);
       }
 
-      
 
       $('#riskTypeId').focus();
 
@@ -122,56 +121,26 @@
           var usersEmailIdsData = null;
 
           _risksService
-              .usersInOrganizationalUnit(ouId)
+              .hodEmails(ouId)
               .done(function (data) {
-
-                  console.log(data);
-
-                  var users = data.items;
-
-                  //console.log(users)
+                  console.log('HOD Emails')
+                  var hodData = JSON.parse(data);
+                  console.log(hodData)
+                  var hodIds = Object.keys(hodData);
+                  var hodEmails = Object.values(hodData);
 
                   var usersSelect = $('#userId');
                   usersSelect.html('');
 
                   var usersOptions = '';
 
-                  _risksService
-                      .usersEmailsIdsDict()
-                      .done(function (data) {
-
-                          var arr = data.split(',');
-
-                          if (users.length > 0) {
-                              var userId;
-                              users.forEach(row => {
-                                  arr.forEach((r, i) => {
-                                      //console.log(i)
-                                      var innerArr = r.split(':');
-                                      var email = innerArr[0].replace('{', '').replace('"', '');
-                                      //console.log("SPLIT====")
-                                      console.log(email)
-                                      email = email.replace(/.$/, "");
-                                      console.log("THE EMAIL")
-                                      console.log(row.emailAddress)
-
-                                      if (row.emailAddress.toString() === email.toString()) {
-                                          console.log("EQUALS")
-                                          userId = innerArr[1].toString().replace('}', '');
-                                          userId = parseInt(userId);
-                                          console.log("USER ID: " + userId);
-                                      }
-                                  });
-
-                                  usersOptions += `<option value="${userId}">${row.name} &nbsp; ${row.surname}(${row.emailAddress})</option>`;
-                              });
-                          usersSelect.append(usersOptions);
-                          }
-                      });
-
+                  hodIds.forEach((r, i) => {
+                      usersOptions += `<option value="${hodIds[i]}">${hodEmails[i].split(" ")[0]} &nbsp;(${hodEmails[i].split(" ")[1]})</option>`;
+                  });
+                  usersSelect.append(usersOptions);
               });
 
-          console.log(ouId);
+          
       });
 
 
@@ -345,23 +314,41 @@
                     if (isERM) {
 
                         var userInfo = $("#userId option:selected").text();
-                        console.log('UserInfo')
-                        console.log(userInfo)
-                        const regExp = /\(([^)]+)\)/g;
-                        const matches = userInfo.match(regExp).toString();
-                        const userEmail = matches.replace('(', '').replace(')', '');
-                        console.log('Email To');
-                        console.log(userEmail);
+                        var orgUnitId = $("#organizationUnitId").val();
 
-                        _risksService
-                            .sendRiskEmail({
-                                emailAddress: userEmail,
-                                subject: "A New Risk From ERM | GRC Portal",
-                                body: "A new Risk has been raised your behalf. Please, login to the GRC portal for details!"
-                            })
-                            .done(function () {
-                                abp.notify.info("Email Sent Successfully!");
+                        _risksService.userInOUEmails(orgUnitId)
+                            .done(function (data) {
+                                var emails = JSON.parse(data);
+                                console.log('All Emails')
+                                console.log(emails)
+
+                                _risksService
+                                    .sendRisksEmails({
+                                        emailAddresses: emails,
+                                        subject: "A New Risk From ERM | GRC Portal",
+                                        body: "A new Risk has been raised your behalf. Please, login to the GRC portal for details!"
+                                    }).done(function () {
+                                        abp.notify.info("Email Sent Successfully!");
+                                    });;
                             });
+
+                        //console.log('UserInfo')
+                        //console.log(userInfo)
+                        //const regExp = /\(([^)]+)\)/g;
+                        //const matches = userInfo.match(regExp).toString();
+                        //const userEmail = matches.replace('(', '').replace(')', '');
+                        //console.log('Email To');
+                        //console.log(userEmail);
+
+                        //_risksService
+                        //    .sendRiskEmail({
+                        //        emailAddress: userEmail,
+                        //        subject: "A New Risk From ERM | GRC Portal",
+                        //        body: "A new Risk has been raised your behalf. Please, login to the GRC portal for details!"
+                        //    })
+                        //    .done(function () {
+                        //        abp.notify.info("Email Sent Successfully!");
+                        //    });
                     } else {
 
                         var id = $('#riskId').val();
